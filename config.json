@@ -1,0 +1,82 @@
+{
+  "site_name": "TokenBench & GPU Cost Engine",
+  "site_tagline": "Live AI Model API Pricing, Token Calculators & Cloud GPU Break-Even Directory",
+  "base_url": "https://stigla.github.io/ai-cost-engine",
+  "max_individual_model_pages": 250,
+  "max_comparison_pages": 150,
+  "affiliates": {
+    "runpod": {
+      "name": "RunPod Cloud GPUs",
+      "badge": "Best for Serverless & Dedicated GPUs",
+      "cta_text": "Deploy on RunPod (From $0.20/hr)",
+      "url": "https://www.runpod.io?ref=YOUR_RUNPOD_REF_ID",
+      "payout_info": "Pays recurring commission on every GPU hour your referrals spend."
+    },
+    "vastai": {
+      "name": "Vast.ai GPU Marketplace",
+      "badge": "Cheapest RTX 4090 & H100 Rentals",
+      "cta_text": "Rent GPUs on Vast.ai (Save up to 70%)",
+      "url": "https://cloud.vast.ai/?ref_id=YOUR_VAST_REF_ID",
+      "payout_info": "Pays ongoing referral credit/commission on GPU marketplace rentals."
+    },
+    "vultr": {
+      "name": "Vultr Cloud GPU & VPS",
+      "badge": "$300 Free Credit for New Users",
+      "cta_text": "Claim $300 Free Vultr GPU Credit",
+      "url": "https://www.vultr.com/?ref=YOUR_VULTR_REF_ID",
+      "payout_info": "Pays up to $100 per qualified signup via Vultr Referral Program."
+    },
+    "digitalocean": {
+      "name": "DigitalOcean GPU Droplets",
+      "badge": "$200 Free Credit for 60 Days",
+      "cta_text": "Get $200 Free Credit on DigitalOcean",
+      "url": "https://m.do.co/c/YOUR_DO_REF_ID",
+      "payout_info": "Pays $25-$200 per signup via DigitalOcean Referral/Affiliate Program."
+    },
+    "hetzner": {
+      "name": "Hetzner Cloud",
+      "badge": "Best Value CPU/RAM VPS for AI Agents",
+      "cta_text": "Get €20 Free Hetzner Cloud Credit",
+      "url": "https://hetzner.cloud/?ref=YOUR_HETZNER_REF_ID",
+      "payout_info": "Pays €10 per referral + gives new users €20 free cloud credit."
+    }
+  },
+  "gpu_tiers": [
+    {
+      "id": "rtx4090",
+      "name": "NVIDIA RTX 4090 (24GB VRAM)",
+      "vram_gb": 24,
+      "hourly_usd": 0.39,
+      "provider_key": "vastai",
+      "throughput_tok_sec": 85,
+      "best_for": "7B to 14B models (Llama 3, Qwen, Mistral)"
+    },
+    {
+      "id": "a100_80gb",
+      "name": "NVIDIA A100 (80GB VRAM)",
+      "vram_gb": 80,
+      "hourly_usd": 1.39,
+      "provider_key": "runpod",
+      "throughput_tok_sec": 65,
+      "best_for": "32B to 70B models (Llama 70B, Qwen 72B, Mixtral)"
+    },
+    {
+      "id": "h100_80gb",
+      "name": "NVIDIA H100 SXM (80GB VRAM)",
+      "vram_gb": 80,
+      "hourly_usd": 2.69,
+      "provider_key": "runpod",
+      "throughput_tok_sec": 140,
+      "best_for": "High-concurrency production LLM inference & 70B+ models"
+    },
+    {
+      "id": "dual_h100",
+      "name": "2x NVIDIA H100 (160GB VRAM)",
+      "vram_gb": 160,
+      "hourly_usd": 5.38,
+      "provider_key": "vultr",
+      "throughput_tok_sec": 110,
+      "best_for": "100B+ & MoE frontier open-weight models (DeepSeek R1/V3, Llama 405B)"
+    }
+  ]
+}
