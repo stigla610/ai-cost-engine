@@ -1,7 +1,7 @@
 {
   "site_name": "TokenBench & GPU Cost Engine",
   "site_tagline": "Live AI Model API Pricing, Token Calculators & Cloud GPU Break-Even Directory",
-  "base_url": "https://stigla.github.io/ai-cost-engine",
+  "base_url": "https://stigla610.github.io/ai-cost-engine",
   "max_individual_model_pages": 250,
   "max_comparison_pages": 150,
   "affiliates": {
