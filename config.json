@@ -4,15 +4,16 @@
   "base_url": "https://stigla610.github.io/ai-cost-engine",
   "indexnow_key": "4b8e9a2d7c1f6e3a5b9d0c8e2f4a1b7d",
   "google_site_verification": "lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c",
-  "max_individual_model_pages": 350,
-  "max_comparison_pages": 600,
-  "max_vram_pages": 250,
+  "max_individual_model_pages": 450,
+  "max_comparison_pages": 650,
+  "max_vram_pages": 450,
   "affiliates": {
     "runpod": {
       "name": "RunPod Cloud GPUs",
       "badge": "Best for Serverless & Dedicated AI GPUs",
       "cta_text": "Deploy on RunPod (From $0.20/hr)",
       "url": "https://runpod.io?ref=lyp3u1tj",
+      "description": "Instant PyTorch, vLLM, and Ollama GPU pods plus auto-scaling Serverless GPU endpoints billed by the second.",
       "payout_info": "Tracked via your RunPod referral ID (lyp3u1tj)."
     },
     "vastai": {
@@ -20,6 +21,7 @@
       "badge": "Cheapest RTX 4090 & H100 Rentals",
       "cta_text": "Rent GPUs on Vast.ai (Save up to 70%)",
       "url": "https://cloud.vast.ai/?ref_id=864932",
+      "description": "Global GPU rental marketplace offering the lowest hourly spot and on-demand rates on RTX 4090, A100, and H100 rigs.",
       "payout_info": "Tracked via your Vast.ai referral ID (864932)."
     },
     "vultr": {
@@ -27,6 +29,7 @@
       "badge": "$300 Free Credit for New Users",
       "cta_text": "Claim Free Vultr GPU Credit",
       "url": "https://www.vultr.com/?ref=9936333",
+      "description": "Enterprise-grade NVIDIA H100, A100, and L40S cloud instances across 32 global data centers with $300 in new-user test credits.",
       "payout_info": "Tracked via your Vultr referral ID (9936333)."
     },
     "digitalocean": {
@@ -34,6 +37,7 @@
       "badge": "$200 Free Credit for 60 Days",
       "cta_text": "Get $200 Free Credit on DigitalOcean",
       "url": "https://m.do.co/c/d78fc54fc74e",
+      "description": "Developer-friendly NVIDIA H100 GPU Droplets, managed databases, and AI app hosting backed by a 60-day $200 free credit.",
       "payout_info": "Tracked via your DigitalOcean referral ID (d78fc54fc74e)."
     }
   },

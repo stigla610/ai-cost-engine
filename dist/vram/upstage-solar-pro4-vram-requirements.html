@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Can You Run Upstage: Solar Pro 4 Locally? VRAM Equivalent &amp; Open-Weight Alternatives</title>
+  <meta name="description" content="Upstage: Solar Pro 4 is a proprietary Cloud API. See the exact GPU VRAM required (45.5 GB Q4 / 154.0 GB FP16) to run an equivalent ~70B open-weight alternative locally or on RunPod/Vast.ai." />
+  <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/vram/upstage-solar-pro4-vram-requirements.html" />
+  <meta property="og:title" content="Can You Run Upstage: Solar Pro 4 Locally? VRAM Equivalent &amp; Open-Weight Alternatives" />
+  <meta property="og:description" content="Upstage: Solar Pro 4 is a proprietary Cloud API. See the exact GPU VRAM required (45.5 GB Q4 / 154.0 GB FP16) to run an equivalent ~70B open-weight alternative locally or on RunPod/Vast.ai." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/vram/upstage-solar-pro4-vram-requirements.html" />
+  <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much VRAM is needed to run Upstage: Solar Pro 4 or an open-weight equivalent?", "acceptedAnswer": {"@type": "Answer", "text": "Upstage: Solar Pro 4 is a closed-source API and cannot be downloaded directly. To run a comparable ~70B parameter open-weight model locally, you need roughly 154.0 GB VRAM in FP16, 80.5 GB VRAM in 8-bit (Q8_0), or 45.5 GB VRAM in 4-bit (Q4_K_M / AWQ) quantization."}}]}</script>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #131b2e;
+      --card-hover: #1a2540;
+      --border: #23304f;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-green: #10b981;
+      --accent-purple: #818cf8;
+      --warn: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; width: 100%; }
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 15, 25, 0.92);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 16px; font-size: 0.92rem; align-items: center; flex-wrap: wrap; }
+    .btn-cta {
+      background: linear-gradient(135deg, #0284c7, #4f46e5);
+      color: #fff !important;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      display: inline-block;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      text-decoration: none !important;
+      white-space: nowrap;
+    }
+    .btn-cta:hover { transform: translateY(-1px); opacity: 0.95; }
+    .btn-green {
+      background: linear-gradient(135deg, #059669, #10b981);
+    }
+    .hero { padding: 38px 0 24px; }
+    .hero h1 { font-size: 2.15rem; line-height: 1.25; margin-bottom: 12px; color: #fff; word-break: break-word; }
+    .hero p { color: var(--muted); font-size: 1.05rem; max-width: 840px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px; margin: 24px 0; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 18px; margin: 24px 0; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      min-width: 0;
+    }
+    .card h2, .card h3 { color: #fff; margin-bottom: 10px; }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .badge-green {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+    }
+    .badge-warn {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warn);
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.94rem;
+      flex-wrap: wrap;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .price-big { font-size: 1.75rem; font-weight: 800; color: var(--accent-green); }
+    .slider-group { margin-bottom: 16px; }
+    .slider-group label { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 6px; font-size: 0.92rem; gap: 8px; flex-wrap: wrap; }
+    input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 10px 14px;
+      background: #0b0f19;
+      border: 1px solid var(--border);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 12px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.91rem; min-width: 640px; }
+    th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 600; background: rgba(255,255,255,0.02); white-space: nowrap; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .filter-pill {
+      background: #0b0f19;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .filter-pill:hover, .filter-pill.active {
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(56, 189, 248, 0.15);
+    }
+    .affiliate-box {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(79, 70, 229, 0.12));
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .notice-box {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 0.92rem;
+      color: #fde68a;
+    }
+    footer {
+      margin-top: 60px;
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0 14px; }
+      .hero { padding: 24px 0 16px; }
+      .hero h1 { font-size: 1.55rem; }
+      .hero p { font-size: 0.95rem; }
+      .nav { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .nav-links { width: 100%; gap: 8px 12px; font-size: 0.84rem; }
+      .btn-cta { padding: 8px 12px; font-size: 0.84rem; white-space: normal; text-align: center; }
+      .card { padding: 16px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 14px; }
+      table { min-width: 540px; font-size: 0.84rem; }
+      th, td { padding: 9px 8px; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a href="../index.html" class="brand">⚡ Token<span>Bench</span></a>
+    <nav class="nav-links">
+      <a href="../index.html">API Cost Calculator</a>
+      <a href="../vram-electricity-calculator.html">VRAM &amp; Electricity Calculator</a>
+      <a href="../gpu-cloud-pricing.html">Cloud GPU Rates</a>
+      <a href="../index.html#comparisons">Model Comparisons</a>
+      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <span class="badge">LLM VRAM &amp; Hardware Calculator</span>
+      <span class="badge badge-warn">Proprietary API · Open-Weight Equivalent</span>
+    </div>
+    <h1>Upstage: Solar Pro 4: Local VRAM Equivalent &amp; Self-Hosting Guide</h1>
+    <p><strong>Upstage: Solar Pro 4</strong> is a closed-weight commercial API hosted by Upstage. Below are the exact VRAM specifications needed to self-host a comparable <strong>~70B-class open-weight LLM</strong> (such as Meta Llama, Qwen, Mistral, or DeepSeek) in FP16, Q8, or Q4 quantization.</p>
+  </section>
+  
+  <div class="notice-box">
+    <strong>ℹ️ Closed-Weight API Notice:</strong> Upstage: Solar Pro 4 weights are proprietary to Upstage and cannot be downloaded as local GGUF/Safetensors files. The calculator below shows the hardware and VRAM required to run an <strong>equivalent ~70B parameter open-weight alternative</strong> locally or on a dedicated Cloud GPU.
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <h2>Equivalent Open-Weight VRAM (~70B Class Model)</h2>
+      <div class="stat-row">
+        <span>Estimated Parameter Class</span>
+        <strong>~70B Parameters</strong>
+      </div>
+      <div class="stat-row">
+        <span>16-Bit Full Precision (FP16 / BF16)</span>
+        <strong>154.0 GB VRAM</strong>
+      </div>
+      <div class="stat-row">
+        <span>8-Bit Quantization (Q8_0 / FP8)</span>
+        <strong>80.5 GB VRAM</strong>
+      </div>
+      <div class="stat-row">
+        <span>4-Bit Quantization (Q4_K_M / AWQ / EXL2)</span>
+        <strong style="color:var(--accent-green)">45.5 GB VRAM</strong>
+      </div>
+      <div class="stat-row">
+        <span>Recommended Cloud GPU</span>
+        <strong>NVIDIA H100 SXM (80GB VRAM) ($2.69/hr)</strong>
+      </div>
+      <div class="stat-row">
+        <span>Cloud API Token Pricing</span>
+        <strong><a href="../models/upstage-solar-pro4.html">$0.15/1M In · $0.60/1M Out →</a></strong>
+      </div>
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Deploy on RunPod (From $0.20/hr)</a>
+        <a href="https://cloud.vast.ai/?ref_id=864932" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">Rent GPUs on Vast.ai (Save up to 70%)</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Can My GPU Run a ~70B Open-Weight Alternative?</h2>
+      <div class="slider-group">
+        <label><span>Select Your Local GPU VRAM</span> <span id="myVramLabel">24 GB VRAM</span></label>
+        <input type="range" id="myVram" min="8" max="192" step="8" value="24" oninput="checkVram()" />
+      </div>
+      <div id="vramVerdict" style="margin-top:16px;padding:14px;border-radius:8px;background:rgba(56,189,248,0.12);border:1px solid var(--accent);"></div>
+      <p style="color:var(--muted);font-size:0.88rem;margin-top:14px;">Don't have enough local VRAM? Rent a pre-configured Ollama / vLLM PyTorch pod on RunPod or Vast.ai in 30 seconds with zero upfront hardware cost.</p>
+    </div>
+  </div>
+</main>
+<script>
+  const FP16 = 154.0;
+  const INT8 = 80.5;
+  const INT4 = 45.5;
+  function checkVram() {
+    const v = parseFloat(document.getElementById('myVram').value);
+    document.getElementById('myVramLabel').textContent = v + ' GB VRAM';
+    const box = document.getElementById('vramVerdict');
+    if (v >= FP16) {
+      box.innerHTML = '✅ <strong>Full Speed (FP16 / BF16):</strong> ' + v + ' GB VRAM can run this model class at full 16-bit precision (' + FP16 + ' GB needed) with generous KV-cache context headroom.';
+    } else if (v >= INT8) {
+      box.innerHTML = '🟢 <strong>Near-Lossless 8-Bit (Q8_0 / FP8):</strong> ' + v + ' GB VRAM comfortably runs 8-bit quantization (' + INT8 + ' GB needed) or 4-bit quantization (' + INT4 + ' GB needed) with large context windows. For full unquantized FP16 (' + FP16 + ' GB), rent a Cloud GPU below.';
+    } else if (v >= INT4) {
+      box.innerHTML = '⚡ <strong>Runs 4-Bit Quantized (Q4_K_M / AWQ):</strong> ' + v + ' GB VRAM can run this model class using 4-bit quantization (' + INT4 + ' GB needed). For 8-bit (' + INT8 + ' GB) or full FP16 (' + FP16 + ' GB), rent a Cloud GPU below.';
+    } else {
+      box.innerHTML = '❌ <strong>Not Enough Local VRAM:</strong> Even 4-bit quantization requires ~' + INT4 + ' GB VRAM (you selected ' + v + ' GB). Rent an RTX 4090, A100, or H100 on RunPod / Vast.ai for pennies per hour instead of buying expensive hardware.';
+    }
+  }
+  checkVram();
+</script>
+<footer>
+  <div class="container">
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 21:03 UTC.</p>
+    <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
+    <p style="margin-top:8px;">
+      <a href="../index.html">All AI Models</a> ·
+      <a href="../vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
+      <a href="../gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="../sitemap.xml">XML Sitemap</a>
+    </p>
+  </div>
+</footer>
+</body>
+</html>
