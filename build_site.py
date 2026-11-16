@@ -285,7 +285,8 @@ def build_model_page(m, all_models, config, updated_str):
     canonical = f"{base_url}/models/{m['slug']}.html"
     gpu = config["gpu_tiers"][m["gpu_tier_idx"]]
     aff = config["affiliates"][gpu["provider_key"]]
-    alt_aff = config["affiliates"]["vultr"]
+    alt_key = "vastai" if gpu["provider_key"] != "vastai" else "runpod"
+    alt_aff = config["affiliates"][alt_key]
 
     # Calculate daily break-even tokens when self-hosting vs API
     daily_gpu_cost = round(gpu["hourly_usd"] * 24, 2)
@@ -451,7 +452,7 @@ def build_comparison_page(m1, m2, config, updated_str):
 
     cheaper = m1 if m1["blended_1m"] <= m2["blended_1m"] else m2
     aff_runpod = config["affiliates"]["runpod"]
-    aff_do = config["affiliates"]["digitalocean"]
+    aff_do = config["affiliates"]["vastai"]
 
     page = shared_head(title, desc, canonical)
     page += shared_nav(prefix="../")

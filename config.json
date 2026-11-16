@@ -7,38 +7,31 @@
   "affiliates": {
     "runpod": {
       "name": "RunPod Cloud GPUs",
-      "badge": "Best for Serverless & Dedicated GPUs",
+      "badge": "Best for Serverless & Dedicated AI GPUs",
       "cta_text": "Deploy on RunPod (From $0.20/hr)",
-      "url": "https://www.runpod.io?ref=YOUR_RUNPOD_REF_ID",
-      "payout_info": "Pays recurring commission on every GPU hour your referrals spend."
+      "url": "https://runpod.io?ref=lyp3u1tj",
+      "payout_info": "Tracked via your RunPod referral ID (lyp3u1tj)."
     },
     "vastai": {
       "name": "Vast.ai GPU Marketplace",
       "badge": "Cheapest RTX 4090 & H100 Rentals",
       "cta_text": "Rent GPUs on Vast.ai (Save up to 70%)",
-      "url": "https://cloud.vast.ai/?ref_id=YOUR_VAST_REF_ID",
-      "payout_info": "Pays ongoing referral credit/commission on GPU marketplace rentals."
+      "url": "https://cloud.vast.ai/?ref_id=864932",
+      "payout_info": "Tracked via your Vast.ai referral ID (864932)."
     },
     "vultr": {
       "name": "Vultr Cloud GPU & VPS",
       "badge": "$300 Free Credit for New Users",
-      "cta_text": "Claim $300 Free Vultr GPU Credit",
-      "url": "https://www.vultr.com/?ref=YOUR_VULTR_REF_ID",
-      "payout_info": "Pays up to $100 per qualified signup via Vultr Referral Program."
+      "cta_text": "Claim Free Vultr GPU Credit",
+      "url": "https://www.vultr.com/?ref=9936333",
+      "payout_info": "Tracked via your Vultr referral ID (9936333)."
     },
     "digitalocean": {
       "name": "DigitalOcean GPU Droplets",
       "badge": "$200 Free Credit for 60 Days",
       "cta_text": "Get $200 Free Credit on DigitalOcean",
-      "url": "https://m.do.co/c/YOUR_DO_REF_ID",
-      "payout_info": "Pays $25-$200 per signup via DigitalOcean Referral/Affiliate Program."
-    },
-    "hetzner": {
-      "name": "Hetzner Cloud",
-      "badge": "Best Value CPU/RAM VPS for AI Agents",
-      "cta_text": "Get €20 Free Hetzner Cloud Credit",
-      "url": "https://hetzner.cloud/?ref=YOUR_HETZNER_REF_ID",
-      "payout_info": "Pays €10 per referral + gives new users €20 free cloud credit."
+      "url": "https://m.do.co/c/d78fc54fc74e",
+      "payout_info": "Tracked via your DigitalOcean referral ID (d78fc54fc74e)."
     }
   },
   "gpu_tiers": [
@@ -74,7 +67,7 @@
       "name": "2x NVIDIA H100 (160GB VRAM)",
       "vram_gb": 160,
       "hourly_usd": 5.38,
-      "provider_key": "vultr",
+      "provider_key": "runpod",
       "throughput_tok_sec": 110,
       "best_for": "100B+ & MoE frontier open-weight models (DeepSeek R1/V3, Llama 405B)"
     }
