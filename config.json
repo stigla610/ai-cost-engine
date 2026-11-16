@@ -1,9 +1,12 @@
 {
   "site_name": "TokenBench & GPU Cost Engine",
-  "site_tagline": "Live AI Model API Pricing, Token Calculators & Cloud GPU Break-Even Directory",
+  "site_tagline": "Live AI Model API Pricing, VRAM Calculators & Cloud GPU Break-Even Directory",
   "base_url": "https://stigla610.github.io/ai-cost-engine",
-  "max_individual_model_pages": 250,
-  "max_comparison_pages": 150,
+  "indexnow_key": "4b8e9a2d7c1f6e3a5b9d0c8e2f4a1b7d",
+  "google_site_verification": "",
+  "max_individual_model_pages": 350,
+  "max_comparison_pages": 600,
+  "max_vram_pages": 250,
   "affiliates": {
     "runpod": {
       "name": "RunPod Cloud GPUs",
@@ -40,15 +43,17 @@
       "name": "NVIDIA RTX 4090 (24GB VRAM)",
       "vram_gb": 24,
       "hourly_usd": 0.39,
+      "watts": 450,
       "provider_key": "vastai",
       "throughput_tok_sec": 85,
-      "best_for": "7B to 14B models (Llama 3, Qwen, Mistral)"
+      "best_for": "7B to 14B models & Q4 quantized 32B models"
     },
     {
       "id": "a100_80gb",
       "name": "NVIDIA A100 (80GB VRAM)",
       "vram_gb": 80,
       "hourly_usd": 1.39,
+      "watts": 400,
       "provider_key": "runpod",
       "throughput_tok_sec": 65,
       "best_for": "32B to 70B models (Llama 70B, Qwen 72B, Mixtral)"
@@ -58,6 +63,7 @@
       "name": "NVIDIA H100 SXM (80GB VRAM)",
       "vram_gb": 80,
       "hourly_usd": 2.69,
+      "watts": 700,
       "provider_key": "runpod",
       "throughput_tok_sec": 140,
       "best_for": "High-concurrency production LLM inference & 70B+ models"
@@ -67,6 +73,7 @@
       "name": "2x NVIDIA H100 (160GB VRAM)",
       "vram_gb": 160,
       "hourly_usd": 5.38,
+      "watts": 1400,
       "provider_key": "runpod",
       "throughput_tok_sec": 110,
       "best_for": "100B+ & MoE frontier open-weight models (DeepSeek R1/V3, Llama 405B)"

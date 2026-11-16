@@ -11,6 +11,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/compare/openai-gpt-4-1-vs-openai-gpt-4o-2024-05-13.html" />
   
+  
   <style>
     :root {
       --bg: #0b0f19;
@@ -59,7 +60,7 @@
       gap: 8px;
     }
     .brand span { color: var(--accent); }
-    .nav-links { display: flex; gap: 20px; font-size: 0.95rem; align-items: center; flex-wrap: wrap; }
+    .nav-links { display: flex; gap: 18px; font-size: 0.94rem; align-items: center; flex-wrap: wrap; }
     .btn-cta {
       background: linear-gradient(135deg, #0284c7, #4f46e5);
       color: #fff !important;
@@ -152,9 +153,10 @@
     <a href="../index.html" class="brand">⚡ Token<span>Bench</span></a>
     <nav class="nav-links">
       <a href="../index.html">API Cost Calculator</a>
+      <a href="../vram-electricity-calculator.html">VRAM &amp; Electricity Calculator</a>
       <a href="../gpu-cloud-pricing.html">Cloud GPU Rates</a>
       <a href="../index.html#comparisons">Model Comparisons</a>
-      <a href="../gpu-cloud-pricing.html" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
+      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
     </nav>
   </div>
 </header>
@@ -198,6 +200,11 @@
           <td>128,000 tokens</td>
         </tr>
         <tr>
+          <td>4-Bit Quantized VRAM</td>
+          <td><a href="../vram/openai-gpt-4-1-vram-requirements.html">45.5 GB VRAM</a></td>
+          <td><a href="../vram/openai-gpt-4o-2024-05-13-vram-requirements.html">45.5 GB VRAM</a></td>
+        </tr>
+        <tr>
           <td>Monthly Cost @ 10M In / 2M Out per day</td>
           <td><strong>$1,080.00/mo</strong></td>
           <td><strong>$2,400.00/mo</strong></td>
@@ -210,7 +217,7 @@
     <div>
       <span class="badge badge-green">Cloud Infrastructure Deal</span>
       <h3>Deploy Your AI App or Open-Source LLM for Less</h3>
-      <p style="color:var(--muted);">Claim free cloud credits or rent serverless GPUs to cut your monthly AI infrastructure bill by up to 70%.</p>
+      <p style="color:var(--muted);">Rent serverless or dedicated GPUs to cut your monthly AI infrastructure bill by up to 70%.</p>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
       <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Deploy on RunPod (From $0.20/hr)</a>
@@ -220,10 +227,11 @@
 </main>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 20:06 UTC.</p>
-    <p style="margin-top:8px;">links to cloud GPU &amp; infrastructure providers may include partner referral links at zero extra cost to you, which keeps this calculator 100% free.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 20:13 UTC.</p>
+    <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·
+      <a href="../vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="../gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
       <a href="../sitemap.xml">XML Sitemap</a>
     </p>

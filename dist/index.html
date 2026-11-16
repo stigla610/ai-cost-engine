@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TokenBench &amp; GPU Cost Engine — Live AI Model API Pricing, Token Calculators &amp; Cloud GPU Break-Even Directory</title>
-  <meta name="description" content="Compare live API token pricing across 250+ AI models (OpenAI, Anthropic, DeepSeek, Meta Llama, Google Gemini) and calculate Cloud GPU self-hosting break-even costs." />
+  <title>TokenBench &amp; GPU Cost Engine — Live AI Model API Pricing, VRAM Calculators &amp; Cloud GPU Break-Even Directory</title>
+  <meta name="description" content="Compare live API token pricing across 350+ AI models (OpenAI, Anthropic, DeepSeek, Meta Llama, Google Gemini), calculate LLM VRAM requirements, and compare Cloud GPU rental rates." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/index.html" />
-  <meta property="og:title" content="TokenBench &amp; GPU Cost Engine — Live AI Model API Pricing, Token Calculators &amp; Cloud GPU Break-Even Directory" />
-  <meta property="og:description" content="Compare live API token pricing across 250+ AI models (OpenAI, Anthropic, DeepSeek, Meta Llama, Google Gemini) and calculate Cloud GPU self-hosting break-even costs." />
+  <meta property="og:title" content="TokenBench &amp; GPU Cost Engine — Live AI Model API Pricing, VRAM Calculators &amp; Cloud GPU Break-Even Directory" />
+  <meta property="og:description" content="Compare live API token pricing across 350+ AI models (OpenAI, Anthropic, DeepSeek, Meta Llama, Google Gemini), calculate LLM VRAM requirements, and compare Cloud GPU rental rates." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/index.html" />
+  
   
   <style>
     :root {
@@ -59,7 +60,7 @@
       gap: 8px;
     }
     .brand span { color: var(--accent); }
-    .nav-links { display: flex; gap: 20px; font-size: 0.95rem; align-items: center; flex-wrap: wrap; }
+    .nav-links { display: flex; gap: 18px; font-size: 0.94rem; align-items: center; flex-wrap: wrap; }
     .btn-cta {
       background: linear-gradient(135deg, #0284c7, #4f46e5);
       color: #fff !important;
@@ -152,36 +153,37 @@
     <a href="index.html" class="brand">⚡ Token<span>Bench</span></a>
     <nav class="nav-links">
       <a href="index.html">API Cost Calculator</a>
+      <a href="vram-electricity-calculator.html">VRAM &amp; Electricity Calculator</a>
       <a href="gpu-cloud-pricing.html">Cloud GPU Rates</a>
       <a href="index.html#comparisons">Model Comparisons</a>
-      <a href="gpu-cloud-pricing.html" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
+      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
     </nav>
   </div>
 </header>
 
 <main class="container">
   <section class="hero">
-    <span class="badge">Auto-Updated Daily · 250+ Live AI Models Tracked</span>
-    <h1>AI API Token Cost Calculator &amp; Cloud GPU Break-Even Engine</h1>
+    <span class="badge">Auto-Updated Daily · 1,203+ Live AI Pricing &amp; VRAM Calculators</span>
+    <h1>AI API Token Cost, VRAM &amp; Cloud GPU Break-Even Engine</h1>
     <p>Instantly compare per-million token costs across OpenAI, Anthropic, Google, DeepSeek, Qwen, and Llama models—and see the exact point where renting a Cloud GPU saves you money.</p>
   </section>
 
   <div class="affiliate-box">
     <div>
       <span class="badge badge-green">Featured Infrastructure Deals</span>
-      <h3>Building an AI Product or Running Local LLMs?</h3>
-      <p style="color:var(--muted);">Deploy dedicated GPUs from $0.20/hr or claim up to $300 in free cloud compute credits below.</p>
+      <h3>Building an AI Product or Running Open-Weight LLMs?</h3>
+      <p style="color:var(--muted);">Deploy dedicated RTX 4090, A100, and H100 GPUs from $0.20/hr with instant PyTorch, vLLM, and Ollama templates.</p>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
       <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Deploy on RunPod (From $0.20/hr)</a>
-      <a href="https://www.vultr.com/?ref=9936333" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">Claim Free Vultr GPU Credit</a>
+      <a href="https://cloud.vast.ai/?ref_id=864932" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">Rent GPUs on Vast.ai (Save up to 70%)</a>
     </div>
   </div>
 
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px;">
-      <h2>Live AI Model Pricing Directory (Per 1M Tokens)</h2>
-      <input type="text" id="searchInput" placeholder="Filter models (e.g. gpt-4, claude, deepseek, llama)..." style="max-width:360px;" oninput="filterTable()" />
+      <h2>Live AI Model Pricing &amp; VRAM Directory (Per 1M Tokens)</h2>
+      <input type="text" id="searchInput" placeholder="Filter models (e.g. gpt-5, claude, deepseek, llama, qwen)..." style="max-width:360px;" oninput="filterTable()" />
     </div>
     <div style="overflow-x:auto;">
       <table>
@@ -191,8 +193,9 @@
             <th>Provider</th>
             <th>Input / 1M</th>
             <th>Output / 1M</th>
-            <th>Context Window</th>
-            <th>Cost Calculator</th>
+            <th>Context</th>
+            <th>Q4 VRAM</th>
+            <th>Calculator</th>
           </tr>
         </thead>
         <tbody id="modelTableBody">
@@ -203,6 +206,7 @@
           <td>$30.0000</td>
           <td>$60.0000</td>
           <td>8,191</td>
+          <td><a href="vram/openai-gpt-4-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4.html">Calculator →</a></td>
         </tr>
         
@@ -212,6 +216,7 @@
           <td>$5.0000</td>
           <td>$15.0000</td>
           <td>128,000</td>
+          <td><a href="vram/openai-gpt-4-turbo-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4-turbo-batch.html">Calculator →</a></td>
         </tr>
         
@@ -221,6 +226,7 @@
           <td>$2.0000</td>
           <td>$8.0000</td>
           <td>1,047,576</td>
+          <td><a href="vram/openai-gpt-4-1-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4-1.html">Calculator →</a></td>
         </tr>
         
@@ -230,6 +236,7 @@
           <td>$1.0000</td>
           <td>$4.0000</td>
           <td>1,047,576</td>
+          <td><a href="vram/openai-gpt-4-1-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4-1-batch.html">Calculator →</a></td>
         </tr>
         
@@ -239,6 +246,7 @@
           <td>$0.4000</td>
           <td>$1.6000</td>
           <td>1,047,576</td>
+          <td><a href="vram/openai-gpt-4-1-mini-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4-1-mini.html">Calculator →</a></td>
         </tr>
         
@@ -248,6 +256,7 @@
           <td>$0.2000</td>
           <td>$0.8000</td>
           <td>1,047,576</td>
+          <td><a href="vram/openai-gpt-4-1-mini-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4-1-mini-batch.html">Calculator →</a></td>
         </tr>
         
@@ -257,6 +266,7 @@
           <td>$0.1000</td>
           <td>$0.4000</td>
           <td>1,047,576</td>
+          <td><a href="vram/openai-gpt-4-1-nano-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4-1-nano.html">Calculator →</a></td>
         </tr>
         
@@ -266,6 +276,7 @@
           <td>$0.0500</td>
           <td>$0.2000</td>
           <td>1,047,576</td>
+          <td><a href="vram/openai-gpt-4-1-nano-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4-1-nano-batch.html">Calculator →</a></td>
         </tr>
         
@@ -275,6 +286,7 @@
           <td>$2.5000</td>
           <td>$10.0000</td>
           <td>128,000</td>
+          <td><a href="vram/openai-gpt-4o-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4o.html">Calculator →</a></td>
         </tr>
         
@@ -284,6 +296,7 @@
           <td>$5.0000</td>
           <td>$15.0000</td>
           <td>128,000</td>
+          <td><a href="vram/openai-gpt-4o-2024-05-13-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4o-2024-05-13.html">Calculator →</a></td>
         </tr>
         
@@ -293,6 +306,7 @@
           <td>$2.5000</td>
           <td>$10.0000</td>
           <td>128,000</td>
+          <td><a href="vram/openai-gpt-4o-2024-08-06-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4o-2024-08-06.html">Calculator →</a></td>
         </tr>
         
@@ -302,6 +316,7 @@
           <td>$2.5000</td>
           <td>$10.0000</td>
           <td>128,000</td>
+          <td><a href="vram/openai-gpt-4o-2024-11-20-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4o-2024-11-20.html">Calculator →</a></td>
         </tr>
         
@@ -311,6 +326,7 @@
           <td>$1.2500</td>
           <td>$5.0000</td>
           <td>128,000</td>
+          <td><a href="vram/openai-gpt-4o-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4o-batch.html">Calculator →</a></td>
         </tr>
         
@@ -320,6 +336,7 @@
           <td>$0.1500</td>
           <td>$0.6000</td>
           <td>128,000</td>
+          <td><a href="vram/openai-gpt-4o-mini-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4o-mini.html">Calculator →</a></td>
         </tr>
         
@@ -329,6 +346,7 @@
           <td>$0.1500</td>
           <td>$0.6000</td>
           <td>128,000</td>
+          <td><a href="vram/openai-gpt-4o-mini-2024-07-18-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4o-mini-2024-07-18.html">Calculator →</a></td>
         </tr>
         
@@ -338,6 +356,7 @@
           <td>$0.0750</td>
           <td>$0.3000</td>
           <td>128,000</td>
+          <td><a href="vram/openai-gpt-4o-mini-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-4o-mini-batch.html">Calculator →</a></td>
         </tr>
         
@@ -347,6 +366,7 @@
           <td>$1.2500</td>
           <td>$10.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5.html">Calculator →</a></td>
         </tr>
         
@@ -356,6 +376,7 @@
           <td>$0.6250</td>
           <td>$5.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-batch.html">Calculator →</a></td>
         </tr>
         
@@ -365,6 +386,7 @@
           <td>$10.0000</td>
           <td>$10.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-image-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-image.html">Calculator →</a></td>
         </tr>
         
@@ -374,6 +396,7 @@
           <td>$2.5000</td>
           <td>$2.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-image-mini-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-image-mini.html">Calculator →</a></td>
         </tr>
         
@@ -383,6 +406,7 @@
           <td>$0.2500</td>
           <td>$2.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-mini-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-mini.html">Calculator →</a></td>
         </tr>
         
@@ -392,6 +416,7 @@
           <td>$0.1250</td>
           <td>$1.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-mini-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-mini-batch.html">Calculator →</a></td>
         </tr>
         
@@ -401,6 +426,7 @@
           <td>$0.0500</td>
           <td>$0.4000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-nano-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-nano.html">Calculator →</a></td>
         </tr>
         
@@ -410,6 +436,7 @@
           <td>$0.0250</td>
           <td>$0.2000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-nano-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-nano-batch.html">Calculator →</a></td>
         </tr>
         
@@ -419,6 +446,7 @@
           <td>$15.0000</td>
           <td>$120.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-pro-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-pro.html">Calculator →</a></td>
         </tr>
         
@@ -428,6 +456,7 @@
           <td>$7.5000</td>
           <td>$60.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-pro-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-pro-batch.html">Calculator →</a></td>
         </tr>
         
@@ -437,6 +466,7 @@
           <td>$1.2500</td>
           <td>$10.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-1-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-1.html">Calculator →</a></td>
         </tr>
         
@@ -446,6 +476,7 @@
           <td>$0.6250</td>
           <td>$5.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-1-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-1-batch.html">Calculator →</a></td>
         </tr>
         
@@ -455,6 +486,7 @@
           <td>$1.2500</td>
           <td>$10.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-1-codex-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-1-codex.html">Calculator →</a></td>
         </tr>
         
@@ -464,6 +496,7 @@
           <td>$1.2500</td>
           <td>$10.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-1-codex-max-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-1-codex-max.html">Calculator →</a></td>
         </tr>
         
@@ -473,6 +506,7 @@
           <td>$0.2500</td>
           <td>$2.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-1-codex-mini-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-1-codex-mini.html">Calculator →</a></td>
         </tr>
         
@@ -482,6 +516,7 @@
           <td>$1.7500</td>
           <td>$14.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-2-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-2.html">Calculator →</a></td>
         </tr>
         
@@ -491,6 +526,7 @@
           <td>$0.8750</td>
           <td>$7.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-2-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-2-batch.html">Calculator →</a></td>
         </tr>
         
@@ -500,6 +536,7 @@
           <td>$1.7500</td>
           <td>$14.0000</td>
           <td>128,000</td>
+          <td><a href="vram/openai-gpt-5-2-chat-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-2-chat.html">Calculator →</a></td>
         </tr>
         
@@ -509,6 +546,7 @@
           <td>$21.0000</td>
           <td>$168.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-2-pro-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-2-pro.html">Calculator →</a></td>
         </tr>
         
@@ -518,6 +556,7 @@
           <td>$10.5000</td>
           <td>$84.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-2-pro-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-2-pro-batch.html">Calculator →</a></td>
         </tr>
         
@@ -527,6 +566,7 @@
           <td>$1.7500</td>
           <td>$14.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-2-codex-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-2-codex.html">Calculator →</a></td>
         </tr>
         
@@ -536,6 +576,7 @@
           <td>$1.7500</td>
           <td>$14.0000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-3-codex-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-3-codex.html">Calculator →</a></td>
         </tr>
         
@@ -545,6 +586,7 @@
           <td>$2.5000</td>
           <td>$15.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-4-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-4.html">Calculator →</a></td>
         </tr>
         
@@ -554,6 +596,7 @@
           <td>$1.2500</td>
           <td>$7.5000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-4-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-4-batch.html">Calculator →</a></td>
         </tr>
         
@@ -563,6 +606,7 @@
           <td>$8.0000</td>
           <td>$15.0000</td>
           <td>272,000</td>
+          <td><a href="vram/openai-gpt-5-4-image-2-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-4-image-2.html">Calculator →</a></td>
         </tr>
         
@@ -572,6 +616,7 @@
           <td>$0.7500</td>
           <td>$4.5000</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-4-mini-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-4-mini.html">Calculator →</a></td>
         </tr>
         
@@ -581,6 +626,7 @@
           <td>$0.3750</td>
           <td>$2.2500</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-4-mini-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-4-mini-batch.html">Calculator →</a></td>
         </tr>
         
@@ -590,6 +636,7 @@
           <td>$0.2000</td>
           <td>$1.2500</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-4-nano-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-4-nano.html">Calculator →</a></td>
         </tr>
         
@@ -599,6 +646,7 @@
           <td>$0.1000</td>
           <td>$0.6250</td>
           <td>400,000</td>
+          <td><a href="vram/openai-gpt-5-4-nano-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-4-nano-batch.html">Calculator →</a></td>
         </tr>
         
@@ -608,6 +656,7 @@
           <td>$30.0000</td>
           <td>$180.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-4-pro-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-4-pro.html">Calculator →</a></td>
         </tr>
         
@@ -617,6 +666,7 @@
           <td>$15.0000</td>
           <td>$90.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-4-pro-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-4-pro-batch.html">Calculator →</a></td>
         </tr>
         
@@ -626,6 +676,7 @@
           <td>$5.0000</td>
           <td>$30.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-5-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-5.html">Calculator →</a></td>
         </tr>
         
@@ -635,6 +686,7 @@
           <td>$2.5000</td>
           <td>$15.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-5-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-5-batch.html">Calculator →</a></td>
         </tr>
         
@@ -644,6 +696,7 @@
           <td>$30.0000</td>
           <td>$180.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-5-pro-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-5-pro.html">Calculator →</a></td>
         </tr>
         
@@ -653,6 +706,7 @@
           <td>$15.0000</td>
           <td>$90.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-5-pro-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-5-pro-batch.html">Calculator →</a></td>
         </tr>
         
@@ -662,6 +716,7 @@
           <td>$0.2000</td>
           <td>$1.2000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-luna-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-luna.html">Calculator →</a></td>
         </tr>
         
@@ -671,6 +726,7 @@
           <td>$0.1000</td>
           <td>$0.6000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-luna-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-luna-batch.html">Calculator →</a></td>
         </tr>
         
@@ -680,6 +736,7 @@
           <td>$0.2000</td>
           <td>$1.2000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-luna-pro-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-luna-pro.html">Calculator →</a></td>
         </tr>
         
@@ -689,6 +746,7 @@
           <td>$0.1000</td>
           <td>$0.6000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-luna-pro-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-luna-pro-batch.html">Calculator →</a></td>
         </tr>
         
@@ -698,6 +756,7 @@
           <td>$4.0000</td>
           <td>$20.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-sol-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-sol.html">Calculator →</a></td>
         </tr>
         
@@ -707,6 +766,7 @@
           <td>$2.0000</td>
           <td>$10.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-sol-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-sol-batch.html">Calculator →</a></td>
         </tr>
         
@@ -716,6 +776,7 @@
           <td>$4.0000</td>
           <td>$20.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-sol-pro-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-sol-pro.html">Calculator →</a></td>
         </tr>
         
@@ -725,6 +786,7 @@
           <td>$2.0000</td>
           <td>$10.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-sol-pro-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-sol-pro-batch.html">Calculator →</a></td>
         </tr>
         
@@ -734,6 +796,7 @@
           <td>$2.0000</td>
           <td>$12.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-terra-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-terra.html">Calculator →</a></td>
         </tr>
         
@@ -743,6 +806,7 @@
           <td>$1.0000</td>
           <td>$6.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-terra-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-terra-batch.html">Calculator →</a></td>
         </tr>
         
@@ -752,6 +816,7 @@
           <td>$2.0000</td>
           <td>$12.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-terra-pro-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-terra-pro.html">Calculator →</a></td>
         </tr>
         
@@ -761,6 +826,7 @@
           <td>$1.0000</td>
           <td>$6.0000</td>
           <td>1,050,000</td>
+          <td><a href="vram/openai-gpt-5-6-terra-pro-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/openai-gpt-5-6-terra-pro-batch.html">Calculator →</a></td>
         </tr>
         
@@ -770,6 +836,7 @@
           <td>$10.0000</td>
           <td>$50.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-fable-5-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-fable-5.html">Calculator →</a></td>
         </tr>
         
@@ -779,6 +846,7 @@
           <td>$5.0000</td>
           <td>$25.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-fable-5-batch-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-fable-5-batch.html">Calculator →</a></td>
         </tr>
         
@@ -788,6 +856,7 @@
           <td>$10.0000</td>
           <td>$50.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-fable-5-1-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-fable-5-1.html">Calculator →</a></td>
         </tr>
         
@@ -797,6 +866,7 @@
           <td>$5.0000</td>
           <td>$25.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-fable-5-1-batch-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-fable-5-1-batch.html">Calculator →</a></td>
         </tr>
         
@@ -806,6 +876,7 @@
           <td>$8.0000</td>
           <td>$40.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-fable-5-2-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-fable-5-2.html">Calculator →</a></td>
         </tr>
         
@@ -815,6 +886,7 @@
           <td>$4.0000</td>
           <td>$20.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-fable-5-2-batch-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-fable-5-2-batch.html">Calculator →</a></td>
         </tr>
         
@@ -824,6 +896,7 @@
           <td>$8.0000</td>
           <td>$40.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-fable-latest-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-fable-latest.html">Calculator →</a></td>
         </tr>
         
@@ -833,6 +906,7 @@
           <td>$1.0000</td>
           <td>$5.0000</td>
           <td>200,000</td>
+          <td><a href="vram/anthropic-claude-haiku-4-5-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/anthropic-claude-haiku-4-5.html">Calculator →</a></td>
         </tr>
         
@@ -842,6 +916,7 @@
           <td>$0.5000</td>
           <td>$2.5000</td>
           <td>200,000</td>
+          <td><a href="vram/anthropic-claude-haiku-4-5-batch-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/anthropic-claude-haiku-4-5-batch.html">Calculator →</a></td>
         </tr>
         
@@ -851,6 +926,7 @@
           <td>$0.1000</td>
           <td>$0.5000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-haiku-5-5-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/anthropic-claude-haiku-5-5.html">Calculator →</a></td>
         </tr>
         
@@ -860,6 +936,7 @@
           <td>$0.0500</td>
           <td>$0.2500</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-haiku-5-5-batch-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/anthropic-claude-haiku-5-5-batch.html">Calculator →</a></td>
         </tr>
         
@@ -869,6 +946,7 @@
           <td>$0.1000</td>
           <td>$0.5000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-haiku-latest-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/anthropic-claude-haiku-latest.html">Calculator →</a></td>
         </tr>
         
@@ -878,6 +956,7 @@
           <td>$15.0000</td>
           <td>$75.0000</td>
           <td>200,000</td>
+          <td><a href="vram/anthropic-claude-opus-4-1-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-4-1.html">Calculator →</a></td>
         </tr>
         
@@ -887,6 +966,7 @@
           <td>$7.5000</td>
           <td>$37.5000</td>
           <td>200,000</td>
+          <td><a href="vram/anthropic-claude-opus-4-1-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-4-1-batch.html">Calculator →</a></td>
         </tr>
         
@@ -896,6 +976,7 @@
           <td>$5.0000</td>
           <td>$25.0000</td>
           <td>200,000</td>
+          <td><a href="vram/anthropic-claude-opus-4-5-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-4-5.html">Calculator →</a></td>
         </tr>
         
@@ -905,6 +986,7 @@
           <td>$2.5000</td>
           <td>$12.5000</td>
           <td>200,000</td>
+          <td><a href="vram/anthropic-claude-opus-4-5-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-4-5-batch.html">Calculator →</a></td>
         </tr>
         
@@ -914,6 +996,7 @@
           <td>$5.0000</td>
           <td>$25.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-opus-4-6-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-4-6.html">Calculator →</a></td>
         </tr>
         
@@ -923,6 +1006,7 @@
           <td>$2.5000</td>
           <td>$12.5000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-opus-4-6-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-4-6-batch.html">Calculator →</a></td>
         </tr>
         
@@ -932,6 +1016,7 @@
           <td>$5.0000</td>
           <td>$25.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-opus-4-7-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-4-7.html">Calculator →</a></td>
         </tr>
         
@@ -941,6 +1026,7 @@
           <td>$2.5000</td>
           <td>$12.5000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-opus-4-7-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-4-7-batch.html">Calculator →</a></td>
         </tr>
         
@@ -950,6 +1036,7 @@
           <td>$5.0000</td>
           <td>$25.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-opus-4-8-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-4-8.html">Calculator →</a></td>
         </tr>
         
@@ -959,6 +1046,7 @@
           <td>$2.5000</td>
           <td>$12.5000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-opus-4-8-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-4-8-batch.html">Calculator →</a></td>
         </tr>
         
@@ -968,6 +1056,7 @@
           <td>$5.0000</td>
           <td>$25.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-opus-5-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-5.html">Calculator →</a></td>
         </tr>
         
@@ -977,6 +1066,7 @@
           <td>$2.5000</td>
           <td>$12.5000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-opus-5-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-5-batch.html">Calculator →</a></td>
         </tr>
         
@@ -986,6 +1076,7 @@
           <td>$4.0000</td>
           <td>$20.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-opus-5-5-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-5-5.html">Calculator →</a></td>
         </tr>
         
@@ -995,6 +1086,7 @@
           <td>$2.0000</td>
           <td>$10.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-opus-5-5-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-5-5-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1004,6 +1096,7 @@
           <td>$4.0000</td>
           <td>$20.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-opus-latest-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/anthropic-claude-opus-latest.html">Calculator →</a></td>
         </tr>
         
@@ -1013,6 +1106,7 @@
           <td>$3.0000</td>
           <td>$15.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-sonnet-4-5-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-sonnet-4-5.html">Calculator →</a></td>
         </tr>
         
@@ -1022,6 +1116,7 @@
           <td>$1.5000</td>
           <td>$7.5000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-sonnet-4-5-batch-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-sonnet-4-5-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1031,6 +1126,7 @@
           <td>$3.0000</td>
           <td>$15.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-sonnet-4-6-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-sonnet-4-6.html">Calculator →</a></td>
         </tr>
         
@@ -1040,6 +1136,7 @@
           <td>$1.5000</td>
           <td>$7.5000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-sonnet-4-6-batch-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-sonnet-4-6-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1049,6 +1146,7 @@
           <td>$2.0000</td>
           <td>$10.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-sonnet-5-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-sonnet-5.html">Calculator →</a></td>
         </tr>
         
@@ -1058,6 +1156,7 @@
           <td>$1.0000</td>
           <td>$5.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-sonnet-5-batch-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-sonnet-5-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1067,6 +1166,7 @@
           <td>$2.0000</td>
           <td>$10.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-sonnet-5-5-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-sonnet-5-5.html">Calculator →</a></td>
         </tr>
         
@@ -1076,6 +1176,7 @@
           <td>$1.0000</td>
           <td>$5.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-sonnet-5-5-batch-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-sonnet-5-5-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1085,6 +1186,7 @@
           <td>$2.0000</td>
           <td>$10.0000</td>
           <td>1,000,000</td>
+          <td><a href="vram/anthropic-claude-sonnet-latest-vram-requirements.html">20.8 GB</a></td>
           <td><a href="models/anthropic-claude-sonnet-latest.html">Calculator →</a></td>
         </tr>
         
@@ -1094,6 +1196,7 @@
           <td>$0.3000</td>
           <td>$2.5000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-2-5-flash-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-2-5-flash.html">Calculator →</a></td>
         </tr>
         
@@ -1103,6 +1206,7 @@
           <td>$0.1000</td>
           <td>$0.4000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-2-5-flash-lite-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-2-5-flash-lite.html">Calculator →</a></td>
         </tr>
         
@@ -1112,6 +1216,7 @@
           <td>$1.2500</td>
           <td>$10.0000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-2-5-pro-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/google-gemini-2-5-pro.html">Calculator →</a></td>
         </tr>
         
@@ -1121,6 +1226,7 @@
           <td>$1.2500</td>
           <td>$10.0000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-2-5-pro-preview-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/google-gemini-2-5-pro-preview.html">Calculator →</a></td>
         </tr>
         
@@ -1130,6 +1236,7 @@
           <td>$0.5000</td>
           <td>$3.0000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-flash-preview-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-flash-preview.html">Calculator →</a></td>
         </tr>
         
@@ -1139,6 +1246,7 @@
           <td>$0.2500</td>
           <td>$1.5000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-flash-preview-batch-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-flash-preview-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1148,6 +1256,7 @@
           <td>$0.2500</td>
           <td>$1.5000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-1-flash-lite-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-1-flash-lite.html">Calculator →</a></td>
         </tr>
         
@@ -1157,6 +1266,7 @@
           <td>$0.1250</td>
           <td>$0.7500</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-1-flash-lite-batch-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-1-flash-lite-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1166,6 +1276,7 @@
           <td>$0.2500</td>
           <td>$1.5000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-1-flash-lite-preview-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-1-flash-lite-preview.html">Calculator →</a></td>
         </tr>
         
@@ -1175,6 +1286,7 @@
           <td>$2.0000</td>
           <td>$12.0000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-1-pro-preview-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/google-gemini-3-1-pro-preview.html">Calculator →</a></td>
         </tr>
         
@@ -1184,6 +1296,7 @@
           <td>$1.0000</td>
           <td>$6.0000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-1-pro-preview-batch-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/google-gemini-3-1-pro-preview-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1193,6 +1306,7 @@
           <td>$2.0000</td>
           <td>$12.0000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-1-pro-preview-customtools-vram-requirements.html">45.5 GB</a></td>
           <td><a href="models/google-gemini-3-1-pro-preview-customtools.html">Calculator →</a></td>
         </tr>
         
@@ -1202,6 +1316,7 @@
           <td>$1.5000</td>
           <td>$9.0000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-5-flash-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-5-flash.html">Calculator →</a></td>
         </tr>
         
@@ -1211,6 +1326,7 @@
           <td>$0.7500</td>
           <td>$4.5000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-5-flash-batch-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-5-flash-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1220,6 +1336,7 @@
           <td>$0.3000</td>
           <td>$2.5000</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-5-flash-lite-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-5-flash-lite.html">Calculator →</a></td>
         </tr>
         
@@ -1229,6 +1346,7 @@
           <td>$0.1500</td>
           <td>$1.2500</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-5-flash-lite-batch-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-5-flash-lite-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1238,6 +1356,7 @@
           <td>$0.7500</td>
           <td>$3.7500</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-6-flash-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-6-flash.html">Calculator →</a></td>
         </tr>
         
@@ -1247,6 +1366,7 @@
           <td>$0.3750</td>
           <td>$1.8750</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-6-flash-batch-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-6-flash-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1256,6 +1376,7 @@
           <td>$0.7500</td>
           <td>$3.7500</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-7-flash-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-7-flash.html">Calculator →</a></td>
         </tr>
         
@@ -1265,6 +1386,7 @@
           <td>$0.3750</td>
           <td>$1.8750</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-7-flash-batch-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-7-flash-batch.html">Calculator →</a></td>
         </tr>
         
@@ -1274,7 +1396,308 @@
           <td>$0.8250</td>
           <td>$4.1250</td>
           <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-8-flash-vram-requirements.html">5.2 GB</a></td>
           <td><a href="models/google-gemini-3-8-flash.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: gemini 3.8 flash (batch) google">
+          <td><a href="models/google-gemini-3-8-flash-batch.html"><strong>Google: Gemini 3.8 Flash (batch)</strong></a><br/><small style="color:var(--muted)">google/gemini-3.8-flash:batch</small></td>
+          <td>Google</td>
+          <td>$0.3750</td>
+          <td>$1.8750</td>
+          <td>1,048,576</td>
+          <td><a href="vram/google-gemini-3-8-flash-batch-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-3-8-flash-batch.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: gemini 4 argon google">
+          <td><a href="models/google-gemini-4-argon.html"><strong>Google: Gemini 4 Argon</strong></a><br/><small style="color:var(--muted)">google/gemini-4-argon</small></td>
+          <td>Google</td>
+          <td>$2.0000</td>
+          <td>$10.0000</td>
+          <td>1,048,576</td>
+          <td><a href="vram/google-gemini-4-argon-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-4-argon.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: gemini 4 argon (batch) google">
+          <td><a href="models/google-gemini-4-argon-batch.html"><strong>Google: Gemini 4 Argon (batch)</strong></a><br/><small style="color:var(--muted)">google/gemini-4-argon:batch</small></td>
+          <td>Google</td>
+          <td>$1.0000</td>
+          <td>$5.0000</td>
+          <td>1,048,576</td>
+          <td><a href="vram/google-gemini-4-argon-batch-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-4-argon-batch.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: gemini 4 carbon google">
+          <td><a href="models/google-gemini-4-carbon.html"><strong>Google: Gemini 4 Carbon</strong></a><br/><small style="color:var(--muted)">google/gemini-4-carbon</small></td>
+          <td>Google</td>
+          <td>$2.0000</td>
+          <td>$10.0000</td>
+          <td>1,048,576</td>
+          <td><a href="vram/google-gemini-4-carbon-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-4-carbon.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: gemini 4 carbon (batch) google">
+          <td><a href="models/google-gemini-4-carbon-batch.html"><strong>Google: Gemini 4 Carbon (batch)</strong></a><br/><small style="color:var(--muted)">google/gemini-4-carbon:batch</small></td>
+          <td>Google</td>
+          <td>$1.0000</td>
+          <td>$5.0000</td>
+          <td>1,048,576</td>
+          <td><a href="vram/google-gemini-4-carbon-batch-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-4-carbon-batch.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: gemini 4 hydrogen google">
+          <td><a href="models/google-gemini-4-hydrogen.html"><strong>Google: Gemini 4 Hydrogen</strong></a><br/><small style="color:var(--muted)">google/gemini-4-hydrogen</small></td>
+          <td>Google</td>
+          <td>$1.5000</td>
+          <td>$7.5000</td>
+          <td>1,048,576</td>
+          <td><a href="vram/google-gemini-4-hydrogen-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-4-hydrogen.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: gemini 4 hydrogen (batch) google">
+          <td><a href="models/google-gemini-4-hydrogen-batch.html"><strong>Google: Gemini 4 Hydrogen (batch)</strong></a><br/><small style="color:var(--muted)">google/gemini-4-hydrogen:batch</small></td>
+          <td>Google</td>
+          <td>$0.7500</td>
+          <td>$3.7500</td>
+          <td>1,048,576</td>
+          <td><a href="vram/google-gemini-4-hydrogen-batch-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-4-hydrogen-batch.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: gemini flash latest ~google">
+          <td><a href="models/google-gemini-flash-latest.html"><strong>Google: Gemini Flash Latest</strong></a><br/><small style="color:var(--muted)">~google/gemini-flash-latest</small></td>
+          <td>~Google</td>
+          <td>$1.5000</td>
+          <td>$7.5000</td>
+          <td>1,048,576</td>
+          <td><a href="vram/google-gemini-flash-latest-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-flash-latest.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: gemini omni 1.1 flash google">
+          <td><a href="models/google-gemini-omni-1-1-flash.html"><strong>Google: Gemini Omni 1.1 Flash</strong></a><br/><small style="color:var(--muted)">google/gemini-omni-1.1-flash</small></td>
+          <td>Google</td>
+          <td>$1.5000</td>
+          <td>$9.0000</td>
+          <td>131,072</td>
+          <td><a href="vram/google-gemini-omni-1-1-flash-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-omni-1-1-flash.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: gemini omni 1.2 flash google">
+          <td><a href="models/google-gemini-omni-1-2-flash.html"><strong>Google: Gemini Omni 1.2 Flash</strong></a><br/><small style="color:var(--muted)">google/gemini-omni-1.2-flash</small></td>
+          <td>Google</td>
+          <td>$1.5000</td>
+          <td>$9.0000</td>
+          <td>131,072</td>
+          <td><a href="vram/google-gemini-omni-1-2-flash-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-omni-1-2-flash.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: gemini pro latest ~google">
+          <td><a href="models/google-gemini-pro-latest.html"><strong>Google: Gemini Pro Latest</strong></a><br/><small style="color:var(--muted)">~google/gemini-pro-latest</small></td>
+          <td>~Google</td>
+          <td>$2.0000</td>
+          <td>$10.0000</td>
+          <td>1,048,576</td>
+          <td><a href="vram/google-gemini-pro-latest-vram-requirements.html">45.5 GB</a></td>
+          <td><a href="models/google-gemini-pro-latest.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: nano banana (gemini 2.5 flash image) google">
+          <td><a href="models/google-gemini-2-5-flash-image.html"><strong>Google: Nano Banana (Gemini 2.5 Flash Image)</strong></a><br/><small style="color:var(--muted)">google/gemini-2.5-flash-image</small></td>
+          <td>Google</td>
+          <td>$0.3000</td>
+          <td>$2.5000</td>
+          <td>32,768</td>
+          <td><a href="vram/google-gemini-2-5-flash-image-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-2-5-flash-image.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: nano banana 2 (gemini 3.1 flash image preview) google">
+          <td><a href="models/google-gemini-3-1-flash-image-preview.html"><strong>Google: Nano Banana 2 (Gemini 3.1 Flash Image Preview)</strong></a><br/><small style="color:var(--muted)">google/gemini-3.1-flash-image-preview</small></td>
+          <td>Google</td>
+          <td>$0.5000</td>
+          <td>$3.0000</td>
+          <td>65,536</td>
+          <td><a href="vram/google-gemini-3-1-flash-image-preview-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-3-1-flash-image-preview.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: nano banana 2 (gemini 3.1 flash image) google">
+          <td><a href="models/google-gemini-3-1-flash-image.html"><strong>Google: Nano Banana 2 (Gemini 3.1 Flash Image)</strong></a><br/><small style="color:var(--muted)">google/gemini-3.1-flash-image</small></td>
+          <td>Google</td>
+          <td>$0.5000</td>
+          <td>$3.0000</td>
+          <td>131,072</td>
+          <td><a href="vram/google-gemini-3-1-flash-image-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-3-1-flash-image.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: nano banana 2 lite (gemini 3.1 flash lite image) google">
+          <td><a href="models/google-gemini-3-1-flash-lite-image.html"><strong>Google: Nano Banana 2 Lite (Gemini 3.1 Flash Lite Image)</strong></a><br/><small style="color:var(--muted)">google/gemini-3.1-flash-lite-image</small></td>
+          <td>Google</td>
+          <td>$0.2500</td>
+          <td>$1.5000</td>
+          <td>65,536</td>
+          <td><a href="vram/google-gemini-3-1-flash-lite-image-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-3-1-flash-lite-image.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: nano banana 2.1 google">
+          <td><a href="models/google-gemini-nano-banana-2-1.html"><strong>Google: Nano Banana 2.1</strong></a><br/><small style="color:var(--muted)">google/gemini-nano-banana-2.1</small></td>
+          <td>Google</td>
+          <td>$1.5000</td>
+          <td>$7.5000</td>
+          <td>65,536</td>
+          <td><a href="vram/google-gemini-nano-banana-2-1-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/google-gemini-nano-banana-2-1.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: nano banana pro (gemini 3 pro image preview) google">
+          <td><a href="models/google-gemini-3-pro-image-preview.html"><strong>Google: Nano Banana Pro (Gemini 3 Pro Image Preview)</strong></a><br/><small style="color:var(--muted)">google/gemini-3-pro-image-preview</small></td>
+          <td>Google</td>
+          <td>$2.0000</td>
+          <td>$12.0000</td>
+          <td>65,536</td>
+          <td><a href="vram/google-gemini-3-pro-image-preview-vram-requirements.html">45.5 GB</a></td>
+          <td><a href="models/google-gemini-3-pro-image-preview.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: nano banana pro (gemini 3 pro image) google">
+          <td><a href="models/google-gemini-3-pro-image.html"><strong>Google: Nano Banana Pro (Gemini 3 Pro Image)</strong></a><br/><small style="color:var(--muted)">google/gemini-3-pro-image</small></td>
+          <td>Google</td>
+          <td>$2.0000</td>
+          <td>$12.0000</td>
+          <td>131,072</td>
+          <td><a href="vram/google-gemini-3-pro-image-vram-requirements.html">45.5 GB</a></td>
+          <td><a href="models/google-gemini-3-pro-image.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek flash latest ~deepseek">
+          <td><a href="models/deepseek-deepseek-flash-latest.html"><strong>DeepSeek: DeepSeek Flash Latest</strong></a><br/><small style="color:var(--muted)">~deepseek/deepseek-flash-latest</small></td>
+          <td>~Deepseek</td>
+          <td>$0.0360</td>
+          <td>$0.5000</td>
+          <td>1,048,576</td>
+          <td><a href="vram/deepseek-deepseek-flash-latest-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/deepseek-deepseek-flash-latest.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek pro latest ~deepseek">
+          <td><a href="models/deepseek-deepseek-pro-latest.html"><strong>DeepSeek: DeepSeek Pro Latest</strong></a><br/><small style="color:var(--muted)">~deepseek/deepseek-pro-latest</small></td>
+          <td>~Deepseek</td>
+          <td>$0.0999</td>
+          <td>$8.0000</td>
+          <td>1,048,576</td>
+          <td><a href="vram/deepseek-deepseek-pro-latest-vram-requirements.html">45.5 GB</a></td>
+          <td><a href="models/deepseek-deepseek-pro-latest.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek v3 deepseek">
+          <td><a href="models/deepseek-deepseek-chat.html"><strong>DeepSeek: DeepSeek V3</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-chat</small></td>
+          <td>Deepseek</td>
+          <td>$0.2574</td>
+          <td>$1.0287</td>
+          <td>163,840</td>
+          <td><a href="vram/deepseek-deepseek-chat-vram-requirements.html">45.5 GB</a></td>
+          <td><a href="models/deepseek-deepseek-chat.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek v3 0324 deepseek">
+          <td><a href="models/deepseek-deepseek-chat-v3-0324.html"><strong>DeepSeek: DeepSeek V3 0324</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-chat-v3-0324</small></td>
+          <td>Deepseek</td>
+          <td>$0.2900</td>
+          <td>$1.1400</td>
+          <td>163,840</td>
+          <td><a href="vram/deepseek-deepseek-chat-v3-0324-vram-requirements.html">45.5 GB</a></td>
+          <td><a href="models/deepseek-deepseek-chat-v3-0324.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek v3.1 deepseek">
+          <td><a href="models/deepseek-deepseek-chat-v3-1.html"><strong>DeepSeek: DeepSeek V3.1</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-chat-v3.1</small></td>
+          <td>Deepseek</td>
+          <td>$0.2500</td>
+          <td>$0.9500</td>
+          <td>163,840</td>
+          <td><a href="vram/deepseek-deepseek-chat-v3-1-vram-requirements.html">45.5 GB</a></td>
+          <td><a href="models/deepseek-deepseek-chat-v3-1.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek v3.1 terminus deepseek">
+          <td><a href="models/deepseek-deepseek-v3-1-terminus.html"><strong>DeepSeek: DeepSeek V3.1 Terminus</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v3.1-terminus</small></td>
+          <td>Deepseek</td>
+          <td>$0.2700</td>
+          <td>$1.0000</td>
+          <td>163,840</td>
+          <td><a href="vram/deepseek-deepseek-v3-1-terminus-vram-requirements.html">45.5 GB</a></td>
+          <td><a href="models/deepseek-deepseek-v3-1-terminus.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek v3.2 deepseek">
+          <td><a href="models/deepseek-deepseek-v3-2.html"><strong>DeepSeek: DeepSeek V3.2</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v3.2</small></td>
+          <td>Deepseek</td>
+          <td>$0.2600</td>
+          <td>$0.3800</td>
+          <td>163,840</td>
+          <td><a href="vram/deepseek-deepseek-v3-2-vram-requirements.html">45.5 GB</a></td>
+          <td><a href="models/deepseek-deepseek-v3-2.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek v3.2 exp deepseek">
+          <td><a href="models/deepseek-deepseek-v3-2-exp.html"><strong>DeepSeek: DeepSeek V3.2 Exp</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v3.2-exp</small></td>
+          <td>Deepseek</td>
+          <td>$0.2700</td>
+          <td>$0.4100</td>
+          <td>163,840</td>
+          <td><a href="vram/deepseek-deepseek-v3-2-exp-vram-requirements.html">45.5 GB</a></td>
+          <td><a href="models/deepseek-deepseek-v3-2-exp.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek v4 flash 0423 deepseek">
+          <td><a href="models/deepseek-deepseek-v4-flash.html"><strong>DeepSeek: DeepSeek V4 Flash 0423</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4-flash</small></td>
+          <td>Deepseek</td>
+          <td>$0.0900</td>
+          <td>$0.1800</td>
+          <td>1,048,576</td>
+          <td><a href="vram/deepseek-deepseek-v4-flash-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/deepseek-deepseek-v4-flash.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek v4 flash 0731 deepseek">
+          <td><a href="models/deepseek-deepseek-v4-flash-0731.html"><strong>DeepSeek: DeepSeek V4 Flash 0731</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4-flash-0731</small></td>
+          <td>Deepseek</td>
+          <td>$0.0600</td>
+          <td>$0.1800</td>
+          <td>1,048,576</td>
+          <td><a href="vram/deepseek-deepseek-v4-flash-0731-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/deepseek-deepseek-v4-flash-0731.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek v4 flash 0731 (batch) deepseek">
+          <td><a href="models/deepseek-deepseek-v4-flash-0731-batch.html"><strong>DeepSeek: DeepSeek V4 Flash 0731 (batch)</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4-flash-0731:batch</small></td>
+          <td>Deepseek</td>
+          <td>$0.0480</td>
+          <td>$0.1440</td>
+          <td>1,048,576</td>
+          <td><a href="vram/deepseek-deepseek-v4-flash-0731-batch-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/deepseek-deepseek-v4-flash-0731-batch.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="deepseek: deepseek v4 flash latest ~deepseek">
+          <td><a href="models/deepseek-deepseek-v4-flash-latest.html"><strong>DeepSeek: DeepSeek V4 Flash Latest</strong></a><br/><small style="color:var(--muted)">~deepseek/deepseek-v4-flash-latest</small></td>
+          <td>~Deepseek</td>
+          <td>$0.0434</td>
+          <td>$0.3000</td>
+          <td>1,048,576</td>
+          <td><a href="vram/deepseek-deepseek-v4-flash-latest-vram-requirements.html">5.2 GB</a></td>
+          <td><a href="models/deepseek-deepseek-v4-flash-latest.html">Calculator →</a></td>
         </tr>
         
         </tbody>
@@ -1407,6 +1830,81 @@
           <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $15.0/1M input tokens →</div>
         </a>
         
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-pro-batch.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5 Pro (batch)</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $7.5/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-1.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.1</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $1.25/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-1-batch.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.1 (batch)</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $0.625/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-1-codex.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.1-Codex</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $1.25/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-1-codex-max.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.1-Codex-Max</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $1.25/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-1-codex-mini.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.1-Codex-Mini</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $0.25/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-2.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.2</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $1.75/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-2-batch.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.2 (batch)</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $0.875/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-2-chat.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.2 Chat</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $1.75/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-2-pro.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.2 Pro</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $21.0/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-2-pro-batch.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.2 Pro (batch)</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $10.5/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-2-codex.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.2-Codex</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $1.75/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-3-codex.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.3-Codex</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $1.75/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-4.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.4</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $2.5/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-vs-openai-gpt-5-4-batch.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 vs OpenAI: GPT-5.4 (batch)</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$30.0/1M vs $1.25/1M input tokens →</div>
+        </a>
+        
         <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-4-1.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
           <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-4.1</strong>
           <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $2.0/1M input tokens →</div>
@@ -1522,6 +2020,81 @@
           <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $15.0/1M input tokens →</div>
         </a>
         
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-pro-batch.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5 Pro (batch)</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $7.5/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-1.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.1</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $1.25/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-1-batch.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.1 (batch)</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $0.625/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-1-codex.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.1-Codex</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $1.25/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-1-codex-max.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.1-Codex-Max</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $1.25/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-1-codex-mini.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.1-Codex-Mini</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $0.25/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-2.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.2</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $1.75/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-2-batch.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.2 (batch)</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $0.875/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-2-chat.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.2 Chat</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $1.75/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-2-pro.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.2 Pro</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $21.0/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-2-pro-batch.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.2 Pro (batch)</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $10.5/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-2-codex.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.2-Codex</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $1.75/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-3-codex.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.3-Codex</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $1.75/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-4.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.4</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $2.5/1M input tokens →</div>
+        </a>
+        
+        <a href="compare/openai-gpt-4-turbo-batch-vs-openai-gpt-5-4-batch.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
+          <strong style="color:#fff;">OpenAI: GPT-4 Turbo (batch) vs OpenAI: GPT-5.4 (batch)</strong>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$5.0/1M vs $1.25/1M input tokens →</div>
+        </a>
+        
         <a href="compare/openai-gpt-4-1-vs-openai-gpt-4-1-batch.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
           <strong style="color:#fff;">OpenAI: GPT-4.1 vs OpenAI: GPT-4.1 (batch)</strong>
           <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$2.0/1M vs $1.0/1M input tokens →</div>
@@ -1602,10 +2175,11 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 20:06 UTC.</p>
-    <p style="margin-top:8px;">links to cloud GPU &amp; infrastructure providers may include partner referral links at zero extra cost to you, which keeps this calculator 100% free.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 20:13 UTC.</p>
+    <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="index.html">All AI Models</a> ·
+      <a href="vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
       <a href="sitemap.xml">XML Sitemap</a>
     </p>

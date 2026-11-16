@@ -30,7 +30,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Fetch live AI model pricing & build 400+ programmatic SEO pages
+      - name: Fetch live AI model pricing & build 1,200+ programmatic SEO pages
         run: python build_site.py
 
       - name: Setup GitHub Pages
@@ -44,3 +44,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Ping IndexNow (Bing, DuckDuckGo, Yandex, Naver) with all live URLs
+        run: python build_site.py --ping-indexnow

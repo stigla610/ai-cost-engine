@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Google: Gemini 4 Carbon (batch) API Cost Calculator &amp; Self-Host GPU Break-Even (2026)</title>
-  <meta name="description" content="Calculate exact Google: Gemini 4 Carbon (batch) token costs ($1.0/1M input, $5.0/1M output), context window (1,048,576 tokens), and Cloud GPU self-hosting break-even." />
+  <meta name="description" content="Calculate exact Google: Gemini 4 Carbon (batch) token costs ($1.0/1M input, $5.0/1M output), VRAM requirements (5.2GB Q4), and Cloud GPU self-hosting break-even." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/models/google-gemini-4-carbon-batch.html" />
   <meta property="og:title" content="Google: Gemini 4 Carbon (batch) API Cost Calculator &amp; Self-Host GPU Break-Even (2026)" />
-  <meta property="og:description" content="Calculate exact Google: Gemini 4 Carbon (batch) token costs ($1.0/1M input, $5.0/1M output), context window (1,048,576 tokens), and Cloud GPU self-hosting break-even." />
+  <meta property="og:description" content="Calculate exact Google: Gemini 4 Carbon (batch) token costs ($1.0/1M input, $5.0/1M output), VRAM requirements (5.2GB Q4), and Cloud GPU self-hosting break-even." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/models/google-gemini-4-carbon-batch.html" />
+  
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Google: Gemini 4 Carbon (batch) API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Google: Gemini 4 Carbon (batch) costs $1.0 per 1M input tokens and $5.0 per 1M output tokens, with a context window of 1,048,576 tokens."}}, {"@type": "Question", "name": "When is it cheaper to self-host Google: Gemini 4 Carbon (batch) on a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Renting a dedicated NVIDIA RTX 4090 (24GB VRAM) costs roughly $0.39/hour ($9.36/day). If your workload exceeds 4.3M blended tokens per day, self-hosting or using dedicated GPU instances on Vast.ai GPU Marketplace can lower your unit costs."}}]}</script>
   <style>
     :root {
@@ -59,7 +60,7 @@
       gap: 8px;
     }
     .brand span { color: var(--accent); }
-    .nav-links { display: flex; gap: 20px; font-size: 0.95rem; align-items: center; flex-wrap: wrap; }
+    .nav-links { display: flex; gap: 18px; font-size: 0.94rem; align-items: center; flex-wrap: wrap; }
     .btn-cta {
       background: linear-gradient(135deg, #0284c7, #4f46e5);
       color: #fff !important;
@@ -152,9 +153,10 @@
     <a href="../index.html" class="brand">⚡ Token<span>Bench</span></a>
     <nav class="nav-links">
       <a href="../index.html">API Cost Calculator</a>
+      <a href="../vram-electricity-calculator.html">VRAM &amp; Electricity Calculator</a>
       <a href="../gpu-cloud-pricing.html">Cloud GPU Rates</a>
       <a href="../index.html#comparisons">Model Comparisons</a>
-      <a href="../gpu-cloud-pricing.html" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
+      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
     </nav>
   </div>
 </header>
@@ -215,8 +217,8 @@
         <strong>1,048,576 tokens</strong>
       </div>
       <div class="stat-row">
-        <span>Recommended Self-Host GPU Tier</span>
-        <strong>NVIDIA RTX 4090 (24GB VRAM) ($0.39/hr)</strong>
+        <span>VRAM Needed (4-bit / FP16)</span>
+        <strong><a href="../vram/google-gemini-4-carbon-batch-vram-requirements.html">5.2 GB / 17.6 GB →</a></strong>
       </div>
       <div class="stat-row">
         <span>API vs. GPU Daily Break-Even</span>
@@ -271,10 +273,11 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 20:06 UTC.</p>
-    <p style="margin-top:8px;">links to cloud GPU &amp; infrastructure providers may include partner referral links at zero extra cost to you, which keeps this calculator 100% free.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 20:13 UTC.</p>
+    <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·
+      <a href="../vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="../gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
       <a href="../sitemap.xml">XML Sitemap</a>
     </p>

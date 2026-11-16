@@ -2,6 +2,7 @@ import urllib.request
 import json
 import os
 import re
+import sys
 import html
 from datetime import datetime, timezone
 
@@ -18,11 +19,24 @@ def load_config():
     with open(CONFIG_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
+def estimate_params_b(model_id, name):
+    combined = f"{model_id} {name}".lower()
+    m = re.search(r"(\d+(?:\.\d+)?)b\b", combined)
+    if m:
+        val = float(m.group(1))
+        if 0.5 <= val <= 2000:
+            return val
+    if any(k in combined for k in ["r1", "v3", "405b", "ultra", "pro", "opus", "gpt-5", "gpt-4"]):
+        return 70.0
+    if any(k in combined for k in ["mini", "flash", "nano", "haiku", "small"]):
+        return 8.0
+    return 32.0
+
 def fetch_models():
     url = "https://openrouter.ai/api/v1/models"
     req = urllib.request.Request(
         url,
-        headers={"User-Agent": "TokenBench-AutoBuilder/1.0"}
+        headers={"User-Agent": "TokenBench-AutoBuilder/2.0"}
     )
     with urllib.request.urlopen(req, timeout=20) as resp:
         raw = json.loads(resp.read().decode("utf-8"))
@@ -38,11 +52,8 @@ def fetch_models():
         except (ValueError, TypeError):
             continue
 
-        # Convert per-token to per-1M tokens
         input_1m = round(prompt_per_tok * 1_000_000, 4)
         output_1m = round(completion_per_tok * 1_000_000, 4)
-
-        # Skip broken negative pricing entries
         if input_1m < 0 or output_1m < 0:
             continue
 
@@ -53,17 +64,11 @@ def fetch_models():
         seen_slugs.add(slug)
 
         provider = model_id.split("/")[0].title() if "/" in model_id else "AI"
-        is_open_weight = any(
-            kw in model_id.lower()
-            for kw in ["llama", "qwen", "mistral", "mixtral", "deepseek", "gemma", "phi-", "yi-", "nemotron"]
-        )
+        params_b = estimate_params_b(model_id, name)
 
-        # Recommend a GPU tier based on model name hints
-        if any(k in model_id.lower() for k in ["405b", "671b", "r1", "v3"]):
+        if params_b >= 100 or any(k in model_id.lower() for k in ["405b", "671b", "r1", "v3"]):
             gpu_tier_idx = 3
-        elif any(k in model_id.lower() for k in ["70b", "72b", "65b", "120b", "large"]):
-            gpu_tier_idx = 1
-        elif any(k in model_id.lower() for k in ["32b", "34b", "27b", "mixtral"]):
+        elif params_b >= 30:
             gpu_tier_idx = 1
         else:
             gpu_tier_idx = 0
@@ -73,18 +78,20 @@ def fetch_models():
             "name": name,
             "slug": slug,
             "provider": provider,
+            "params_b": params_b,
+            "vram_fp16": round(params_b * 2.2, 1),
+            "vram_int8": round(params_b * 1.15, 1),
+            "vram_int4": round(params_b * 0.65, 1),
             "input_1m": input_1m,
             "output_1m": output_1m,
             "blended_1m": round((input_1m * 0.7) + (output_1m * 0.3), 4),
             "context_length": context_length,
-            "description": (item.get("description") or f"Live API token pricing, context window specs, and self-hosted GPU break-even analysis for {name}.")[:280],
-            "is_open_weight": is_open_weight,
+            "description": (item.get("description") or f"Live API token pricing, VRAM requirements, and Cloud GPU break-even analysis for {name}.")[:280],
             "gpu_tier_idx": gpu_tier_idx,
         })
 
-    # Prioritize paid commercial & top open-weight models so calculators are meaningful
     paid_models = [m for m in models if m["input_1m"] > 0 or m["output_1m"] > 0]
-    priority_keywords = ["gpt-4", "gpt-5", "claude", "gemini", "deepseek", "llama-3", "qwen", "mistral", "o1", "o3", "grok", "command"]
+    priority_keywords = ["gpt-4", "gpt-5", "claude", "gemini", "deepseek", "llama", "qwen", "mistral", "o1", "o3", "grok", "command"]
     def sort_key(m):
         score = 0
         for i, kw in enumerate(priority_keywords):
@@ -95,10 +102,12 @@ def fetch_models():
     paid_models.sort(key=sort_key)
     return paid_models
 
-def shared_head(title, description, canonical_url, json_ld=None):
+def shared_head(title, description, canonical_url, config, json_ld=None):
     schema_tag = ""
     if json_ld:
         schema_tag = f'<script type="application/ld+json">{json.dumps(json_ld)}</script>'
+    gsc = config.get("google_site_verification", "").strip()
+    gsc_tag = f'<meta name="google-site-verification" content="{html.escape(gsc)}" />' if gsc else ""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -111,6 +120,7 @@ def shared_head(title, description, canonical_url, json_ld=None):
   <meta property="og:description" content="{html.escape(description)}" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="{html.escape(canonical_url)}" />
+  {gsc_tag}
   {schema_tag}
   <style>
     :root {{
@@ -160,7 +170,7 @@ def shared_head(title, description, canonical_url, json_ld=None):
       gap: 8px;
     }}
     .brand span {{ color: var(--accent); }}
-    .nav-links {{ display: flex; gap: 20px; font-size: 0.95rem; align-items: center; flex-wrap: wrap; }}
+    .nav-links {{ display: flex; gap: 18px; font-size: 0.94rem; align-items: center; flex-wrap: wrap; }}
     .btn-cta {{
       background: linear-gradient(135deg, #0284c7, #4f46e5);
       color: #fff !important;
@@ -249,16 +259,18 @@ def shared_head(title, description, canonical_url, json_ld=None):
 </head>
 """
 
-def shared_nav(prefix=""):
+def shared_nav(prefix="", config=None):
+    runpod_url = config["affiliates"]["runpod"]["url"] if config else "#"
     return f"""<body>
 <header>
   <div class="container nav">
     <a href="{prefix}index.html" class="brand">⚡ Token<span>Bench</span></a>
     <nav class="nav-links">
       <a href="{prefix}index.html">API Cost Calculator</a>
+      <a href="{prefix}vram-electricity-calculator.html">VRAM &amp; Electricity Calculator</a>
       <a href="{prefix}gpu-cloud-pricing.html">Cloud GPU Rates</a>
       <a href="{prefix}index.html#comparisons">Model Comparisons</a>
-      <a href="{prefix}gpu-cloud-pricing.html" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
+      <a href="{html.escape(runpod_url)}" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
     </nav>
   </div>
 </header>
@@ -267,10 +279,11 @@ def shared_nav(prefix=""):
 def shared_footer(config, updated_str, prefix=""):
     return f"""<footer>
   <div class="container">
-    <p><strong>{html.escape(config['site_name'])}</strong> — Automatically updated daily with live API pricing &amp; cloud GPU benchmarks. Last auto-sync: {updated_str}.</p>
-    <p style="margin-top:8px;">links to cloud GPU &amp; infrastructure providers may include partner referral links at zero extra cost to you, which keeps this calculator 100% free.</p>
+    <p><strong>{html.escape(config['site_name'])}</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: {updated_str}.</p>
+    <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="{prefix}index.html">All AI Models</a> ·
+      <a href="{prefix}vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="{prefix}gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
       <a href="{prefix}sitemap.xml">XML Sitemap</a>
     </p>
@@ -288,13 +301,12 @@ def build_model_page(m, all_models, config, updated_str):
     alt_key = "vastai" if gpu["provider_key"] != "vastai" else "runpod"
     alt_aff = config["affiliates"][alt_key]
 
-    # Calculate daily break-even tokens when self-hosting vs API
     daily_gpu_cost = round(gpu["hourly_usd"] * 24, 2)
     blended = max(m["blended_1m"], 0.05)
     breakeven_m_tokens_day = round(daily_gpu_cost / blended, 1)
 
     title = f"{m['name']} API Cost Calculator & Self-Host GPU Break-Even (2026)"
-    desc = f"Calculate exact {m['name']} token costs (${m['input_1m']}/1M input, ${m['output_1m']}/1M output), context window ({m['context_length']:,} tokens), and Cloud GPU self-hosting break-even."
+    desc = f"Calculate exact {m['name']} token costs (${m['input_1m']}/1M input, ${m['output_1m']}/1M output), VRAM requirements ({m['vram_int4']}GB Q4), and Cloud GPU self-hosting break-even."
 
     json_ld = {
         "@context": "https://schema.org",
@@ -319,15 +331,14 @@ def build_model_page(m, all_models, config, updated_str):
         ]
     }
 
-    # Find 6 related models for internal SEO linking
     related = [x for x in all_models if x["slug"] != m["slug"]][:8]
     related_links = "".join(
         f'<li><a href="{x["slug"]}.html">{html.escape(x["name"])} Cost Calculator (${x["input_1m"]}/1M in)</a></li>'
         for x in related
     )
 
-    page = shared_head(title, desc, canonical, json_ld)
-    page += shared_nav(prefix="../")
+    page = shared_head(title, desc, canonical, config, json_ld)
+    page += shared_nav(prefix="../", config=config)
     page += f"""
 <main class="container">
   <section class="hero">
@@ -385,8 +396,8 @@ def build_model_page(m, all_models, config, updated_str):
         <strong>{m['context_length']:,} tokens</strong>
       </div>
       <div class="stat-row">
-        <span>Recommended Self-Host GPU Tier</span>
-        <strong>{html.escape(gpu['name'])} (${gpu['hourly_usd']}/hr)</strong>
+        <span>VRAM Needed (4-bit / FP16)</span>
+        <strong><a href="../vram/{m['slug']}-vram-requirements.html">{m['vram_int4']} GB / {m['vram_fp16']} GB →</a></strong>
       </div>
       <div class="stat-row">
         <span>API vs. GPU Daily Break-Even</span>
@@ -443,6 +454,196 @@ def build_model_page(m, all_models, config, updated_str):
     page += shared_footer(config, updated_str, prefix="../")
     return page
 
+def build_vram_page(m, config, updated_str):
+    base_url = config["base_url"].rstrip("/")
+    vram_slug = f"{m['slug']}-vram-requirements"
+    canonical = f"{base_url}/vram/{vram_slug}.html"
+    gpu = config["gpu_tiers"][m["gpu_tier_idx"]]
+    aff_runpod = config["affiliates"]["runpod"]
+    aff_vast = config["affiliates"]["vastai"]
+
+    title = f"{m['name']} VRAM Requirements & GPU Hardware Calculator (FP16, Q8, Q4)"
+    desc = f"How much VRAM do you need to run {m['name']}? See exact memory requirements for FP16 ({m['vram_fp16']} GB), 8-bit ({m['vram_int8']} GB), and 4-bit GGUF/AWQ ({m['vram_int4']} GB) plus Cloud GPU rental costs."
+
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": f"How much VRAM is needed to run {m['name']}?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": f"Running {m['name']} requires approximately {m['vram_fp16']} GB VRAM in 16-bit (FP16/BF16), {m['vram_int8']} GB VRAM in 8-bit quantization, and {m['vram_int4']} GB VRAM in 4-bit (Q4_K_M / AWQ) quantization including KV cache overhead."
+                }
+            }
+        ]
+    }
+
+    page = shared_head(title, desc, canonical, config, json_ld)
+    page += shared_nav(prefix="../", config=config)
+    page += f"""
+<main class="container">
+  <section class="hero">
+    <span class="badge">LLM VRAM &amp; Hardware Calculator</span>
+    <h1>{html.escape(m['name'])} VRAM Requirements &amp; GPU Guide</h1>
+    <p>Find out if your local GPU can run <strong>{html.escape(m['name'])}</strong> in FP16, 8-bit, or 4-bit GGUF/EXL2 quantization—or rent the exact Cloud GPU needed for ${gpu['hourly_usd']}/hr.</p>
+  </section>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>VRAM Required by Quantization Level</h2>
+      <div class="stat-row">
+        <span>16-Bit Full Precision (FP16 / BF16)</span>
+        <strong>{m['vram_fp16']} GB VRAM</strong>
+      </div>
+      <div class="stat-row">
+        <span>8-Bit Quantization (Q8_0 / INT8)</span>
+        <strong>{m['vram_int8']} GB VRAM</strong>
+      </div>
+      <div class="stat-row">
+        <span>4-Bit Quantization (Q4_K_M / AWQ / GPTQ)</span>
+        <strong style="color:var(--accent-green)">{m['vram_int4']} GB VRAM</strong>
+      </div>
+      <div class="stat-row">
+        <span>Recommended Cloud GPU</span>
+        <strong>{html.escape(gpu['name'])} (${gpu['hourly_usd']}/hr)</strong>
+      </div>
+      <div class="stat-row">
+        <span>API Pricing Alternative</span>
+        <strong><a href="../models/{m['slug']}.html">${m['input_1m']}/1M In · ${m['output_1m']}/1M Out →</a></strong>
+      </div>
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="{html.escape(aff_runpod['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">{html.escape(aff_runpod['cta_text'])}</a>
+        <a href="{html.escape(aff_vast['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">{html.escape(aff_vast['cta_text'])}</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Can My GPU Run {html.escape(m['name'])}?</h2>
+      <div class="slider-group">
+        <label><span>Select Your Local GPU VRAM</span> <span id="myVramLabel">24 GB (RTX 3090 / 4090)</span></label>
+        <input type="range" id="myVram" min="8" max="160" step="8" value="24" oninput="checkVram()" />
+      </div>
+      <div id="vramVerdict" style="margin-top:16px;padding:14px;border-radius:8px;background:rgba(56,189,248,0.12);border:1px solid var(--accent);"></div>
+      <p style="color:var(--muted);font-size:0.88rem;margin-top:14px;">Don't have enough local VRAM? Rent a pre-configured Ollama / vLLM PyTorch pod on RunPod or Vast.ai in 30 seconds with no hardware upfront cost.</p>
+    </div>
+  </div>
+</main>
+<script>
+  const FP16 = {m['vram_fp16']};
+  const INT8 = {m['vram_int8']};
+  const INT4 = {m['vram_int4']};
+  function checkVram() {{
+    const v = parseFloat(document.getElementById('myVram').value);
+    document.getElementById('myVramLabel').textContent = v + ' GB VRAM';
+    const box = document.getElementById('vramVerdict');
+    if (v >= FP16) {{
+      box.innerHTML = '✅ <strong>Full Speed (FP16):</strong> ' + v + ' GB VRAM can run this model at full 16-bit precision with generous context window headroom.';
+    }} else if (v >= INT4) {{
+      box.innerHTML = '⚡ <strong>Runs Quantized (4-bit / 8-bit):</strong> ' + v + ' GB VRAM can run this model using 4-bit (Q4_K_M / AWQ) quantization (' + INT4 + ' GB needed). For full FP16 (' + FP16 + ' GB), rent a Cloud GPU below.';
+    }} else {{
+      box.innerHTML = '❌ <strong>Not Enough Local VRAM:</strong> Even 4-bit quantization requires ~' + INT4 + ' GB VRAM. Rent an A100 or H100 on RunPod / Vast.ai for pennies per hour instead of buying new hardware.';
+    }}
+  }}
+  checkVram();
+</script>
+"""
+    page += shared_footer(config, updated_str, prefix="../")
+    return vram_slug, page
+
+def build_vram_hub_page(models, config, updated_str):
+    base_url = config["base_url"].rstrip("/")
+    canonical = f"{base_url}/vram-electricity-calculator.html"
+    title = "LLM VRAM Calculator & Local GPU Electricity vs Cloud Cost (2026)"
+    desc = "Calculate exact VRAM requirements (FP16, Q8, Q4) for any LLM and compare your home GPU electricity bill ($/kWh) against renting Cloud GPUs on RunPod and Vast.ai."
+
+    aff_runpod = config["affiliates"]["runpod"]
+    aff_vast = config["affiliates"]["vastai"]
+
+    vram_links = "".join(
+        f'<a href="vram/{m["slug"]}-vram-requirements.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;"><strong style="color:#fff;">{html.escape(m["name"])} VRAM Guide</strong><div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">4-bit: {m["vram_int4"]} GB · FP16: {m["vram_fp16"]} GB →</div></a>'
+        for m in models[:90]
+    )
+
+    page = shared_head(title, desc, canonical, config)
+    page += shared_nav(prefix="", config=config)
+    page += f"""
+<main class="container">
+  <section class="hero">
+    <span class="badge">VRAM &amp; Power Bill Calculator</span>
+    <h1>LLM VRAM &amp; Home GPU Electricity vs. Cloud Calculator</h1>
+    <p>Calculate how much VRAM your model requires and compare your local PC's electricity + hardware depreciation cost against on-demand Cloud GPUs.</p>
+  </section>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Interactive LLM VRAM Calculator</h2>
+      <div class="slider-group">
+        <label><span>Model Size (Billion Parameters)</span> <span id="paramVal">70B</span></label>
+        <input type="range" id="paramSlider" min="3" max="405" step="1" value="70" oninput="calcHub()" />
+      </div>
+      <div class="stat-row">
+        <span>FP16 / BF16 Full Precision</span>
+        <strong id="hubFp16">154.0 GB VRAM</strong>
+      </div>
+      <div class="stat-row">
+        <span>8-Bit Quantized (Q8_0)</span>
+        <strong id="hubInt8">80.5 GB VRAM</strong>
+      </div>
+      <div class="stat-row">
+        <span>4-Bit Quantized (Q4_K_M / AWQ)</span>
+        <strong id="hubInt4" style="color:var(--accent-green)">45.5 GB VRAM</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Home GPU Electricity Bill Calculator</h2>
+      <div class="slider-group">
+        <label><span>System Power Draw (Watts)</span> <span id="wattVal">550 W</span></label>
+        <input type="range" id="wattSlider" min="150" max="1600" step="50" value="550" oninput="calcHub()" />
+      </div>
+      <div class="slider-group">
+        <label><span>Electricity Rate ($ / kWh)</span> <span id="kwhVal">$0.18 / kWh</span></label>
+        <input type="range" id="kwhSlider" min="0.05" max="0.50" step="0.01" value="0.18" oninput="calcHub()" />
+      </div>
+      <div class="stat-row">
+        <span>24/7 Monthly Home Power Cost</span>
+        <strong id="elecMonthly" class="price-big">$71.28/mo</strong>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="{html.escape(aff_runpod['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">{html.escape(aff_runpod['cta_text'])}</a>
+        <a href="{html.escape(aff_vast['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">{html.escape(aff_vast['cta_text'])}</a>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="color:#fff;margin-top:36px;margin-bottom:12px;">Model-Specific VRAM Requirement Calculators</h2>
+  <div class="grid-3">
+    {vram_links}
+  </div>
+</main>
+<script>
+  function calcHub() {{
+    const p = parseFloat(document.getElementById('paramSlider').value);
+    document.getElementById('paramVal').textContent = p + 'B';
+    document.getElementById('hubFp16').textContent = (p * 2.2).toFixed(1) + ' GB VRAM';
+    document.getElementById('hubInt8').textContent = (p * 1.15).toFixed(1) + ' GB VRAM';
+    document.getElementById('hubInt4').textContent = (p * 0.65).toFixed(1) + ' GB VRAM';
+
+    const w = parseFloat(document.getElementById('wattSlider').value);
+    const kwh = parseFloat(document.getElementById('kwhSlider').value);
+    document.getElementById('wattVal').textContent = w + ' W';
+    document.getElementById('kwhVal').textContent = '$' + kwh.toFixed(2) + ' / kWh';
+    const monthly = (w / 1000) * 24 * 30 * kwh;
+    document.getElementById('elecMonthly').textContent = '$' + monthly.toFixed(2) + '/mo';
+  }}
+  calcHub();
+</script>
+"""
+    page += shared_footer(config, updated_str, prefix="")
+    return page
+
 def build_comparison_page(m1, m2, config, updated_str):
     base_url = config["base_url"].rstrip("/")
     comp_slug = f"{m1['slug']}-vs-{m2['slug']}"
@@ -454,8 +655,8 @@ def build_comparison_page(m1, m2, config, updated_str):
     aff_runpod = config["affiliates"]["runpod"]
     aff_do = config["affiliates"]["vastai"]
 
-    page = shared_head(title, desc, canonical)
-    page += shared_nav(prefix="../")
+    page = shared_head(title, desc, canonical, config)
+    page += shared_nav(prefix="../", config=config)
     page += f"""
 <main class="container">
   <section class="hero">
@@ -496,6 +697,11 @@ def build_comparison_page(m1, m2, config, updated_str):
           <td>{m2['context_length']:,} tokens</td>
         </tr>
         <tr>
+          <td>4-Bit Quantized VRAM</td>
+          <td><a href="../vram/{m1['slug']}-vram-requirements.html">{m1['vram_int4']} GB VRAM</a></td>
+          <td><a href="../vram/{m2['slug']}-vram-requirements.html">{m2['vram_int4']} GB VRAM</a></td>
+        </tr>
+        <tr>
           <td>Monthly Cost @ 10M In / 2M Out per day</td>
           <td><strong>${((m1['input_1m']*10 + m1['output_1m']*2)*30):,.2f}/mo</strong></td>
           <td><strong>${((m2['input_1m']*10 + m2['output_1m']*2)*30):,.2f}/mo</strong></td>
@@ -508,7 +714,7 @@ def build_comparison_page(m1, m2, config, updated_str):
     <div>
       <span class="badge badge-green">Cloud Infrastructure Deal</span>
       <h3>Deploy Your AI App or Open-Source LLM for Less</h3>
-      <p style="color:var(--muted);">Claim free cloud credits or rent serverless GPUs to cut your monthly AI infrastructure bill by up to 70%.</p>
+      <p style="color:var(--muted);">Rent serverless or dedicated GPUs to cut your monthly AI infrastructure bill by up to 70%.</p>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
       <a href="{html.escape(aff_runpod['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">{html.escape(aff_runpod['cta_text'])}</a>
@@ -524,7 +730,7 @@ def build_gpu_page(config, updated_str):
     base_url = config["base_url"].rstrip("/")
     canonical = f"{base_url}/gpu-cloud-pricing.html"
     title = "Cloud GPU Price Comparison (2026): H100, A100, RTX 4090 Hourly Rates"
-    desc = "Compare hourly Cloud GPU rental prices across RunPod, Vast.ai, Vultr, DigitalOcean, and Hetzner. Find the cheapest GPU for LLM inference and fine-tuning."
+    desc = "Compare hourly Cloud GPU rental prices across RunPod, Vast.ai, Vultr, and DigitalOcean. Find the cheapest GPU for LLM inference and fine-tuning."
 
     rows = ""
     for gpu in config["gpu_tiers"]:
@@ -551,8 +757,8 @@ def build_gpu_page(config, updated_str):
         </div>
         """
 
-    page = shared_head(title, desc, canonical)
-    page += shared_nav(prefix="")
+    page = shared_head(title, desc, canonical, config)
+    page += shared_nav(prefix="", config=config)
     page += f"""
 <main class="container">
   <section class="hero">
@@ -582,7 +788,7 @@ def build_gpu_page(config, updated_str):
     </div>
   </div>
 
-  <h2 style="margin-top:36px;color:#fff;">Verified Cloud GPU &amp; VPS Free Credit Offers</h2>
+  <h2 style="margin-top:36px;color:#fff;">Verified Cloud GPU &amp; VPS Partner Offers</h2>
   <div class="grid-3">
     {cards}
   </div>
@@ -591,14 +797,14 @@ def build_gpu_page(config, updated_str):
     page += shared_footer(config, updated_str, prefix="")
     return page
 
-def build_index_page(models, comparisons, config, updated_str):
+def build_index_page(models, comparisons, config, updated_str, total_pages):
     base_url = config["base_url"].rstrip("/")
     canonical = f"{base_url}/index.html"
     title = f"{config['site_name']} — {config['site_tagline']}"
-    desc = "Compare live API token pricing across 250+ AI models (OpenAI, Anthropic, DeepSeek, Meta Llama, Google Gemini) and calculate Cloud GPU self-hosting break-even costs."
+    desc = "Compare live API token pricing across 350+ AI models (OpenAI, Anthropic, DeepSeek, Meta Llama, Google Gemini), calculate LLM VRAM requirements, and compare Cloud GPU rental rates."
 
     table_rows = ""
-    for m in models[:120]:
+    for m in models[:150]:
         table_rows += f"""
         <tr class="model-row" data-name="{html.escape(m['name'].lower())} {html.escape(m['provider'].lower())}">
           <td><a href="models/{m['slug']}.html"><strong>{html.escape(m['name'])}</strong></a><br/><small style="color:var(--muted)">{html.escape(m['id'])}</small></td>
@@ -606,12 +812,13 @@ def build_index_page(models, comparisons, config, updated_str):
           <td>${m['input_1m']:.4f}</td>
           <td>${m['output_1m']:.4f}</td>
           <td>{m['context_length']:,}</td>
+          <td><a href="vram/{m['slug']}-vram-requirements.html">{m['vram_int4']} GB</a></td>
           <td><a href="models/{m['slug']}.html">Calculator →</a></td>
         </tr>
         """
 
     comp_links = ""
-    for c_slug, m1, m2 in comparisons[:60]:
+    for c_slug, m1, m2 in comparisons[:90]:
         comp_links += f"""
         <a href="compare/{c_slug}.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
           <strong style="color:#fff;">{html.escape(m1['name'])} vs {html.escape(m2['name'])}</strong>
@@ -620,23 +827,23 @@ def build_index_page(models, comparisons, config, updated_str):
         """
 
     aff_main = config["affiliates"]["runpod"]
-    aff_sec = config["affiliates"]["vultr"]
+    aff_sec = config["affiliates"]["vastai"]
 
-    page = shared_head(title, desc, canonical)
-    page += shared_nav(prefix="")
+    page = shared_head(title, desc, canonical, config)
+    page += shared_nav(prefix="", config=config)
     page += f"""
 <main class="container">
   <section class="hero">
-    <span class="badge">Auto-Updated Daily · {len(models)}+ Live AI Models Tracked</span>
-    <h1>AI API Token Cost Calculator &amp; Cloud GPU Break-Even Engine</h1>
+    <span class="badge">Auto-Updated Daily · {total_pages:,}+ Live AI Pricing &amp; VRAM Calculators</span>
+    <h1>AI API Token Cost, VRAM &amp; Cloud GPU Break-Even Engine</h1>
     <p>Instantly compare per-million token costs across OpenAI, Anthropic, Google, DeepSeek, Qwen, and Llama models—and see the exact point where renting a Cloud GPU saves you money.</p>
   </section>
 
   <div class="affiliate-box">
     <div>
       <span class="badge badge-green">Featured Infrastructure Deals</span>
-      <h3>Building an AI Product or Running Local LLMs?</h3>
-      <p style="color:var(--muted);">Deploy dedicated GPUs from $0.20/hr or claim up to $300 in free cloud compute credits below.</p>
+      <h3>Building an AI Product or Running Open-Weight LLMs?</h3>
+      <p style="color:var(--muted);">Deploy dedicated RTX 4090, A100, and H100 GPUs from $0.20/hr with instant PyTorch, vLLM, and Ollama templates.</p>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
       <a href="{html.escape(aff_main['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">{html.escape(aff_main['cta_text'])}</a>
@@ -646,8 +853,8 @@ def build_index_page(models, comparisons, config, updated_str):
 
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px;">
-      <h2>Live AI Model Pricing Directory (Per 1M Tokens)</h2>
-      <input type="text" id="searchInput" placeholder="Filter models (e.g. gpt-4, claude, deepseek, llama)..." style="max-width:360px;" oninput="filterTable()" />
+      <h2>Live AI Model Pricing &amp; VRAM Directory (Per 1M Tokens)</h2>
+      <input type="text" id="searchInput" placeholder="Filter models (e.g. gpt-5, claude, deepseek, llama, qwen)..." style="max-width:360px;" oninput="filterTable()" />
     </div>
     <div style="overflow-x:auto;">
       <table>
@@ -657,8 +864,9 @@ def build_index_page(models, comparisons, config, updated_str):
             <th>Provider</th>
             <th>Input / 1M</th>
             <th>Output / 1M</th>
-            <th>Context Window</th>
-            <th>Cost Calculator</th>
+            <th>Context</th>
+            <th>Q4 VRAM</th>
+            <th>Calculator</th>
           </tr>
         </thead>
         <tbody id="modelTableBody">
@@ -690,17 +898,43 @@ def build_index_page(models, comparisons, config, updated_str):
     page += shared_footer(config, updated_str, prefix="")
     return page
 
+def submit_indexnow(config, urls):
+    key = config.get("indexnow_key", "").strip()
+    if not key:
+        return
+    base_url = config["base_url"].rstrip("/")
+    host = base_url.split("://")[-1].split("/")[0]
+    payload = {
+        "host": host,
+        "key": key,
+        "keyLocation": f"{base_url}/{key}.txt",
+        "urlList": urls[:1000]
+    }
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        "https://api.indexnow.org/indexnow",
+        data=data,
+        headers={"Content-Type": "application/json; charset=utf-8"},
+        method="POST"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            print(f"IndexNow ping succeeded with HTTP {resp.status} for {len(payload['urlList'])} URLs!")
+    except Exception as e:
+        print(f"IndexNow ping note: {e}")
+
 def main():
     config = load_config()
     updated_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     print("Fetching live AI model pricing data...")
     all_models = fetch_models()
-    max_models = int(config.get("max_individual_model_pages", 250))
+    max_models = int(config.get("max_individual_model_pages", 350))
     models = all_models[:max_models]
     print(f"Selected {len(models)} models for programmatic calculator pages.")
 
     os.makedirs(os.path.join(DIST_DIR, "models"), exist_ok=True)
     os.makedirs(os.path.join(DIST_DIR, "compare"), exist_ok=True)
+    os.makedirs(os.path.join(DIST_DIR, "vram"), exist_ok=True)
 
     urls = []
     base_url = config["base_url"].rstrip("/")
@@ -713,9 +947,18 @@ def main():
             f.write(html_out)
         urls.append(f"{base_url}/models/{m['slug']}.html")
 
-    # 2. Build comparison pages for top models
-    max_comp = int(config.get("max_comparison_pages", 150))
-    top_for_comp = models[:25]
+    # 2. Build VRAM calculator pages
+    max_vram = int(config.get("max_vram_pages", 250))
+    for m in models[:max_vram]:
+        v_slug, v_html = build_vram_page(m, config, updated_str)
+        v_path = os.path.join(DIST_DIR, "vram", f"{v_slug}.html")
+        with open(v_path, "w", encoding="utf-8") as f:
+            f.write(v_html)
+        urls.append(f"{base_url}/vram/{v_slug}.html")
+
+    # 3. Build comparison pages for top models
+    max_comp = int(config.get("max_comparison_pages", 600))
+    top_for_comp = models[:40]
     comparisons = []
     for i in range(len(top_for_comp)):
         for j in range(i + 1, len(top_for_comp)):
@@ -731,19 +974,25 @@ def main():
         if len(comparisons) >= max_comp:
             break
 
-    # 3. Build Cloud GPU comparison page
+    # 4. Build VRAM & Electricity Hub Page
+    vram_hub_html = build_vram_hub_page(models, config, updated_str)
+    with open(os.path.join(DIST_DIR, "vram-electricity-calculator.html"), "w", encoding="utf-8") as f:
+        f.write(vram_hub_html)
+    urls.insert(0, f"{base_url}/vram-electricity-calculator.html")
+
+    # 5. Build Cloud GPU comparison page
     gpu_html = build_gpu_page(config, updated_str)
     with open(os.path.join(DIST_DIR, "gpu-cloud-pricing.html"), "w", encoding="utf-8") as f:
         f.write(gpu_html)
     urls.insert(0, f"{base_url}/gpu-cloud-pricing.html")
 
-    # 4. Build Main Index Hub
-    index_html = build_index_page(models, comparisons, config, updated_str)
+    # 6. Build Main Index Hub
+    index_html = build_index_page(models, comparisons, config, updated_str, len(urls) + 1)
     with open(os.path.join(DIST_DIR, "index.html"), "w", encoding="utf-8") as f:
         f.write(index_html)
     urls.insert(0, f"{base_url}/index.html")
 
-    # 5. Build sitemap.xml & robots.txt & .nojekyll
+    # 7. Build sitemap.xml & robots.txt & .nojekyll & IndexNow key file
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     sitemap_entries = "\n".join(
         f"  <url><loc>{html.escape(u)}</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq></url>"
@@ -764,7 +1013,14 @@ def main():
     with open(os.path.join(DIST_DIR, ".nojekyll"), "w", encoding="utf-8") as f:
         f.write("")
 
+    indexnow_key = config.get("indexnow_key", "").strip()
+    if indexnow_key:
+        with open(os.path.join(DIST_DIR, f"{indexnow_key}.txt"), "w", encoding="utf-8") as f:
+            f.write(indexnow_key)
+
     print(f"Successfully generated {len(urls)} total SEO pages in {DIST_DIR}")
+    if "--ping-indexnow" in sys.argv:
+        submit_indexnow(config, urls)
 
 if __name__ == "__main__":
     main()
