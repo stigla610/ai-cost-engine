@@ -1,6 +1,7 @@
 # ⚡ TokenBench — AI API Pricing, LLM VRAM & Cloud GPU Break-Even Engine
 
 [![Live Demo](https://img.shields.io/badge/Live_Calculators-TokenBench-38bdf8?style=for-the-badge)](https://stigla610.github.io/ai-cost-engine/)
+[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Space-f59e0b?style=for-the-badge)](https://huggingface.co/spaces/stigla610/llm-vram-cost-calculator)
 [![Models Tracked](https://img.shields.io/badge/Models_Tracked-440%2B-10b981?style=for-the-badge)](https://stigla610.github.io/ai-cost-engine/index.html)
 [![Auto-Sync](https://img.shields.io/badge/Updated-Daily_via_GitHub_Actions-818cf8?style=for-the-badge)](https://stigla610.github.io/ai-cost-engine/gpu-cloud-pricing.html)
 
