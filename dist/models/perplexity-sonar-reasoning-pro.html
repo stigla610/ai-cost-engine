@@ -6,10 +6,17 @@
   <title>Perplexity: Sonar Reasoning Pro API Cost Calculator &amp; Open-Weight GPU Break-Even (2026)</title>
   <meta name="description" content="Calculate exact Perplexity: Sonar Reasoning Pro API token costs ($2.00/1M input, $8.00/1M output) and compare against self-hosting an open-weight GPU alternative." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/models/perplexity-sonar-reasoning-pro.html" />
+  <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
+  <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="Perplexity: Sonar Reasoning Pro API Cost Calculator &amp; Open-Weight GPU Break-Even (2026)" />
   <meta property="og:description" content="Calculate exact Perplexity: Sonar Reasoning Pro API token costs ($2.00/1M input, $8.00/1M output) and compare against self-hosting an open-weight GPU alternative." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/models/perplexity-sonar-reasoning-pro.html" />
+  <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Perplexity: Sonar Reasoning Pro API Cost Calculator &amp; Open-Weight GPU Break-Even (2026)" />
+  <meta name="twitter:description" content="Calculate exact Perplexity: Sonar Reasoning Pro API token costs ($2.00/1M input, $8.00/1M output) and compare against self-hosting an open-weight GPU alternative." />
+  <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Perplexity: Sonar Reasoning Pro API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Perplexity: Sonar Reasoning Pro costs $2.00 per 1M input tokens and $8.00 per 1M output tokens, with a context window of 128,000 tokens."}}, {"@type": "Question", "name": "Can you self-host Perplexity: Sonar Reasoning Pro or switch to a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Perplexity: Sonar Reasoning Pro is a proprietary API model, so its weights are not downloadable. However, if your API spend exceeds $1,937/month (~17.0M tokens/day), running an equivalent open-weight model (Llama, Qwen, or DeepSeek) on a dedicated NVIDIA H100 SXM (80GB VRAM) ($2.69/hr) on RunPod Cloud GPUs can cut costs substantially."}}]}</script>
   <style>
@@ -75,10 +82,36 @@
       transition: transform 0.15s ease, opacity 0.15s ease;
       text-decoration: none !important;
       white-space: nowrap;
+      border: none;
+      cursor: pointer;
     }
     .btn-cta:hover { transform: translateY(-1px); opacity: 0.95; }
     .btn-green {
       background: linear-gradient(135deg, #059669, #10b981);
+    }
+    .btn-ghost {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(56, 189, 248, 0.18);
+    }
+    .share-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
     }
     .hero { padding: 38px 0 24px; }
     .hero h1 { font-size: 2.15rem; line-height: 1.25; margin-bottom: 12px; color: #fff; word-break: break-word; }
@@ -144,6 +177,8 @@
     table { width: 100%; border-collapse: collapse; font-size: 0.91rem; min-width: 640px; }
     th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
     th { color: var(--muted); font-weight: 600; background: rgba(255,255,255,0.02); white-space: nowrap; }
+    th.sortable { cursor: pointer; user-select: none; transition: color 0.15s ease; }
+    th.sortable:hover { color: var(--accent); }
     tr:hover td { background: rgba(255,255,255,0.02); }
     .filter-bar {
       display: flex;
@@ -262,6 +297,10 @@
         <strong id="gpuMonthlyCost">$1,936.80/mo</strong>
       </div>
       <div id="verdictBox" style="margin-top:16px;padding:12px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid var(--accent-green);font-size:0.92rem;"></div>
+      <div class="share-row">
+        <button type="button" class="btn-ghost" onclick="copyCalcLink(this)">🔗 Copy Shareable Link</button>
+        <button type="button" class="btn-ghost" onclick="copyMarkdown(this)">📋 Copy Markdown (Reddit / GitHub)</button>
+      </div>
     </div>
 
     <div class="card">
@@ -323,10 +362,18 @@
   </div>
 </main>
 <script>
+  const MODEL_NAME = "Perplexity: Sonar Reasoning Pro";
+  const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/models/perplexity-sonar-reasoning-pro.html";
   const IN_RATE = 2.0;
   const OUT_RATE = 8.0;
   const GPU_MONTHLY = 1936.8;
   const IS_OPEN = false;
+  function initFromParams() {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('in')) document.getElementById('inSlider').value = p.get('in');
+    if (p.get('out')) document.getElementById('outSlider').value = p.get('out');
+    recalc();
+  }
   function recalc() {
     const inTok = parseFloat(document.getElementById('inSlider').value);
     const outTok = parseFloat(document.getElementById('outSlider').value);
@@ -348,11 +395,30 @@
       verdict.innerHTML = '✅ <strong>Pay-Per-Token API Wins:</strong> At this volume, staying on the serverless API (or serverless GPU endpoints) is cheaper than renting a 24/7 dedicated GPU instance.';
     }
   }
-  recalc();
+  function copyCalcLink(btn) {
+    const inTok = document.getElementById('inSlider').value;
+    const outTok = document.getElementById('outSlider').value;
+    const url = CANONICAL_URL + '?in=' + inTok + '&out=' + outTok;
+    navigator.clipboard.writeText(url);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Link Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }
+  function copyMarkdown(btn) {
+    const inTok = parseFloat(document.getElementById('inSlider').value).toLocaleString();
+    const outTok = parseFloat(document.getElementById('outSlider').value).toLocaleString();
+    const monthly = document.getElementById('monthlyCost').textContent;
+    const md = `**${MODEL_NAME} Cost Estimate** (${inTok} in / ${outTok} out per day): **${monthly}/mo** vs **$${GPU_MONTHLY.toFixed(2)}/mo** on Cloud GPU — [Calculate on TokenBench](${CANONICAL_URL}?in=${document.getElementById('inSlider').value}&out=${document.getElementById('outSlider').value})`;
+    navigator.clipboard.writeText(md);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Markdown Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }
+  initFromParams();
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 21:03 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-17 11:35 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·

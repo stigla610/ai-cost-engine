@@ -6,12 +6,19 @@
   <title>Cloud GPU Price Comparison (2026): H100, A100, RTX 4090 Hourly Rates</title>
   <meta name="description" content="Compare hourly Cloud GPU rental prices across RunPod, Vast.ai, Vultr, and DigitalOcean. Find the cheapest GPU for LLM inference and fine-tuning." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/gpu-cloud-pricing.html" />
+  <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
+  <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="Cloud GPU Price Comparison (2026): H100, A100, RTX 4090 Hourly Rates" />
   <meta property="og:description" content="Compare hourly Cloud GPU rental prices across RunPod, Vast.ai, Vultr, and DigitalOcean. Find the cheapest GPU for LLM inference and fine-tuning." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/gpu-cloud-pricing.html" />
+  <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Cloud GPU Price Comparison (2026): H100, A100, RTX 4090 Hourly Rates" />
+  <meta name="twitter:description" content="Compare hourly Cloud GPU rental prices across RunPod, Vast.ai, Vultr, and DigitalOcean. Find the cheapest GPU for LLM inference and fine-tuning." />
+  <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
-  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does it cost to rent an NVIDIA H100, A100, or RTX 4090 per hour?", "acceptedAnswer": {"@type": "Answer", "text": "On-demand Cloud GPU rental rates start around $0.39/hr for an NVIDIA RTX 4090 (24GB VRAM) on Vast.ai, $1.39/hr for an NVIDIA A100 (80GB VRAM) on RunPod, and $2.69/hr for an NVIDIA H100 SXM (80GB VRAM)."}}]}</script>
   <style>
     :root {
       --bg: #0b0f19;
@@ -75,10 +82,36 @@
       transition: transform 0.15s ease, opacity 0.15s ease;
       text-decoration: none !important;
       white-space: nowrap;
+      border: none;
+      cursor: pointer;
     }
     .btn-cta:hover { transform: translateY(-1px); opacity: 0.95; }
     .btn-green {
       background: linear-gradient(135deg, #059669, #10b981);
+    }
+    .btn-ghost {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(56, 189, 248, 0.18);
+    }
+    .share-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
     }
     .hero { padding: 38px 0 24px; }
     .hero h1 { font-size: 2.15rem; line-height: 1.25; margin-bottom: 12px; color: #fff; word-break: break-word; }
@@ -144,6 +177,8 @@
     table { width: 100%; border-collapse: collapse; font-size: 0.91rem; min-width: 640px; }
     th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
     th { color: var(--muted); font-weight: 600; background: rgba(255,255,255,0.02); white-space: nowrap; }
+    th.sortable { cursor: pointer; user-select: none; transition: color 0.15s ease; }
+    th.sortable:hover { color: var(--accent); }
     tr:hover td { background: rgba(255,255,255,0.02); }
     .filter-bar {
       display: flex;
@@ -323,7 +358,7 @@
 </main>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 21:03 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-17 11:35 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="index.html">All AI Models</a> ·

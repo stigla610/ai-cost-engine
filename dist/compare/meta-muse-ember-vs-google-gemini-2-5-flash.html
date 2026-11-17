@@ -6,12 +6,19 @@
   <title>Meta: Muse Ember vs Google: Gemini 2.5 Flash: API Pricing &amp; Token Cost Comparison (2026)</title>
   <meta name="description" content="Interactive price comparison: Meta: Muse Ember ($0.10/1M in) vs Google: Gemini 2.5 Flash ($0.30/1M in). Calculate which LLM is cheaper for your workload." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/compare/meta-muse-ember-vs-google-gemini-2-5-flash.html" />
+  <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
+  <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="Meta: Muse Ember vs Google: Gemini 2.5 Flash: API Pricing &amp; Token Cost Comparison (2026)" />
   <meta property="og:description" content="Interactive price comparison: Meta: Muse Ember ($0.10/1M in) vs Google: Gemini 2.5 Flash ($0.30/1M in). Calculate which LLM is cheaper for your workload." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/compare/meta-muse-ember-vs-google-gemini-2-5-flash.html" />
+  <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Meta: Muse Ember vs Google: Gemini 2.5 Flash: API Pricing &amp; Token Cost Comparison (2026)" />
+  <meta name="twitter:description" content="Interactive price comparison: Meta: Muse Ember ($0.10/1M in) vs Google: Gemini 2.5 Flash ($0.30/1M in). Calculate which LLM is cheaper for your workload." />
+  <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
-  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Meta: Muse Ember cheaper than Google: Gemini 2.5 Flash?", "acceptedAnswer": {"@type": "Answer", "text": "Meta: Muse Ember has the lower blended token price. Meta: Muse Ember costs $0.10/1M input and $0.50/1M output tokens, whereas Google: Gemini 2.5 Flash costs $0.30/1M input and $2.50/1M output tokens."}}]}</script>
   <style>
     :root {
       --bg: #0b0f19;
@@ -75,10 +82,36 @@
       transition: transform 0.15s ease, opacity 0.15s ease;
       text-decoration: none !important;
       white-space: nowrap;
+      border: none;
+      cursor: pointer;
     }
     .btn-cta:hover { transform: translateY(-1px); opacity: 0.95; }
     .btn-green {
       background: linear-gradient(135deg, #059669, #10b981);
+    }
+    .btn-ghost {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(56, 189, 248, 0.18);
+    }
+    .share-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
     }
     .hero { padding: 38px 0 24px; }
     .hero h1 { font-size: 2.15rem; line-height: 1.25; margin-bottom: 12px; color: #fff; word-break: break-word; }
@@ -144,6 +177,8 @@
     table { width: 100%; border-collapse: collapse; font-size: 0.91rem; min-width: 640px; }
     th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
     th { color: var(--muted); font-weight: 600; background: rgba(255,255,255,0.02); white-space: nowrap; }
+    th.sortable { cursor: pointer; user-select: none; transition: color 0.15s ease; }
+    th.sortable:hover { color: var(--accent); }
     tr:hover td { background: rgba(255,255,255,0.02); }
     .filter-bar {
       display: flex;
@@ -252,6 +287,10 @@
         <strong id="m2Monthly" style="font-size:1.25rem;">$0.00/mo</strong>
       </div>
       <div id="compWinnerBox" style="margin-top:14px;padding:12px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid var(--accent-green);font-size:0.92rem;"></div>
+      <div class="share-row">
+        <button type="button" class="btn-ghost" onclick="copyCompLink(this)">🔗 Copy Comparison Link</button>
+        <button type="button" class="btn-ghost" onclick="copyCompMd(this)">📋 Copy Markdown Table</button>
+      </div>
     </div>
 
     <div class="card">
@@ -315,6 +354,7 @@
   </div>
 </main>
 <script>
+  const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/compare/meta-muse-ember-vs-google-gemini-2-5-flash.html";
   const M1_NAME = "Meta: Muse Ember";
   const M2_NAME = "Google: Gemini 2.5 Flash";
   const M1_IN = 0.1;
@@ -334,11 +374,38 @@
     const winner = cost1 <= cost2 ? M1_NAME : M2_NAME;
     document.getElementById('compWinnerBox').innerHTML = '🏆 <strong>' + winner + ' is cheaper:</strong> Saves you <strong>$' + diff + '/month</strong> at this token volume.';
   }
-  calcComp();
+  function copyCompLink(btn) {
+    const inTok = document.getElementById('compInSlider').value;
+    const outTok = document.getElementById('compOutSlider').value;
+    navigator.clipboard.writeText(`${CANONICAL_URL}?in=${inTok}&out=${outTok}`);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Link Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }
+  function copyCompMd(btn) {
+    const m1c = document.getElementById('m1Monthly').textContent;
+    const m2c = document.getElementById('m2Monthly').textContent;
+    const md = `| Model | Input / 1M | Output / 1M | Est. Monthly |
+|---|---|---|---|
+| **${M1_NAME}** | $${M1_IN} | $${M1_OUT} | **${m1c}** |
+| **${M2_NAME}** | $${M2_IN} | $${M2_OUT} | **${m2c}** |
+
+*Compared via [TokenBench](${CANONICAL_URL})*`;
+    navigator.clipboard.writeText(md);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Markdown Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }
+  (function() {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('in')) document.getElementById('compInSlider').value = p.get('in');
+    if (p.get('out')) document.getElementById('compOutSlider').value = p.get('out');
+    calcComp();
+  })();
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 21:03 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-17 11:35 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·

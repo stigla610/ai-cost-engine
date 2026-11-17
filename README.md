@@ -1,35 +1,53 @@
-# TokenBench — Automated AI & Cloud GPU Cost Calculator Engine
+# ⚡ TokenBench — AI API Pricing, LLM VRAM & Cloud GPU Break-Even Engine
 
-This project is a **100% automated programmatic SEO & affiliate web application** that costs **$0/month** to run and updates itself daily.
+[![Live Demo](https://img.shields.io/badge/Live_Calculators-TokenBench-38bdf8?style=for-the-badge)](https://stigla610.github.io/ai-cost-engine/)
+[![Models Tracked](https://img.shields.io/badge/Models_Tracked-440%2B-10b981?style=for-the-badge)](https://stigla610.github.io/ai-cost-engine/index.html)
+[![Auto-Sync](https://img.shields.io/badge/Updated-Daily_via_GitHub_Actions-818cf8?style=for-the-badge)](https://stigla610.github.io/ai-cost-engine/gpu-cloud-pricing.html)
 
-## How It Makes Money Automatically
-1. **Live Data Ingestion (`build_site.py`)**: Every day, the script pulls real-time pricing and context window data for 250+ AI models (OpenAI, Anthropic, Google Gemini, DeepSeek, Llama, Qwen, Mistral) from OpenRouter's free public API.
-2. **402 Programmatic Calculator & Comparison Pages (`dist/`)**:
-   - **250 Individual Model Cost Calculators** (`dist/models/*.html`) with interactive daily/monthly token sliders and "API vs. Self-Hosted GPU Break-Even" recommendations.
-   - **150 Head-to-Head Model Comparisons** (`dist/compare/*-vs-*.html`) targeting high-intent search queries (e.g., *"GPT-4o vs DeepSeek R1 API pricing"*).
-   - **Cloud GPU Pricing Directory** (`dist/gpu-cloud-pricing.html`) comparing H100, A100, and RTX 4090 hourly rental costs.
-   - **Auto-generated `sitemap.xml` & FAQ JSON-LD Schema** for search engine indexing.
-3. **Recurring Cloud GPU & VPS Affiliate Commissions**: Every calculator and comparison page recommends Cloud GPU/VPS infrastructure where developers can claim free credits or rent GPUs, embedding your referral links from [`config.json`](./config.json).
-4. **Zero-Maintenance Daily Cloud Autopilot (`.github/workflows/daily-autopilot.yml`)**: Runs on GitHub Actions every day at 06:00 UTC for free, rebuilds the site with any new models or price drops, and deploys straight to GitHub Pages—even when your PC is turned off.
+**TokenBench** is an open, daily-updated benchmark and calculator suite for comparing **LLM API token pricing**, estimating **local GPU VRAM requirements** (FP16, Q8_0, and 4-bit GGUF/AWQ/EXL2 quantization + KV cache overhead), and finding the exact **daily token break-even point** between serverless APIs and dedicated Cloud GPUs.
+
+👉 **Launch the Live Web App:** **[https://stigla610.github.io/ai-cost-engine/](https://stigla610.github.io/ai-cost-engine/)**
 
 ---
 
-## One-Time Setup (5 Minutes, $0 Cost)
+## 🛠️ Interactive Calculators & Directories
 
-### Step 1: Add Your Free Referral / Affiliate IDs in `config.json`
-Open [`config.json`](./config.json) (or tell Antigravity your referral links and I will update it for you):
-- **RunPod** (Recurring % of all GPU spend): Sign up free at `https://www.runpod.io` → Referrals → Copy your `?ref=...` link.
-- **Vast.ai** (Ongoing GPU rental commission): Sign up free at `https://cloud.vast.ai` → Affiliate/Referral link.
-- **Vultr** (Up to $100 per signup): `https://www.vultr.com/company/referral-program/`
-- **DigitalOcean** ($25–$200 per signup): `https://www.digitalocean.com/referral-program`
-- **Hetzner** (€10 per referral): `https://www.hetzner.com`
+* **[Batch Workload API Cost Simulator](https://stigla610.github.io/ai-cost-engine/index.html)** — Slide your daily input/output token volume to rank 260+ models (OpenAI, Anthropic, Google Gemini, DeepSeek, Meta Llama, Qwen, Mistral, xAI Grok) from cheapest to most expensive per month.
+* **[LLM VRAM & Home GPU Electricity Calculator](https://stigla610.github.io/ai-cost-engine/vram-electricity-calculator.html)** — Calculate exact GPU memory needed for 1B–405B+ models across context lengths (`2K` to `128K` tokens) and compare your local PC's `$/kWh` power bill against cloud GPU instances.
+* **[Cloud GPU Hourly Price Matrix](https://stigla610.github.io/ai-cost-engine/gpu-cloud-pricing.html)** — Compare on-demand RTX 4090, NVIDIA A100 (80GB), and NVIDIA H100 (80GB) hourly and monthly rates.
 
-### Step 2: Push to a Free GitHub Repository & Enable GitHub Pages
-1. Create a free public repository on GitHub named `ai-cost-engine`.
-2. In GitHub repository **Settings → Pages**, set **Build and deployment → Source** to **GitHub Actions**.
-3. Push this folder to GitHub:
-   ```powershell
-   git remote add origin https://github.com/YOUR_USERNAME/ai-cost-engine.git
-   git push -u origin main
-   ```
-That's it! GitHub Actions will automatically build and host your site at `https://YOUR_USERNAME.github.io/ai-cost-engine/` and update it every single day at 06:00 UTC with zero input from you.
+---
+
+## 📊 Quick Reference: LLM VRAM Requirements by Model Size
+
+Memory estimates include model weights plus baseline 8K context KV-cache overhead:
+
+| Parameter Size | Example Open-Weight Models | 4-Bit (Q4_K_M / AWQ) | 8-Bit (Q8_0 / FP8) | 16-Bit (FP16 / BF16) | Recommended Hardware |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **7B – 8B** | [Llama 3.1 8B](https://stigla610.github.io/ai-cost-engine/vram/meta-llama-llama-3-1-8b-instruct-vram-requirements.html), Qwen3 8B, Ministral 8B | **5.2 GB** | **9.2 GB** | **17.6 GB** | RTX 3060 12GB / RTX 4060 Ti 16GB |
+| **14B** | [Microsoft Phi-4](https://stigla610.github.io/ai-cost-engine/vram/microsoft-phi-4-vram-requirements.html), [Qwen3 14B](https://stigla610.github.io/ai-cost-engine/vram/qwen-qwen3-14b-vram-requirements.html) | **9.1 GB** | **16.1 GB** | **30.8 GB** | RTX 4070 Ti 16GB / RTX 4090 24GB |
+| **24B – 32B** | [Qwen3 32B](https://stigla610.github.io/ai-cost-engine/vram/qwen-qwen3-32b-vram-requirements.html), [Mistral Small 24B](https://stigla610.github.io/ai-cost-engine/vram/mistralai-mistral-small-3-2-24b-instruct-vram-requirements.html), [Gemma 4 31B](https://stigla610.github.io/ai-cost-engine/vram/google-gemma-4-31b-it-vram-requirements.html) | **15.6 – 20.8 GB** | **27.6 – 36.8 GB** | **52.8 – 70.4 GB** | 1x RTX 3090 / 4090 (24GB) |
+| **70B – 72B** | [Llama 3.3 70B](https://stigla610.github.io/ai-cost-engine/vram/meta-llama-llama-3-3-70b-instruct-vram-requirements.html), [Qwen2.5 72B](https://stigla610.github.io/ai-cost-engine/vram/qwen-qwen-2-5-72b-instruct-vram-requirements.html) | **45.5 – 46.8 GB** | **80.5 – 82.8 GB** | **154.0 – 158.4 GB** | 2x RTX 3090/4090 (48GB) or 1x A100 80GB |
+| **109B – 123B** | [Llama 4 Scout](https://stigla610.github.io/ai-cost-engine/vram/meta-llama-llama-4-scout-vram-requirements.html), [Mistral Large](https://stigla610.github.io/ai-cost-engine/vram/mistralai-mistral-large-vram-requirements.html), [gpt-oss-120b](https://stigla610.github.io/ai-cost-engine/vram/openai-gpt-oss-120b-vram-requirements.html) | **70.8 – 80.0 GB** | **125.4 – 141.5 GB** | **239.8 – 270.6 GB** | 1x–2x A100 / H100 80GB or Mac Ultra |
+| **235B – 400B** | [Qwen3 235B MoE](https://stigla610.github.io/ai-cost-engine/vram/qwen-qwen3-235b-a22b-2507-vram-requirements.html), [Llama 4 Maverick](https://stigla610.github.io/ai-cost-engine/vram/meta-llama-llama-4-maverick-vram-requirements.html) | **152.8 – 260.0 GB** | **270.2 – 460.0 GB** | **517.0 – 880.0 GB** | 2x–4x H100 80GB Cluster |
+| **671B MoE** | [DeepSeek V3](https://stigla610.github.io/ai-cost-engine/vram/deepseek-deepseek-chat-vram-requirements.html), [DeepSeek R1](https://stigla610.github.io/ai-cost-engine/vram/deepseek-deepseek-r1-0528-vram-requirements.html) | **436.2 GB** | **771.6 GB** | **1,476.2 GB** | 6x–8x H100 / A100 80GB Node |
+
+---
+
+## ⚖️ Popular Head-to-Head API Cost Comparisons
+
+* [OpenAI GPT-5 vs Anthropic Claude Sonnet 4.5](https://stigla610.github.io/ai-cost-engine/compare/openai-gpt-5-vs-anthropic-claude-sonnet-4-5.html)
+* [OpenAI GPT-5 vs Google Gemini 2.5 Pro](https://stigla610.github.io/ai-cost-engine/compare/openai-gpt-5-vs-google-gemini-2-5-pro.html)
+* [OpenAI GPT-5 vs DeepSeek V3](https://stigla610.github.io/ai-cost-engine/compare/openai-gpt-5-vs-deepseek-deepseek-chat.html)
+* [OpenAI GPT-5 vs Meta Llama 4 Maverick](https://stigla610.github.io/ai-cost-engine/compare/openai-gpt-5-vs-meta-llama-llama-4-maverick.html)
+* [OpenAI GPT-5 vs Qwen3 32B](https://stigla610.github.io/ai-cost-engine/compare/openai-gpt-5-vs-qwen-qwen3-32b.html)
+
+---
+
+## 🚀 Building Locally
+
+```bash
+python build_site.py
+```
+
+Generates all static HTML calculators, JSON-LD structured data, SVG brand assets, and `sitemap.xml` inside `./dist`.

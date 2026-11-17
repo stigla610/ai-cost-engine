@@ -6,12 +6,19 @@
   <title>LLM VRAM Calculator &amp; Local GPU Electricity vs Cloud Cost (2026)</title>
   <meta name="description" content="Calculate exact VRAM requirements (FP16, Q8, Q4) for any LLM including context window KV cache, and compare your home GPU electricity bill ($/kWh) against Cloud GPUs." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/vram-electricity-calculator.html" />
+  <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
+  <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="LLM VRAM Calculator &amp; Local GPU Electricity vs Cloud Cost (2026)" />
   <meta property="og:description" content="Calculate exact VRAM requirements (FP16, Q8, Q4) for any LLM including context window KV cache, and compare your home GPU electricity bill ($/kWh) against Cloud GPUs." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/vram-electricity-calculator.html" />
+  <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="LLM VRAM Calculator &amp; Local GPU Electricity vs Cloud Cost (2026)" />
+  <meta name="twitter:description" content="Calculate exact VRAM requirements (FP16, Q8, Q4) for any LLM including context window KV cache, and compare your home GPU electricity bill ($/kWh) against Cloud GPUs." />
+  <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
-  
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "TokenBench LLM VRAM & GPU Electricity Calculator", "url": "https://stigla610.github.io/ai-cost-engine/vram-electricity-calculator.html", "applicationCategory": "DeveloperApplication", "operatingSystem": "All", "description": "Calculate exact VRAM requirements (FP16, Q8, Q4) for any LLM including context window KV cache, and compare your home GPU electricity bill ($/kWh) against Cloud GPUs.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}</script>
   <style>
     :root {
       --bg: #0b0f19;
@@ -75,10 +82,36 @@
       transition: transform 0.15s ease, opacity 0.15s ease;
       text-decoration: none !important;
       white-space: nowrap;
+      border: none;
+      cursor: pointer;
     }
     .btn-cta:hover { transform: translateY(-1px); opacity: 0.95; }
     .btn-green {
       background: linear-gradient(135deg, #059669, #10b981);
+    }
+    .btn-ghost {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(56, 189, 248, 0.18);
+    }
+    .share-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
     }
     .hero { padding: 38px 0 24px; }
     .hero h1 { font-size: 2.15rem; line-height: 1.25; margin-bottom: 12px; color: #fff; word-break: break-word; }
@@ -144,6 +177,8 @@
     table { width: 100%; border-collapse: collapse; font-size: 0.91rem; min-width: 640px; }
     th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
     th { color: var(--muted); font-weight: 600; background: rgba(255,255,255,0.02); white-space: nowrap; }
+    th.sortable { cursor: pointer; user-select: none; transition: color 0.15s ease; }
+    th.sortable:hover { color: var(--accent); }
     tr:hover td { background: rgba(255,255,255,0.02); }
     .filter-bar {
       display: flex;
@@ -234,6 +269,14 @@
   <div class="grid-2">
     <div class="card">
       <h2>Interactive LLM VRAM Calculator</h2>
+      <div class="filter-bar" style="margin-bottom:12px;">
+        <button type="button" class="filter-pill" onclick="setParamPreset(8)">8B (Llama 3.1 / Qwen)</button>
+        <button type="button" class="filter-pill" onclick="setParamPreset(14)">14B (Phi-4 / Qwen)</button>
+        <button type="button" class="filter-pill" onclick="setParamPreset(32)">32B (Qwen3 / DeepSeek Distill)</button>
+        <button type="button" class="filter-pill" onclick="setParamPreset(70)">70B (Llama 3.3 / Qwen 72B)</button>
+        <button type="button" class="filter-pill" onclick="setParamPreset(123)">123B (Mistral Large)</button>
+        <button type="button" class="filter-pill" onclick="setParamPreset(405)">405B (Frontier MoE)</button>
+      </div>
       <div class="slider-group">
         <label><span>Model Size (Billion Parameters)</span> <span id="paramVal">70B</span></label>
         <input type="range" id="paramSlider" min="1" max="405" step="1" value="70" oninput="calcHub()" />
@@ -257,6 +300,10 @@
       <div class="stat-row">
         <span>Recommended GPU Tier</span>
         <strong id="hubGpuRec" style="color:var(--accent)">NVIDIA A100 80GB</strong>
+      </div>
+      <div class="share-row">
+        <button type="button" class="btn-ghost" onclick="copyHubLink(this)">🔗 Copy Shareable Link</button>
+        <button type="button" class="btn-ghost" onclick="copyHubMd(this)">📋 Copy Markdown Summary</button>
       </div>
     </div>
 
@@ -296,13 +343,17 @@
   </div>
 </main>
 <script>
+  const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/vram-electricity-calculator.html";
+  function setParamPreset(val) {
+    document.getElementById('paramSlider').value = val;
+    calcHub();
+  }
   function calcHub() {
     const p = parseFloat(document.getElementById('paramSlider').value);
     const ctx = parseFloat(document.getElementById('ctxSlider').value);
     document.getElementById('paramVal').textContent = p + 'B';
     document.getElementById('ctxVal').textContent = ctx.toLocaleString() + ' tokens';
 
-    // KV cache scales roughly with parameter size and context length beyond 8k baseline
     const kvExtraGb = Math.max(0, (ctx - 8192) / 8192) * (p * 0.025);
     const fp16 = (p * 2.2) + (kvExtraGb * 2);
     const int8 = (p * 1.15) + (kvExtraGb * 1.2);
@@ -329,11 +380,46 @@
     document.getElementById('kwhMonthly').textContent = monthlyKwh.toFixed(1) + ' kWh/mo';
     document.getElementById('elecMonthly').textContent = '$' + monthlyCost.toFixed(2) + '/mo';
   }
-  calcHub();
+  function getHubUrl() {
+    const p = document.getElementById('paramSlider').value;
+    const ctx = document.getElementById('ctxSlider').value;
+    const w = document.getElementById('wattSlider').value;
+    const kwh = document.getElementById('kwhSlider').value;
+    const hrs = document.getElementById('hrsSlider').value;
+    return `${CANONICAL_URL}?p=${p}&ctx=${ctx}&w=${w}&kwh=${kwh}&hrs=${hrs}`;
+  }
+  function copyHubLink(btn) {
+    navigator.clipboard.writeText(getHubUrl());
+    const orig = btn.textContent;
+    btn.textContent = '✅ Link Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }
+  function copyHubMd(btn) {
+    const p = document.getElementById('paramSlider').value;
+    const ctx = parseFloat(document.getElementById('ctxSlider').value).toLocaleString();
+    const q4 = document.getElementById('hubInt4').textContent;
+    const q8 = document.getElementById('hubInt8').textContent;
+    const fp16 = document.getElementById('hubFp16').textContent;
+    const elec = document.getElementById('elecMonthly').textContent;
+    const md = `**${p}B LLM VRAM & Power Estimate (@ ${ctx} context)**: Q4: **${q4}** · Q8: **${q8}** · FP16: **${fp16}** · Home Electricity: **${elec}** — [Interactive Calculator](${getHubUrl()})`;
+    navigator.clipboard.writeText(md);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Markdown Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }
+  (function() {
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('p')) document.getElementById('paramSlider').value = q.get('p');
+    if (q.get('ctx')) document.getElementById('ctxSlider').value = q.get('ctx');
+    if (q.get('w')) document.getElementById('wattSlider').value = q.get('w');
+    if (q.get('kwh')) document.getElementById('kwhSlider').value = q.get('kwh');
+    if (q.get('hrs')) document.getElementById('hrsSlider').value = q.get('hrs');
+    calcHub();
+  })();
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 21:03 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-17 11:35 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="index.html">All AI Models</a> ·

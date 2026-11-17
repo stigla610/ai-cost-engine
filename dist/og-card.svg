@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="60" y="60" width="1080" height="510" rx="24" fill="#131b2e" stroke="#38bdf8" stroke-width="2"/>
+  <text x="110" y="165" font-family="Inter,Segoe UI,sans-serif" font-size="32" font-weight="700" fill="#38bdf8">⚡ TOKENBENCH &amp; GPU COST ENGINE</text>
+  <text x="110" y="255" font-family="Inter,Segoe UI,sans-serif" font-size="56" font-weight="800" fill="#ffffff">AI API Token Pricing, VRAM</text>
+  <text x="110" y="325" font-family="Inter,Segoe UI,sans-serif" font-size="56" font-weight="800" fill="#ffffff">&amp; Cloud GPU Break-Even Calculator</text>
+  <text x="110" y="405" font-family="Inter,Segoe UI,sans-serif" font-size="28" fill="#94a3b8">Compare 440+ LLMs (GPT-5, Claude, Gemini, DeepSeek, Llama, Qwen, Mistral)</text>
+  <rect x="110" y="455" width="360" height="64" rx="12" fill="#10b981"/>
+  <text x="145" y="497" font-family="Inter,Segoe UI,sans-serif" font-size="26" font-weight="700" fill="#ffffff">1,500+ Live Calculators →</text>
+</svg>

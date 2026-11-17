@@ -6,10 +6,17 @@
   <title>Venice: Uncensored VRAM Requirements &amp; GPU Hardware Calculator (FP16, Q8, Q4)</title>
   <meta name="description" content="How much VRAM do you need to run Venice: Uncensored locally? See exact memory requirements for FP16 (52.8 GB), 8-bit (27.6 GB), and 4-bit GGUF/AWQ (15.6 GB) plus Cloud GPU rental costs." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/vram/cognitivecomputations-dolphin-mistral-24b-venice-edition-vram-requirements.html" />
+  <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
+  <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="Venice: Uncensored VRAM Requirements &amp; GPU Hardware Calculator (FP16, Q8, Q4)" />
   <meta property="og:description" content="How much VRAM do you need to run Venice: Uncensored locally? See exact memory requirements for FP16 (52.8 GB), 8-bit (27.6 GB), and 4-bit GGUF/AWQ (15.6 GB) plus Cloud GPU rental costs." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/vram/cognitivecomputations-dolphin-mistral-24b-venice-edition-vram-requirements.html" />
+  <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Venice: Uncensored VRAM Requirements &amp; GPU Hardware Calculator (FP16, Q8, Q4)" />
+  <meta name="twitter:description" content="How much VRAM do you need to run Venice: Uncensored locally? See exact memory requirements for FP16 (52.8 GB), 8-bit (27.6 GB), and 4-bit GGUF/AWQ (15.6 GB) plus Cloud GPU rental costs." />
+  <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much VRAM is needed to run Venice: Uncensored or an open-weight equivalent?", "acceptedAnswer": {"@type": "Answer", "text": "Running Venice: Uncensored (~24B parameters) requires approximately 52.8 GB VRAM in 16-bit (FP16/BF16), 27.6 GB VRAM in 8-bit (Q8_0) quantization, and 15.6 GB VRAM in 4-bit (Q4_K_M / AWQ) quantization including KV cache overhead."}}]}</script>
   <style>
@@ -75,10 +82,36 @@
       transition: transform 0.15s ease, opacity 0.15s ease;
       text-decoration: none !important;
       white-space: nowrap;
+      border: none;
+      cursor: pointer;
     }
     .btn-cta:hover { transform: translateY(-1px); opacity: 0.95; }
     .btn-green {
       background: linear-gradient(135deg, #059669, #10b981);
+    }
+    .btn-ghost {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(56, 189, 248, 0.18);
+    }
+    .share-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
     }
     .hero { padding: 38px 0 24px; }
     .hero h1 { font-size: 2.15rem; line-height: 1.25; margin-bottom: 12px; color: #fff; word-break: break-word; }
@@ -144,6 +177,8 @@
     table { width: 100%; border-collapse: collapse; font-size: 0.91rem; min-width: 640px; }
     th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
     th { color: var(--muted); font-weight: 600; background: rgba(255,255,255,0.02); white-space: nowrap; }
+    th.sortable { cursor: pointer; user-select: none; transition: color 0.15s ease; }
+    th.sortable:hover { color: var(--accent); }
     tr:hover td { background: rgba(255,255,255,0.02); }
     .filter-bar {
       display: flex;
@@ -269,19 +304,41 @@
 
     <div class="card">
       <h2>Can My Local GPU Run Venice: Uncensored?</h2>
+      <p style="color:var(--muted);font-size:0.86rem;margin-bottom:10px;">Quick-select your hardware preset or drag the slider:</p>
+      <div class="filter-bar" style="margin-bottom:12px;">
+        <button type="button" class="filter-pill" onclick="setGpuVram(16)">RTX 4060 Ti (16GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(24)">RTX 3090/4090 (24GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(32)">RTX 5090 (32GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(48)">2x 3090 / A6000 (48GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(64)">Mac Studio (64GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(80)">A100 / H100 (80GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(192)">Mac Ultra / 2x H100 (192GB)</button>
+      </div>
       <div class="slider-group">
         <label><span>Select Your Local GPU VRAM</span> <span id="myVramLabel">24 GB VRAM</span></label>
         <input type="range" id="myVram" min="8" max="192" step="8" value="24" oninput="checkVram()" />
       </div>
       <div id="vramVerdict" style="margin-top:16px;padding:14px;border-radius:8px;background:rgba(56,189,248,0.12);border:1px solid var(--accent);"></div>
       <p style="color:var(--muted);font-size:0.88rem;margin-top:14px;">Don't have enough local VRAM? Rent a pre-configured Ollama / vLLM PyTorch pod on RunPod or Vast.ai in 30 seconds with zero upfront hardware cost.</p>
+      <div class="share-row">
+        <button type="button" class="btn-ghost" onclick="copyVramLink(this)">🔗 Copy Hardware Check Link</button>
+        <button type="button" class="btn-ghost" onclick="copyVramMd(this)">📋 Copy Markdown for Reddit / GitHub</button>
+      </div>
     </div>
   </div>
 </main>
 <script>
+  const MODEL_NAME = "Venice: Uncensored";
+  const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/vram/cognitivecomputations-dolphin-mistral-24b-venice-edition-vram-requirements.html";
   const FP16 = 52.8;
   const INT8 = 27.6;
   const INT4 = 15.6;
+  function setGpuVram(val) {
+    const slider = document.getElementById('myVram');
+    if (val > parseFloat(slider.max)) slider.max = val;
+    slider.value = val;
+    checkVram();
+  }
   function checkVram() {
     const v = parseFloat(document.getElementById('myVram').value);
     document.getElementById('myVramLabel').textContent = v + ' GB VRAM';
@@ -296,11 +353,30 @@
       box.innerHTML = '❌ <strong>Not Enough Local VRAM:</strong> Even 4-bit quantization requires ~' + INT4 + ' GB VRAM (you selected ' + v + ' GB). Rent an RTX 4090, A100, or H100 on RunPod / Vast.ai for pennies per hour instead of buying expensive hardware.';
     }
   }
-  checkVram();
+  function copyVramLink(btn) {
+    const v = document.getElementById('myVram').value;
+    navigator.clipboard.writeText(CANONICAL_URL + '?vram=' + v);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Link Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }
+  function copyVramMd(btn) {
+    const v = document.getElementById('myVram').value;
+    const md = `**${MODEL_NAME} VRAM Requirements**: Q4: **${INT4} GB** · Q8: **${INT8} GB** · FP16: **${FP16} GB** — [Check GPU compatibility on TokenBench](${CANONICAL_URL}?vram=${v})`;
+    navigator.clipboard.writeText(md);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Markdown Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }
+  (function() {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('vram')) setGpuVram(parseFloat(p.get('vram')));
+    else checkVram();
+  })();
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-16 21:03 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-17 11:35 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·

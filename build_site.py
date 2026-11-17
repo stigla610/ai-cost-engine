@@ -355,6 +355,7 @@ def fetch_models():
     return interleaved_primary + interleaved_secondary
 
 def shared_head(title, description, canonical_url, config, json_ld=None):
+    base_url = config["base_url"].rstrip("/")
     schema_tag = ""
     if json_ld:
         schema_tag = f'<script type="application/ld+json">{json.dumps(json_ld)}</script>'
@@ -368,10 +369,17 @@ def shared_head(title, description, canonical_url, config, json_ld=None):
   <title>{html.escape(title)}</title>
   <meta name="description" content="{html.escape(description)}" />
   <link rel="canonical" href="{html.escape(canonical_url)}" />
+  <link rel="icon" type="image/svg+xml" href="{base_url}/favicon.svg" />
+  <meta property="og:site_name" content="{html.escape(config['site_name'])}" />
   <meta property="og:title" content="{html.escape(title)}" />
   <meta property="og:description" content="{html.escape(description)}" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="{html.escape(canonical_url)}" />
+  <meta property="og:image" content="{base_url}/og-card.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{html.escape(title)}" />
+  <meta name="twitter:description" content="{html.escape(description)}" />
+  <meta name="twitter:image" content="{base_url}/og-card.svg" />
   {gsc_tag}
   {schema_tag}
   <style>
@@ -437,10 +445,36 @@ def shared_head(title, description, canonical_url, config, json_ld=None):
       transition: transform 0.15s ease, opacity 0.15s ease;
       text-decoration: none !important;
       white-space: nowrap;
+      border: none;
+      cursor: pointer;
     }}
     .btn-cta:hover {{ transform: translateY(-1px); opacity: 0.95; }}
     .btn-green {{
       background: linear-gradient(135deg, #059669, #10b981);
+    }}
+    .btn-ghost {{
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }}
+    .btn-ghost:hover {{
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(56, 189, 248, 0.18);
+    }}
+    .share-row {{
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
     }}
     .hero {{ padding: 38px 0 24px; }}
     .hero h1 {{ font-size: 2.15rem; line-height: 1.25; margin-bottom: 12px; color: #fff; word-break: break-word; }}
@@ -506,6 +540,8 @@ def shared_head(title, description, canonical_url, config, json_ld=None):
     table {{ width: 100%; border-collapse: collapse; font-size: 0.91rem; min-width: 640px; }}
     th, td {{ padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }}
     th {{ color: var(--muted); font-weight: 600; background: rgba(255,255,255,0.02); white-space: nowrap; }}
+    th.sortable {{ cursor: pointer; user-select: none; transition: color 0.15s ease; }}
+    th.sortable:hover {{ color: var(--accent); }}
     tr:hover td {{ background: rgba(255,255,255,0.02); }}
     .filter-bar {{
       display: flex;
@@ -714,6 +750,10 @@ def build_model_page(m, all_models, config, updated_str):
         <strong id="gpuMonthlyCost">${round(daily_gpu_cost * 30, 2):,.2f}/mo</strong>
       </div>
       <div id="verdictBox" style="margin-top:16px;padding:12px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid var(--accent-green);font-size:0.92rem;"></div>
+      <div class="share-row">
+        <button type="button" class="btn-ghost" onclick="copyCalcLink(this)">🔗 Copy Shareable Link</button>
+        <button type="button" class="btn-ghost" onclick="copyMarkdown(this)">📋 Copy Markdown (Reddit / GitHub)</button>
+      </div>
     </div>
 
     <div class="card">
@@ -775,10 +815,18 @@ def build_model_page(m, all_models, config, updated_str):
   </div>
 </main>
 <script>
+  const MODEL_NAME = {json.dumps(m['name'])};
+  const CANONICAL_URL = {json.dumps(canonical)};
   const IN_RATE = {m['input_1m']};
   const OUT_RATE = {m['output_1m']};
   const GPU_MONTHLY = {round(daily_gpu_cost * 30, 2)};
   const IS_OPEN = {"true" if m["is_open_weight"] else "false"};
+  function initFromParams() {{
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('in')) document.getElementById('inSlider').value = p.get('in');
+    if (p.get('out')) document.getElementById('outSlider').value = p.get('out');
+    recalc();
+  }}
   function recalc() {{
     const inTok = parseFloat(document.getElementById('inSlider').value);
     const outTok = parseFloat(document.getElementById('outSlider').value);
@@ -800,7 +848,26 @@ def build_model_page(m, all_models, config, updated_str):
       verdict.innerHTML = '✅ <strong>Pay-Per-Token API Wins:</strong> At this volume, staying on the serverless API (or serverless GPU endpoints) is cheaper than renting a 24/7 dedicated GPU instance.';
     }}
   }}
-  recalc();
+  function copyCalcLink(btn) {{
+    const inTok = document.getElementById('inSlider').value;
+    const outTok = document.getElementById('outSlider').value;
+    const url = CANONICAL_URL + '?in=' + inTok + '&out=' + outTok;
+    navigator.clipboard.writeText(url);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Link Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }}
+  function copyMarkdown(btn) {{
+    const inTok = parseFloat(document.getElementById('inSlider').value).toLocaleString();
+    const outTok = parseFloat(document.getElementById('outSlider').value).toLocaleString();
+    const monthly = document.getElementById('monthlyCost').textContent;
+    const md = `**${{MODEL_NAME}} Cost Estimate** (${{inTok}} in / ${{outTok}} out per day): **${{monthly}}/mo** vs **$${{GPU_MONTHLY.toFixed(2)}}/mo** on Cloud GPU — [Calculate on TokenBench](${{CANONICAL_URL}}?in=${{document.getElementById('inSlider').value}}&out=${{document.getElementById('outSlider').value}})`;
+    navigator.clipboard.writeText(md);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Markdown Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }}
+  initFromParams();
 </script>
 """
     page += shared_footer(config, updated_str, prefix="../")
@@ -903,19 +970,41 @@ def build_vram_page(m, config, updated_str):
 
     <div class="card">
       <h2>{card2_title}</h2>
+      <p style="color:var(--muted);font-size:0.86rem;margin-bottom:10px;">Quick-select your hardware preset or drag the slider:</p>
+      <div class="filter-bar" style="margin-bottom:12px;">
+        <button type="button" class="filter-pill" onclick="setGpuVram(16)">RTX 4060 Ti (16GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(24)">RTX 3090/4090 (24GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(32)">RTX 5090 (32GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(48)">2x 3090 / A6000 (48GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(64)">Mac Studio (64GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(80)">A100 / H100 (80GB)</button>
+        <button type="button" class="filter-pill" onclick="setGpuVram(192)">Mac Ultra / 2x H100 (192GB)</button>
+      </div>
       <div class="slider-group">
         <label><span>Select Your Local GPU VRAM</span> <span id="myVramLabel">24 GB VRAM</span></label>
         <input type="range" id="myVram" min="8" max="{slider_max}" step="8" value="24" oninput="checkVram()" />
       </div>
       <div id="vramVerdict" style="margin-top:16px;padding:14px;border-radius:8px;background:rgba(56,189,248,0.12);border:1px solid var(--accent);"></div>
       <p style="color:var(--muted);font-size:0.88rem;margin-top:14px;">Don't have enough local VRAM? Rent a pre-configured Ollama / vLLM PyTorch pod on RunPod or Vast.ai in 30 seconds with zero upfront hardware cost.</p>
+      <div class="share-row">
+        <button type="button" class="btn-ghost" onclick="copyVramLink(this)">🔗 Copy Hardware Check Link</button>
+        <button type="button" class="btn-ghost" onclick="copyVramMd(this)">📋 Copy Markdown for Reddit / GitHub</button>
+      </div>
     </div>
   </div>
 </main>
 <script>
+  const MODEL_NAME = {json.dumps(m['name'])};
+  const CANONICAL_URL = {json.dumps(canonical)};
   const FP16 = {m['vram_fp16']};
   const INT8 = {m['vram_int8']};
   const INT4 = {m['vram_int4']};
+  function setGpuVram(val) {{
+    const slider = document.getElementById('myVram');
+    if (val > parseFloat(slider.max)) slider.max = val;
+    slider.value = val;
+    checkVram();
+  }}
   function checkVram() {{
     const v = parseFloat(document.getElementById('myVram').value);
     document.getElementById('myVramLabel').textContent = v + ' GB VRAM';
@@ -930,7 +1019,26 @@ def build_vram_page(m, config, updated_str):
       box.innerHTML = '❌ <strong>Not Enough Local VRAM:</strong> Even 4-bit quantization requires ~' + INT4 + ' GB VRAM (you selected ' + v + ' GB). Rent an RTX 4090, A100, or H100 on RunPod / Vast.ai for pennies per hour instead of buying expensive hardware.';
     }}
   }}
-  checkVram();
+  function copyVramLink(btn) {{
+    const v = document.getElementById('myVram').value;
+    navigator.clipboard.writeText(CANONICAL_URL + '?vram=' + v);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Link Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }}
+  function copyVramMd(btn) {{
+    const v = document.getElementById('myVram').value;
+    const md = `**${{MODEL_NAME}} VRAM Requirements**: Q4: **${{INT4}} GB** · Q8: **${{INT8}} GB** · FP16: **${{FP16}} GB** — [Check GPU compatibility on TokenBench](${{CANONICAL_URL}}?vram=${{v}})`;
+    navigator.clipboard.writeText(md);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Markdown Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }}
+  (function() {{
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('vram')) setGpuVram(parseFloat(p.get('vram')));
+    else checkVram();
+  }})();
 </script>
 """
     page += shared_footer(config, updated_str, prefix="../")
@@ -945,6 +1053,17 @@ def build_vram_hub_page(models, config, updated_str):
     aff_runpod = config["affiliates"]["runpod"]
     aff_vast = config["affiliates"]["vastai"]
 
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "TokenBench LLM VRAM & GPU Electricity Calculator",
+        "url": canonical,
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "description": desc,
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+    }
+
     # Feature genuinely open-weight models first in the VRAM directory grid
     open_models = [m for m in models if m["is_open_weight"] and not m["is_secondary"]]
     other_models = [m for m in models if not m["is_open_weight"] and not m["is_secondary"]]
@@ -958,7 +1077,7 @@ def build_vram_hub_page(models, config, updated_str):
         for m in featured_vram_models
     )
 
-    page = shared_head(title, desc, canonical, config)
+    page = shared_head(title, desc, canonical, config, json_ld=json_ld)
     page += shared_nav(prefix="", config=config)
     page += f"""
 <main class="container">
@@ -971,6 +1090,14 @@ def build_vram_hub_page(models, config, updated_str):
   <div class="grid-2">
     <div class="card">
       <h2>Interactive LLM VRAM Calculator</h2>
+      <div class="filter-bar" style="margin-bottom:12px;">
+        <button type="button" class="filter-pill" onclick="setParamPreset(8)">8B (Llama 3.1 / Qwen)</button>
+        <button type="button" class="filter-pill" onclick="setParamPreset(14)">14B (Phi-4 / Qwen)</button>
+        <button type="button" class="filter-pill" onclick="setParamPreset(32)">32B (Qwen3 / DeepSeek Distill)</button>
+        <button type="button" class="filter-pill" onclick="setParamPreset(70)">70B (Llama 3.3 / Qwen 72B)</button>
+        <button type="button" class="filter-pill" onclick="setParamPreset(123)">123B (Mistral Large)</button>
+        <button type="button" class="filter-pill" onclick="setParamPreset(405)">405B (Frontier MoE)</button>
+      </div>
       <div class="slider-group">
         <label><span>Model Size (Billion Parameters)</span> <span id="paramVal">70B</span></label>
         <input type="range" id="paramSlider" min="1" max="405" step="1" value="70" oninput="calcHub()" />
@@ -994,6 +1121,10 @@ def build_vram_hub_page(models, config, updated_str):
       <div class="stat-row">
         <span>Recommended GPU Tier</span>
         <strong id="hubGpuRec" style="color:var(--accent)">NVIDIA A100 80GB</strong>
+      </div>
+      <div class="share-row">
+        <button type="button" class="btn-ghost" onclick="copyHubLink(this)">🔗 Copy Shareable Link</button>
+        <button type="button" class="btn-ghost" onclick="copyHubMd(this)">📋 Copy Markdown Summary</button>
       </div>
     </div>
 
@@ -1033,13 +1164,17 @@ def build_vram_hub_page(models, config, updated_str):
   </div>
 </main>
 <script>
+  const CANONICAL_URL = {json.dumps(canonical)};
+  function setParamPreset(val) {{
+    document.getElementById('paramSlider').value = val;
+    calcHub();
+  }}
   function calcHub() {{
     const p = parseFloat(document.getElementById('paramSlider').value);
     const ctx = parseFloat(document.getElementById('ctxSlider').value);
     document.getElementById('paramVal').textContent = p + 'B';
     document.getElementById('ctxVal').textContent = ctx.toLocaleString() + ' tokens';
 
-    // KV cache scales roughly with parameter size and context length beyond 8k baseline
     const kvExtraGb = Math.max(0, (ctx - 8192) / 8192) * (p * 0.025);
     const fp16 = (p * 2.2) + (kvExtraGb * 2);
     const int8 = (p * 1.15) + (kvExtraGb * 1.2);
@@ -1066,7 +1201,42 @@ def build_vram_hub_page(models, config, updated_str):
     document.getElementById('kwhMonthly').textContent = monthlyKwh.toFixed(1) + ' kWh/mo';
     document.getElementById('elecMonthly').textContent = '$' + monthlyCost.toFixed(2) + '/mo';
   }}
-  calcHub();
+  function getHubUrl() {{
+    const p = document.getElementById('paramSlider').value;
+    const ctx = document.getElementById('ctxSlider').value;
+    const w = document.getElementById('wattSlider').value;
+    const kwh = document.getElementById('kwhSlider').value;
+    const hrs = document.getElementById('hrsSlider').value;
+    return `${{CANONICAL_URL}}?p=${{p}}&ctx=${{ctx}}&w=${{w}}&kwh=${{kwh}}&hrs=${{hrs}}`;
+  }}
+  function copyHubLink(btn) {{
+    navigator.clipboard.writeText(getHubUrl());
+    const orig = btn.textContent;
+    btn.textContent = '✅ Link Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }}
+  function copyHubMd(btn) {{
+    const p = document.getElementById('paramSlider').value;
+    const ctx = parseFloat(document.getElementById('ctxSlider').value).toLocaleString();
+    const q4 = document.getElementById('hubInt4').textContent;
+    const q8 = document.getElementById('hubInt8').textContent;
+    const fp16 = document.getElementById('hubFp16').textContent;
+    const elec = document.getElementById('elecMonthly').textContent;
+    const md = `**${{p}}B LLM VRAM & Power Estimate (@ ${{ctx}} context)**: Q4: **${{q4}}** · Q8: **${{q8}}** · FP16: **${{fp16}}** · Home Electricity: **${{elec}}** — [Interactive Calculator](${{getHubUrl()}})`;
+    navigator.clipboard.writeText(md);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Markdown Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }}
+  (function() {{
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('p')) document.getElementById('paramSlider').value = q.get('p');
+    if (q.get('ctx')) document.getElementById('ctxSlider').value = q.get('ctx');
+    if (q.get('w')) document.getElementById('wattSlider').value = q.get('w');
+    if (q.get('kwh')) document.getElementById('kwhSlider').value = q.get('kwh');
+    if (q.get('hrs')) document.getElementById('hrsSlider').value = q.get('hrs');
+    calcHub();
+  }})();
 </script>
 """
     page += shared_footer(config, updated_str, prefix="")
@@ -1083,10 +1253,25 @@ def build_comparison_page(m1, m2, config, updated_str):
     aff_runpod = config["affiliates"]["runpod"]
     aff_do = config["affiliates"]["vastai"]
 
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": f"Is {m1['name']} cheaper than {m2['name']}?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": f"{cheaper['name']} has the lower blended token price. {m1['name']} costs {format_price(m1['input_1m'])}/1M input and {format_price(m1['output_1m'])}/1M output tokens, whereas {m2['name']} costs {format_price(m2['input_1m'])}/1M input and {format_price(m2['output_1m'])}/1M output tokens."
+                }
+            }
+        ]
+    }
+
     vram_cell_1 = f'<a href="../vram/{m1["slug"]}-vram-requirements.html">{m1["vram_int4"]} GB (Open-Weight)</a>' if m1["is_open_weight"] else f'<a href="../vram/{m1["slug"]}-vram-requirements.html">API Only (~{m1["vram_int4"]} GB eq.)</a>'
     vram_cell_2 = f'<a href="../vram/{m2["slug"]}-vram-requirements.html">{m2["vram_int4"]} GB (Open-Weight)</a>' if m2["is_open_weight"] else f'<a href="../vram/{m2["slug"]}-vram-requirements.html">API Only (~{m2["vram_int4"]} GB eq.)</a>'
 
-    page = shared_head(title, desc, canonical, config)
+    page = shared_head(title, desc, canonical, config, json_ld=json_ld)
     page += shared_nav(prefix="../", config=config)
     page += f"""
 <main class="container">
@@ -1117,6 +1302,10 @@ def build_comparison_page(m1, m2, config, updated_str):
         <strong id="m2Monthly" style="font-size:1.25rem;">$0.00/mo</strong>
       </div>
       <div id="compWinnerBox" style="margin-top:14px;padding:12px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid var(--accent-green);font-size:0.92rem;"></div>
+      <div class="share-row">
+        <button type="button" class="btn-ghost" onclick="copyCompLink(this)">🔗 Copy Comparison Link</button>
+        <button type="button" class="btn-ghost" onclick="copyCompMd(this)">📋 Copy Markdown Table</button>
+      </div>
     </div>
 
     <div class="card">
@@ -1180,6 +1369,7 @@ def build_comparison_page(m1, m2, config, updated_str):
   </div>
 </main>
 <script>
+  const CANONICAL_URL = {json.dumps(canonical)};
   const M1_NAME = {json.dumps(m1['name'])};
   const M2_NAME = {json.dumps(m2['name'])};
   const M1_IN = {m1['input_1m']};
@@ -1199,7 +1389,29 @@ def build_comparison_page(m1, m2, config, updated_str):
     const winner = cost1 <= cost2 ? M1_NAME : M2_NAME;
     document.getElementById('compWinnerBox').innerHTML = '🏆 <strong>' + winner + ' is cheaper:</strong> Saves you <strong>$' + diff + '/month</strong> at this token volume.';
   }}
-  calcComp();
+  function copyCompLink(btn) {{
+    const inTok = document.getElementById('compInSlider').value;
+    const outTok = document.getElementById('compOutSlider').value;
+    navigator.clipboard.writeText(`${{CANONICAL_URL}}?in=${{inTok}}&out=${{outTok}}`);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Link Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }}
+  function copyCompMd(btn) {{
+    const m1c = document.getElementById('m1Monthly').textContent;
+    const m2c = document.getElementById('m2Monthly').textContent;
+    const md = `| Model | Input / 1M | Output / 1M | Est. Monthly |\n|---|---|---|---|\n| **${{M1_NAME}}** | $${{M1_IN}} | $${{M1_OUT}} | **${{m1c}}** |\n| **${{M2_NAME}}** | $${{M2_IN}} | $${{M2_OUT}} | **${{m2c}}** |\n\n*Compared via [TokenBench](${{CANONICAL_URL}})*`;
+    navigator.clipboard.writeText(md);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Markdown Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }}
+  (function() {{
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('in')) document.getElementById('compInSlider').value = p.get('in');
+    if (p.get('out')) document.getElementById('compOutSlider').value = p.get('out');
+    calcComp();
+  }})();
 </script>
 """
     page += shared_footer(config, updated_str, prefix="../")
@@ -1210,6 +1422,21 @@ def build_gpu_page(config, updated_str):
     canonical = f"{base_url}/gpu-cloud-pricing.html"
     title = "Cloud GPU Price Comparison (2026): H100, A100, RTX 4090 Hourly Rates"
     desc = "Compare hourly Cloud GPU rental prices across RunPod, Vast.ai, Vultr, and DigitalOcean. Find the cheapest GPU for LLM inference and fine-tuning."
+
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How much does it cost to rent an NVIDIA H100, A100, or RTX 4090 per hour?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "On-demand Cloud GPU rental rates start around $0.39/hr for an NVIDIA RTX 4090 (24GB VRAM) on Vast.ai, $1.39/hr for an NVIDIA A100 (80GB VRAM) on RunPod, and $2.69/hr for an NVIDIA H100 SXM (80GB VRAM)."
+                }
+            }
+        ]
+    }
 
     rows = ""
     for gpu in config["gpu_tiers"]:
@@ -1240,7 +1467,7 @@ def build_gpu_page(config, updated_str):
         </div>
         """
 
-    page = shared_head(title, desc, canonical, config)
+    page = shared_head(title, desc, canonical, config, json_ld=json_ld)
     page += shared_nav(prefix="", config=config)
     page += f"""
 <main class="container">
@@ -1284,25 +1511,38 @@ def build_index_page(models, comparisons, config, updated_str, total_pages):
     base_url = config["base_url"].rstrip("/")
     canonical = f"{base_url}/index.html"
     title = f"{config['site_name']} — {config['site_tagline']}"
-    desc = "Compare live API token pricing across 300+ AI models (OpenAI, Anthropic, DeepSeek, Meta Llama, Qwen, Mistral, Google Gemini), calculate LLM VRAM requirements, and compare Cloud GPU rental rates."
+    desc = "Compare live API token pricing across 300+ AI models (OpenAI, Anthropic, DeepSeek, Meta Llama, Qwen, Mistral, Google Gemini), simulate monthly workload bills, calculate LLM VRAM requirements, and compare Cloud GPU rental rates."
 
-    # Display all clean primary models in the index directory so every family (Llama, Qwen, Mistral, DeepSeek, OpenAI, Anthropic, Google, xAI) is searchable
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": config["site_name"],
+        "url": canonical,
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "description": desc,
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+    }
+
     display_models = [m for m in models if not m["is_secondary"]][:260]
 
     table_rows = ""
     for m in display_models:
         search_terms = f"{m['name'].lower()} {m['provider'].lower()} {m['id'].lower()} {'open-weight' if m['is_open_weight'] else 'proprietary api'}"
+        gpu_monthly = round(config["gpu_tiers"][m["gpu_tier_idx"]]["hourly_usd"] * 24 * 30, 2)
+        default_monthly = ((2.0 * m["input_1m"]) + (0.5 * m["output_1m"])) * 30.0
         if m["is_open_weight"]:
             vram_col = f'<a href="vram/{m["slug"]}-vram-requirements.html"><strong>{m["vram_int4"]} GB</strong></a> <small style="color:var(--accent-green)">(Open)</small>'
         else:
             vram_col = f'<a href="vram/{m["slug"]}-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~{m["vram_int4"]} GB eq.)</a>'
 
         table_rows += f"""
-        <tr class="model-row" data-name="{html.escape(search_terms)}" data-open="{'1' if m['is_open_weight'] else '0'}">
+        <tr class="model-row" data-name="{html.escape(search_terms)}" data-open="{'1' if m['is_open_weight'] else '0'}" data-in="{m['input_1m']}" data-out="{m['output_1m']}" data-ctx="{m['context_length']}" data-vram="{m['vram_int4']}" data-gpu="{gpu_monthly}" data-monthly="{default_monthly:.2f}">
           <td><a href="models/{m['slug']}.html"><strong>{html.escape(m['name'])}</strong></a><br/><small style="color:var(--muted)">{html.escape(m['id'])}</small></td>
           <td>{html.escape(m['provider'])}</td>
           <td>{format_price(m['input_1m'])}</td>
           <td>{format_price(m['output_1m'])}</td>
+          <td class="sim-cell"><strong>${default_monthly:,.2f}/mo</strong></td>
           <td>{m['context_length']:,}</td>
           <td>{vram_col}</td>
           <td><a href="models/{m['slug']}.html">Calculator →</a></td>
@@ -1321,15 +1561,44 @@ def build_index_page(models, comparisons, config, updated_str, total_pages):
     aff_main = config["affiliates"]["runpod"]
     aff_sec = config["affiliates"]["vastai"]
 
-    page = shared_head(title, desc, canonical, config)
+    page = shared_head(title, desc, canonical, config, json_ld=json_ld)
     page += shared_nav(prefix="", config=config)
     page += f"""
 <main class="container">
   <section class="hero">
     <span class="badge">Auto-Updated Daily · {total_pages:,}+ Live AI Pricing &amp; VRAM Calculators</span>
     <h1>AI API Token Cost, VRAM &amp; Cloud GPU Break-Even Engine</h1>
-    <p>Instantly compare per-million token costs across OpenAI, Anthropic, Google, DeepSeek, Qwen, Mistral, and Meta Llama models—and see the exact point where renting a Cloud GPU saves you money.</p>
+    <p>Instantly compare per-million token costs across OpenAI, Anthropic, Google, DeepSeek, Qwen, Mistral, and Meta Llama models—and simulate your exact monthly bill across all {len(display_models)} models at once.</p>
   </section>
+
+  <div class="card" style="margin-bottom:24px;border-color:rgba(56,189,248,0.4);">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+      <div>
+        <span class="badge badge-green" style="margin-bottom:4px;">Live Batch Workload Simulator</span>
+        <h2 style="margin-bottom:2px;">Simulate Your Monthly Bill Across All {len(display_models)} Models</h2>
+      </div>
+      <div class="filter-bar" style="margin-bottom:0;">
+        <button type="button" class="filter-pill" onclick="setWorkloadPreset(200000, 50000)">Indie App (250K/day)</button>
+        <button type="button" class="filter-pill active" onclick="setWorkloadPreset(2000000, 500000)">Startup (2.5M/day)</button>
+        <button type="button" class="filter-pill" onclick="setWorkloadPreset(10000000, 2500000)">Scale-Up (12.5M/day)</button>
+        <button type="button" class="filter-pill" onclick="setWorkloadPreset(50000000, 10000000)">Agent Fleet (60M/day)</button>
+      </div>
+    </div>
+    <div class="grid-2" style="margin:12px 0 6px;">
+      <div class="slider-group" style="margin-bottom:4px;">
+        <label><span>Daily Input Tokens</span> <span id="simInLabel" style="color:var(--accent)">2,000,000 / day</span></label>
+        <input type="range" id="simInSlider" min="100000" max="100000000" step="100000" value="2000000" oninput="updateWorkloadSim()" />
+      </div>
+      <div class="slider-group" style="margin-bottom:4px;">
+        <label><span>Daily Output Tokens</span> <span id="simOutLabel" style="color:var(--accent)">500,000 / day</span></label>
+        <input type="range" id="simOutSlider" min="50000" max="40000000" step="50000" value="500000" oninput="updateWorkloadSim()" />
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:8px;">
+      <small style="color:var(--muted);">💡 Tip: Click any column header below (e.g. <strong>Est. Monthly</strong> or <strong>Input / 1M</strong>) to sort all models from cheapest to most expensive.</small>
+      <button type="button" class="btn-ghost" onclick="copyIndexLink(this)">🔗 Copy Shareable Benchmark Link</button>
+    </div>
+  </div>
 
   <div class="affiliate-box">
     <div>
@@ -1364,12 +1633,13 @@ def build_index_page(models, comparisons, config, updated_str, total_pages):
       <table id="pricingTable">
         <thead>
           <tr>
-            <th>Model Name</th>
-            <th>Provider</th>
-            <th>Input / 1M</th>
-            <th>Output / 1M</th>
-            <th>Context</th>
-            <th>Q4 VRAM / Type</th>
+            <th class="sortable" onclick="sortTable('name')">Model Name ↕</th>
+            <th class="sortable" onclick="sortTable('provider')">Provider ↕</th>
+            <th class="sortable" onclick="sortTable('in')">Input / 1M ↕</th>
+            <th class="sortable" onclick="sortTable('out')">Output / 1M ↕</th>
+            <th class="sortable" onclick="sortTable('monthly')" style="color:var(--accent)">Est. Monthly ↕</th>
+            <th class="sortable" onclick="sortTable('ctx')">Context ↕</th>
+            <th class="sortable" onclick="sortTable('vram')">Q4 VRAM / Type ↕</th>
             <th>Calculator</th>
           </tr>
         </thead>
@@ -1389,9 +1659,66 @@ def build_index_page(models, comparisons, config, updated_str, total_pages):
   </section>
 </main>
 <script>
+  const CANONICAL_URL = {json.dumps(canonical)};
   let currentMode = '';
+  let sortCol = '';
+  let sortAsc = true;
+
+  function setWorkloadPreset(inVal, outVal) {{
+    document.getElementById('simInSlider').value = inVal;
+    document.getElementById('simOutSlider').value = outVal;
+    updateWorkloadSim();
+  }}
+
+  function updateWorkloadSim() {{
+    const inTok = parseFloat(document.getElementById('simInSlider').value);
+    const outTok = parseFloat(document.getElementById('simOutSlider').value);
+    document.getElementById('simInLabel').textContent = inTok.toLocaleString() + ' / day';
+    document.getElementById('simOutLabel').textContent = outTok.toLocaleString() + ' / day';
+    const rows = document.querySelectorAll('.model-row');
+    rows.forEach(r => {{
+      const inRate = parseFloat(r.getAttribute('data-in') || '0');
+      const outRate = parseFloat(r.getAttribute('data-out') || '0');
+      const gpuRate = parseFloat(r.getAttribute('data-gpu') || '999999');
+      const monthly = (((inTok / 1e6) * inRate) + ((outTok / 1e6) * outRate)) * 30;
+      r.setAttribute('data-monthly', monthly.toFixed(4));
+      const cell = r.querySelector('.sim-cell');
+      if (cell) {{
+        const fmt = '$' + monthly.toLocaleString(undefined, {{minimumFractionDigits: 2, maximumFractionDigits: 2}}) + '/mo';
+        if (monthly > gpuRate) {{
+          cell.innerHTML = '<strong>' + fmt + '</strong><br/><small style="color:var(--accent-green)">💡 GPU Cheaper</small>';
+        }} else {{
+          cell.innerHTML = '<strong>' + fmt + '</strong>';
+        }}
+      }}
+    }});
+    if (sortCol === 'monthly') sortTable('monthly', true);
+  }}
+
+  function sortTable(col, keepDir) {{
+    if (!keepDir) {{
+      if (sortCol === col) sortAsc = !sortAsc;
+      else {{ sortCol = col; sortAsc = true; }}
+    }}
+    const tbody = document.getElementById('modelTableBody');
+    const rows = Array.from(tbody.querySelectorAll('.model-row'));
+    rows.sort((a, b) => {{
+      let va, vb;
+      if (col === 'name' || col === 'provider') {{
+        va = (a.children[col === 'name' ? 0 : 1].textContent || '').toLowerCase();
+        vb = (b.children[col === 'name' ? 0 : 1].textContent || '').toLowerCase();
+        return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+      }} else {{
+        va = parseFloat(a.getAttribute('data-' + col) || '0');
+        vb = parseFloat(b.getAttribute('data-' + col) || '0');
+        return sortAsc ? (va - vb) : (vb - va);
+      }}
+    }});
+    rows.forEach(r => tbody.appendChild(r));
+  }}
+
   function setQuickFilter(q, btn) {{
-    document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.card .filter-bar .filter-pill').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     const input = document.getElementById('searchInput');
     if (q === 'OPEN_ONLY') {{
@@ -1403,6 +1730,7 @@ def build_index_page(models, comparisons, config, updated_str, total_pages):
     }}
     filterTable();
   }}
+
   function filterTable() {{
     const q = document.getElementById('searchInput').value.toLowerCase().trim();
     const rows = document.querySelectorAll('.model-row');
@@ -1414,10 +1742,57 @@ def build_index_page(models, comparisons, config, updated_str, total_pages):
       r.style.display = (matchesOpen && matchesText) ? '' : 'none';
     }});
   }}
+
+  function copyIndexLink(btn) {{
+    const inTok = document.getElementById('simInSlider').value;
+    const outTok = document.getElementById('simOutSlider').value;
+    const q = encodeURIComponent(document.getElementById('searchInput').value.trim());
+    const url = `${{CANONICAL_URL}}?in=${{inTok}}&out=${{outTok}}${{q ? '&q=' + q : ''}}`;
+    navigator.clipboard.writeText(url);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Link Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }}
+
+  (function() {{
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('in')) document.getElementById('simInSlider').value = p.get('in');
+    if (p.get('out')) document.getElementById('simOutSlider').value = p.get('out');
+    if (p.get('q')) document.getElementById('searchInput').value = p.get('q');
+    updateWorkloadSim();
+    filterTable();
+  }})();
 </script>
 """
     page += shared_footer(config, updated_str, prefix="")
     return page
+
+def build_brand_assets(dist_dir):
+    favicon_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#0b0f19"/>
+  <path d="M36 6L14 36h16l-4 22 24-30H34z" fill="#38bdf8"/>
+</svg>"""
+    with open(os.path.join(dist_dir, "favicon.svg"), "w", encoding="utf-8") as f:
+        f.write(favicon_svg)
+
+    og_svg = """<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="60" y="60" width="1080" height="510" rx="24" fill="#131b2e" stroke="#38bdf8" stroke-width="2"/>
+  <text x="110" y="165" font-family="Inter,Segoe UI,sans-serif" font-size="32" font-weight="700" fill="#38bdf8">⚡ TOKENBENCH &amp; GPU COST ENGINE</text>
+  <text x="110" y="255" font-family="Inter,Segoe UI,sans-serif" font-size="56" font-weight="800" fill="#ffffff">AI API Token Pricing, VRAM</text>
+  <text x="110" y="325" font-family="Inter,Segoe UI,sans-serif" font-size="56" font-weight="800" fill="#ffffff">&amp; Cloud GPU Break-Even Calculator</text>
+  <text x="110" y="405" font-family="Inter,Segoe UI,sans-serif" font-size="28" fill="#94a3b8">Compare 440+ LLMs (GPT-5, Claude, Gemini, DeepSeek, Llama, Qwen, Mistral)</text>
+  <rect x="110" y="455" width="360" height="64" rx="12" fill="#10b981"/>
+  <text x="145" y="497" font-family="Inter,Segoe UI,sans-serif" font-size="26" font-weight="700" fill="#ffffff">1,500+ Live Calculators →</text>
+</svg>"""
+    with open(os.path.join(dist_dir, "og-card.svg"), "w", encoding="utf-8") as f:
+        f.write(og_svg)
 
 def submit_indexnow(config, urls):
     key = config.get("indexnow_key", "").strip()
@@ -1425,24 +1800,26 @@ def submit_indexnow(config, urls):
         return
     base_url = config["base_url"].rstrip("/")
     host = base_url.split("://")[-1].split("/")[0]
-    payload = {
-        "host": host,
-        "key": key,
-        "keyLocation": f"{base_url}/{key}.txt",
-        "urlList": urls[:1000]
-    }
-    data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(
-        "https://api.indexnow.org/indexnow",
-        data=data,
-        headers={"Content-Type": "application/json; charset=utf-8"},
-        method="POST"
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            print(f"IndexNow ping succeeded with HTTP {resp.status} for {len(payload['urlList'])} URLs!")
-    except Exception as e:
-        print(f"IndexNow ping note: {e}")
+    for i in range(0, len(urls), 1000):
+        batch = urls[i:i+1000]
+        payload = {
+            "host": host,
+            "key": key,
+            "keyLocation": f"{base_url}/{key}.txt",
+            "urlList": batch
+        }
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            "https://api.indexnow.org/indexnow",
+            data=data,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+            method="POST"
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                print(f"IndexNow ping batch {i//1000 + 1} succeeded with HTTP {resp.status} for {len(batch)} URLs!")
+        except Exception as e:
+            print(f"IndexNow ping note: {e}")
 
 def main():
     config = load_config()
@@ -1461,6 +1838,7 @@ def main():
     os.makedirs(os.path.join(DIST_DIR, "models"), exist_ok=True)
     os.makedirs(comp_dir, exist_ok=True)
     os.makedirs(os.path.join(DIST_DIR, "vram"), exist_ok=True)
+    build_brand_assets(DIST_DIR)
 
     urls = []
     base_url = config["base_url"].rstrip("/")
