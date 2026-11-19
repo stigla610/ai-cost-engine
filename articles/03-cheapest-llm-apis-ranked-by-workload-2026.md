@@ -7,7 +7,7 @@ canonical_url: https://stigla610.github.io/ai-cost-engine/benchmarks.html#cheape
 
 If you are running agents, batch classification, or summarization pipelines at 10M tokens/day (8M input + 2M output), token rates vary by over **100x** between providers.
 
-Below is the live ranking updated 2026-11-19 13:07 UTC via [TokenBench](https://stigla610.github.io/ai-cost-engine/):
+Below is the live ranking updated 2026-11-19 13:17 UTC via [TokenBench](https://stigla610.github.io/ai-cost-engine/):
 
 | Rank | Model | Provider | Input / 1M | Output / 1M | 10M/Day Monthly Bill |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -25,9 +25,9 @@ Below is the live ranking updated 2026-11-19 13:07 UTC via [TokenBench](https://
 | #12 | [Amazon: Nova Micro 1.0](https://stigla610.github.io/ai-cost-engine/models/amazon-nova-micro-v1.html) | Amazon | $0.035 | $0.14 | **$16.80/mo** |
 | #13 | [Mistral: Mistral Small 3](https://stigla610.github.io/ai-cost-engine/models/mistralai-mistral-small-24b-instruct-2501.html) | Mistral AI | $0.05 | $0.08 | **$16.80/mo** |
 | #14 | [Tencent: Hy4 flash](https://stigla610.github.io/ai-cost-engine/models/tencent-hy4-flash.html) | Tencent | $0.035 | $0.1405 | **$16.83/mo** |
-| #15 | [Cohere: Command R7B (12-2024)](https://stigla610.github.io/ai-cost-engine/models/cohere-command-r7b-12-2024.html) | Cohere | $0.0375 | $0.15 | **$18.00/mo** |
-| #16 | [Google: Gemma 3 4B](https://stigla610.github.io/ai-cost-engine/models/google-gemma-3-4b-it.html) | Google | $0.05 | $0.10 | **$18.00/mo** |
-| #17 | [Meta: Llama 3.2 1B Instruct](https://stigla610.github.io/ai-cost-engine/models/meta-llama-llama-3-2-1b-instruct.html) | Meta Llama | $0.027 | $0.201 | **$18.54/mo** |
-| #18 | [inclusionAI: Ling 3.1 Flash](https://stigla610.github.io/ai-cost-engine/models/inclusionai-ling-3-1-flash.html) | Inclusionai | $0.045 | $0.135 | **$18.90/mo** |
+| #15 | [DeepSeek: DeepSeek V4.1 Flash 1017](https://stigla610.github.io/ai-cost-engine/models/deepseek-deepseek-v4-1-flash-1017.html) | DeepSeek | $0.035 | $0.15 | **$17.40/mo** |
+| #16 | [Cohere: Command R7B (12-2024)](https://stigla610.github.io/ai-cost-engine/models/cohere-command-r7b-12-2024.html) | Cohere | $0.0375 | $0.15 | **$18.00/mo** |
+| #17 | [Google: Gemma 3 4B](https://stigla610.github.io/ai-cost-engine/models/google-gemma-3-4b-it.html) | Google | $0.05 | $0.10 | **$18.00/mo** |
+| #18 | [Meta: Llama 3.2 1B Instruct](https://stigla610.github.io/ai-cost-engine/models/meta-llama-llama-3-2-1b-instruct.html) | Meta Llama | $0.027 | $0.201 | **$18.54/mo** |
 
 Compare side-by-side costs or simulate custom token ratios on the live dashboard: [https://stigla610.github.io/ai-cost-engine/](https://stigla610.github.io/ai-cost-engine/)

@@ -299,12 +299,12 @@
 
       <div class="slider-group">
         <label><span>Input Tokens per Day</span> <span id="inVal">2,000,000</span></label>
-        <input type="range" id="inSlider" min="100000" max="50000000" step="100000" value="2000000" oninput="recalc()" />
+        <input type="range" id="inSlider" min="100000" max="70000000" step="100000" value="2000000" oninput="recalc()" />
       </div>
 
       <div class="slider-group">
         <label><span>Output Tokens per Day</span> <span id="outVal">500,000</span></label>
-        <input type="range" id="outSlider" min="50000" max="20000000" step="50000" value="500000" oninput="recalc()" />
+        <input type="range" id="outSlider" min="50000" max="28000000" step="50000" value="500000" oninput="recalc()" />
       </div>
 
       <div class="stat-row">
@@ -362,8 +362,8 @@
       </div>
 
       <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="https://cloud.vast.ai/?ref_id=864932" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent GPUs on Vast.ai (Save up to 70%)</a>
-        <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">Deploy on RunPod (From $0.20/hr)</a>
+        <a href="https://cloud.vast.ai/?ref_id=864932" target="_blank" rel="nofollow sponsored" data-track-cta="model_vastai" class="btn-cta">Rent GPUs on Vast.ai (Save up to 70%)</a>
+        <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" data-track-cta="model_runpod" class="btn-cta btn-green">Deploy on RunPod (From $0.20/hr)</a>
       </div>
     </div>
   </div>
@@ -374,7 +374,7 @@
       <h3>Stop Overpaying for High-Volume AI Inference</h3>
       <p style="color:var(--muted);max-width:700px;">Running Qwen: Qwen3.5-9B at scale? Deploy pre-configured vLLM or Ollama pods on dedicated H100, A100, or RTX 4090 GPUs by the second.</p>
     </div>
-    <a href="https://cloud.vast.ai/?ref_id=864932" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent GPUs on Vast.ai (Save up to 70%) →</a>
+    <a href="https://cloud.vast.ai/?ref_id=864932" target="_blank" rel="nofollow sponsored" data-track-cta="model_banner_vastai" class="btn-cta">Rent GPUs on Vast.ai (Save up to 70%) →</a>
   </div>
   
   <div class="card" style="margin-top:24px;">
@@ -447,11 +447,11 @@
     document.getElementById('outVal').textContent = outTok.toLocaleString();
     const daily = ((inTok / 1e6) * IN_RATE) + ((outTok / 1e6) * OUT_RATE);
     const monthly = daily * 30;
-    document.getElementById('dailyCost').textContent = '$' + daily.toFixed(2);
-    document.getElementById('monthlyCost').textContent = '$' + monthly.toFixed(2);
+    document.getElementById('dailyCost').textContent = '$' + daily.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('monthlyCost').textContent = '$' + monthly.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
     const verdict = document.getElementById('verdictBox');
     if (monthly > GPU_MONTHLY) {
-      const save = (monthly - GPU_MONTHLY).toFixed(0);
+      const save = Math.round(monthly - GPU_MONTHLY).toLocaleString();
       if (IS_OPEN) {
         verdict.innerHTML = '💡 <strong>Self-Hosting Qwen: Qwen3.5-9B Wins:</strong> At this volume, renting a dedicated Cloud GPU saves roughly <strong>$' + save + '/month</strong> compared to pay-per-token API billing.';
       } else {
@@ -484,7 +484,7 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:07 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:17 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·

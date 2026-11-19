@@ -335,12 +335,20 @@ def render_hardware_buy_card(m, config):
     elec_monthly = round((hw["watts"] / 1000.0) * 24 * 30 * 0.18, 2)
 
     if fits_single_box:
-        headline = f"Buy Local Hardware vs. Rent Cloud GPU for {html.escape(m['name'])}"
-        summary = (
-            f"Running <strong>{html.escape(m['name'])}</strong> (~{m['vram_int4']} GB in 4-bit) fits locally on "
-            f"<strong>{html.escape(hw['name'])}</strong> (~${hw['approx_price_usd']:,} upfront, ~${elec_monthly:.2f}/mo electricity at $0.18/kWh). "
-            f"Or rent a <strong>{html.escape(gpu['name'])}</strong> on-demand for <strong>${gpu['hourly_usd']:.2f}/hr</strong> with zero hardware CapEx."
-        )
+        if m["is_open_weight"]:
+            headline = f"Buy Local Hardware vs. Rent Cloud GPU for {html.escape(m['name'])}"
+            summary = (
+                f"Running <strong>{html.escape(m['name'])}</strong> (~{m['vram_int4']} GB in 4-bit) fits locally on "
+                f"<strong>{html.escape(hw['name'])}</strong> (~${hw['approx_price_usd']:,} upfront, ~${elec_monthly:.2f}/mo electricity at $0.18/kWh). "
+                f"Or rent a <strong>{html.escape(gpu['name'])}</strong> on-demand for <strong>${gpu['hourly_usd']:.2f}/hr</strong> with zero hardware CapEx."
+            )
+        else:
+            headline = f"Buy Local Hardware vs. Rent Cloud GPU (Open-Weight Alternative to {html.escape(m['name'])})"
+            summary = (
+                f"While {html.escape(m['name'])} is a proprietary API, running an <strong>open-weight ~{m['params_b']:g}B equivalent</strong> (~{m['vram_int4']} GB in 4-bit) fits locally on "
+                f"<strong>{html.escape(hw['name'])}</strong> (~${hw['approx_price_usd']:,} upfront, ~${elec_monthly:.2f}/mo electricity at $0.18/kWh). "
+                f"Or rent a <strong>{html.escape(gpu['name'])}</strong> on-demand for <strong>${gpu['hourly_usd']:.2f}/hr</strong> with zero hardware CapEx."
+            )
         badge_txt = f"Fits Locally on {hw['max_vram_gb']}GB Tier"
     else:
         rtx24 = tiers[1] if len(tiers) > 1 else hw
@@ -1005,6 +1013,8 @@ def build_model_page(m, all_models, config, updated_str):
     daily_gpu_cost = round(gpu["hourly_usd"] * 24, 2)
     blended = max(m["blended_1m"], 0.05)
     breakeven_m_tokens_day = round(daily_gpu_cost / blended, 1)
+    in_max = min(500_000_000, max(50_000_000, int(((breakeven_m_tokens_day * 1.4) // 10 + 1) * 10_000_000)))
+    out_max = max(20_000_000, int(in_max * 0.4))
 
     in_fmt = format_price(m["input_1m"])
     out_fmt = format_price(m["output_1m"])
@@ -1079,12 +1089,12 @@ def build_model_page(m, all_models, config, updated_str):
 
       <div class="slider-group">
         <label><span>Input Tokens per Day</span> <span id="inVal">2,000,000</span></label>
-        <input type="range" id="inSlider" min="100000" max="50000000" step="100000" value="2000000" oninput="recalc()" />
+        <input type="range" id="inSlider" min="100000" max="{in_max}" step="100000" value="2000000" oninput="recalc()" />
       </div>
 
       <div class="slider-group">
         <label><span>Output Tokens per Day</span> <span id="outVal">500,000</span></label>
-        <input type="range" id="outSlider" min="50000" max="20000000" step="50000" value="500000" oninput="recalc()" />
+        <input type="range" id="outSlider" min="50000" max="{out_max}" step="50000" value="500000" oninput="recalc()" />
       </div>
 
       <div class="stat-row">
@@ -1142,8 +1152,8 @@ def build_model_page(m, all_models, config, updated_str):
       </div>
 
       <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="{html.escape(aff['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">{html.escape(aff['cta_text'])}</a>
-        <a href="{html.escape(alt_aff['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">{html.escape(alt_aff['cta_text'])}</a>
+        <a href="{html.escape(aff['url'])}" target="_blank" rel="nofollow sponsored" data-track-cta="model_{gpu['provider_key']}" class="btn-cta">{html.escape(aff['cta_text'])}</a>
+        <a href="{html.escape(alt_aff['url'])}" target="_blank" rel="nofollow sponsored" data-track-cta="model_{alt_key}" class="btn-cta btn-green">{html.escape(alt_aff['cta_text'])}</a>
       </div>
     </div>
   </div>
@@ -1154,7 +1164,7 @@ def build_model_page(m, all_models, config, updated_str):
       <h3>Stop Overpaying for High-Volume AI Inference</h3>
       <p style="color:var(--muted);max-width:700px;">{"Running " + html.escape(m['name']) + " at scale? Deploy pre-configured vLLM or Ollama pods on dedicated H100, A100, or RTX 4090 GPUs by the second." if m["is_open_weight"] else "Spending heavily on " + html.escape(m['name']) + " API calls? Benchmark open-weight alternatives (Llama 4, Qwen 3, DeepSeek V3/R1) on dedicated H100, A100, or RTX 4090 GPUs from $0.20/hr."}</p>
     </div>
-    <a href="{html.escape(aff['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">{html.escape(aff['cta_text'])} →</a>
+    <a href="{html.escape(aff['url'])}" target="_blank" rel="nofollow sponsored" data-track-cta="model_banner_{gpu['provider_key']}" class="btn-cta">{html.escape(aff['cta_text'])} →</a>
   </div>
   {render_deploy_card(m, config)}
   <div class="card" style="margin-top:24px;">
@@ -1184,11 +1194,11 @@ def build_model_page(m, all_models, config, updated_str):
     document.getElementById('outVal').textContent = outTok.toLocaleString();
     const daily = ((inTok / 1e6) * IN_RATE) + ((outTok / 1e6) * OUT_RATE);
     const monthly = daily * 30;
-    document.getElementById('dailyCost').textContent = '$' + daily.toFixed(2);
-    document.getElementById('monthlyCost').textContent = '$' + monthly.toFixed(2);
+    document.getElementById('dailyCost').textContent = '$' + daily.toLocaleString(undefined, {{minimumFractionDigits: 2, maximumFractionDigits: 2}});
+    document.getElementById('monthlyCost').textContent = '$' + monthly.toLocaleString(undefined, {{minimumFractionDigits: 2, maximumFractionDigits: 2}});
     const verdict = document.getElementById('verdictBox');
     if (monthly > GPU_MONTHLY) {{
-      const save = (monthly - GPU_MONTHLY).toFixed(0);
+      const save = Math.round(monthly - GPU_MONTHLY).toLocaleString();
       if (IS_OPEN) {{
         verdict.innerHTML = '💡 <strong>{verdict_win_prefix}:</strong> At this volume, renting a dedicated Cloud GPU saves roughly <strong>$' + save + '/month</strong> compared to pay-per-token API billing.';
       }} else {{
@@ -1313,8 +1323,8 @@ def build_vram_page(m, config, updated_str):
         <strong><a href="../models/{m['slug']}.html">{in_fmt}/1M In · {out_fmt}/1M Out →</a></strong>
       </div>
       <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="{html.escape(aff_runpod['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">{html.escape(aff_runpod['cta_text'])}</a>
-        <a href="{html.escape(aff_vast['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">{html.escape(aff_vast['cta_text'])}</a>
+        <a href="{html.escape(aff_runpod['url'])}" target="_blank" rel="nofollow sponsored" data-track-cta="vram_runpod" class="btn-cta">{html.escape(aff_runpod['cta_text'])}</a>
+        <a href="{html.escape(aff_vast['url'])}" target="_blank" rel="nofollow sponsored" data-track-cta="vram_vastai" class="btn-cta btn-green">{html.escape(aff_vast['cta_text'])}</a>
       </div>
     </div>
 
@@ -1664,12 +1674,12 @@ def build_comparison_page(m1, m2, config, updated_str):
     <div class="card">
       <h2>Side-by-Side Specs &amp; Token Rates</h2>
       <div class="table-wrap">
-        <table style="min-width:420px;">
+        <table style="min-width:0;table-layout:fixed;width:100%;">
           <thead>
             <tr>
-              <th>Metric</th>
-              <th><a href="../models/{m1['slug']}.html">{html.escape(m1['name'])}</a></th>
-              <th><a href="../models/{m2['slug']}.html">{html.escape(m2['name'])}</a></th>
+              <th style="width:32%;white-space:normal;word-break:break-word;">Metric</th>
+              <th style="width:34%;white-space:normal;word-break:break-word;"><a href="../models/{m1['slug']}.html">{html.escape(m1['name'])}</a></th>
+              <th style="width:34%;white-space:normal;word-break:break-word;"><a href="../models/{m2['slug']}.html">{html.escape(m2['name'])}</a></th>
             </tr>
           </thead>
           <tbody>
@@ -1716,8 +1726,8 @@ def build_comparison_page(m1, m2, config, updated_str):
       <p style="color:var(--muted);">Rent serverless or dedicated GPUs on RunPod and Vast.ai to cut your monthly AI infrastructure bill by up to 70%.</p>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
-      <a href="{html.escape(aff_runpod['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">{html.escape(aff_runpod['cta_text'])}</a>
-      <a href="{html.escape(aff_do['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">{html.escape(aff_do['cta_text'])}</a>
+      <a href="{html.escape(aff_runpod['url'])}" target="_blank" rel="nofollow sponsored" data-track-cta="compare_runpod" class="btn-cta">{html.escape(aff_runpod['cta_text'])}</a>
+      <a href="{html.escape(aff_do['url'])}" target="_blank" rel="nofollow sponsored" data-track-cta="compare_vastai" class="btn-cta btn-green">{html.escape(aff_do['cta_text'])}</a>
     </div>
   </div>
 </main>
@@ -1801,7 +1811,7 @@ def build_gpu_page(config, updated_str):
           <td><strong style="color:var(--accent-green)">${gpu['hourly_usd']:.2f}/hr</strong> (${gpu['hourly_usd']*24*30:,.0f}/mo)</td>
           <td>~{gpu['throughput_tok_sec']} tok/s</td>
           <td>{html.escape(gpu['best_for'])}</td>
-          <td><a href="{html.escape(aff['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">{html.escape(aff['cta_text'])}</a></td>
+          <td><a href="{html.escape(aff['url'])}" target="_blank" rel="nofollow sponsored" data-track-cta="gpu_matrix_{gpu['id']}" class="btn-cta">{html.escape(aff['cta_text'])}</a></td>
         </tr>
         """
 
@@ -1816,7 +1826,7 @@ def build_gpu_page(config, updated_str):
           <span class="badge badge-green">{html.escape(aff['badge'])}</span>
           <h3>{html.escape(aff['name'])}</h3>
           <p style="color:var(--muted);font-size:0.92rem;margin:10px 0 18px;">{html.escape(desc_text)}</p>
-          <a href="{html.escape(aff['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">{html.escape(aff['cta_text'])} →</a>
+          <a href="{html.escape(aff['url'])}" target="_blank" rel="nofollow sponsored" data-track-cta="gpu_partner_{key}" class="btn-cta">{html.escape(aff['cta_text'])} →</a>
         </div>
         """
 
