@@ -7,7 +7,7 @@ canonical_url: https://stigla610.github.io/ai-cost-engine/benchmarks.html#cheape
 
 If you are running agents, batch classification, or summarization pipelines at 10M tokens/day (8M input + 2M output), token rates vary by over **100x** between providers.
 
-Below is the live ranking updated 2026-11-19 13:17 UTC via [TokenBench](https://stigla610.github.io/ai-cost-engine/):
+Below is the live ranking updated 2026-11-19 13:39 UTC via [TokenBench](https://stigla610.github.io/ai-cost-engine/):
 
 | Rank | Model | Provider | Input / 1M | Output / 1M | 10M/Day Monthly Bill |
 | :--- | :--- | :--- | :--- | :--- | :--- |
