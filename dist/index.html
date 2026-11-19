@@ -223,6 +223,27 @@
       font-size: 0.92rem;
       color: #fde68a;
     }
+    .cmd-item { margin-bottom: 12px; }
+    .cmd-item:last-child { margin-bottom: 0; }
+    .cmd-label { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+    .cmd-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #070a12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+    }
+    .cmd-box code {
+      color: #a5f3fc;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.84rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .cmd-copy { flex-shrink: 0; padding: 5px 10px; font-size: 0.78rem; }
     footer {
       margin-top: 60px;
       border-top: 1px solid var(--border);
@@ -261,7 +282,7 @@
 
 <main class="container">
   <section class="hero">
-    <span class="badge">Auto-Updated Daily · 1,543+ Live AI Pricing &amp; VRAM Calculators</span>
+    <span class="badge">Auto-Updated Daily · 1,553+ Live AI Pricing &amp; VRAM Calculators</span>
     <h1>AI API Token Cost, VRAM &amp; Cloud GPU Break-Even Engine</h1>
     <p>Instantly compare per-million token costs across OpenAI, Anthropic, Google, DeepSeek, Qwen, Mistral, and Meta Llama models—and simulate your exact monthly bill across all 260 models at once.</p>
   </section>
@@ -306,7 +327,32 @@
       <a href="https://cloud.vast.ai/?ref_id=864932" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">Rent GPUs on Vast.ai (Save up to 70%)</a>
     </div>
   </div>
-
+  
+  <div class="card" style="margin:24px 0;border-color:rgba(16,185,129,0.4);">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:6px;">
+      <h2 style="margin-bottom:0;">🖥️ Check Your Local GPU in Terminal (Zero-Install CLI)</h2>
+      <span class="badge badge-green" style="margin-bottom:0;">Zero Dependencies · Python 3</span>
+    </div>
+    <p style="color:var(--muted);font-size:0.9rem;margin-bottom:14px;">Auto-detects your NVIDIA GPU (<code>nvidia-smi</code>) or Apple Silicon Unified Memory and prints which Llama, Qwen, DeepSeek, Gemma, and Mistral models fit—with exact <code>ollama run</code> and <code>vllm serve</code> commands. Supports <code>--vram 24 --ctx 32768 --live</code>.</p>
+    <div class="grid-2" style="margin:0;gap:14px;">
+      
+      <div class="cmd-item">
+        <div class="cmd-label">Linux / macOS (Terminal)</div>
+        <div class="cmd-box">
+          <code>curl -sL https://stigla610.github.io/ai-cost-engine/tokenbench.py | python3 -</code>
+          <button type="button" class="btn-ghost cmd-copy" data-cmd="curl -sL https://stigla610.github.io/ai-cost-engine/tokenbench.py | python3 -" onclick="copyCmd(this)">📋 Copy</button>
+        </div>
+      </div>
+      
+      <div class="cmd-item">
+        <div class="cmd-label">Windows (PowerShell)</div>
+        <div class="cmd-box">
+          <code>irm https://stigla610.github.io/ai-cost-engine/tokenbench.py | python -</code>
+          <button type="button" class="btn-ghost cmd-copy" data-cmd="irm https://stigla610.github.io/ai-cost-engine/tokenbench.py | python -" onclick="copyCmd(this)">📋 Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px;">
       <h2>Live AI Model Pricing &amp; VRAM Directory (Per 1M Tokens)</h2>
@@ -538,12 +584,12 @@
           <td><a href="models/google-gemini-2-5-flash.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="deepseek: r1 0528 deepseek deepseek/deepseek-r1-0528 open-weight" data-open="1" data-in="0.5" data-out="2.15" data-ctx="163840" data-vram="436.2" data-gpu="3873.6" data-monthly="62.25">
+        <tr class="model-row" data-name="deepseek: r1 0528 deepseek deepseek/deepseek-r1-0528 open-weight" data-open="1" data-in="0.571" data-out="2.286" data-ctx="163840" data-vram="436.2" data-gpu="3873.6" data-monthly="68.55">
           <td><a href="models/deepseek-deepseek-r1-0528.html"><strong>DeepSeek: R1 0528</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-r1-0528</small></td>
           <td>DeepSeek</td>
-          <td>$0.50</td>
-          <td>$2.15</td>
-          <td class="sim-cell"><strong>$62.25/mo</strong></td>
+          <td>$0.571</td>
+          <td>$2.286</td>
+          <td class="sim-cell"><strong>$68.55/mo</strong></td>
           <td>163,840</td>
           <td><a href="vram/deepseek-deepseek-r1-0528-vram-requirements.html"><strong>436.2 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/deepseek-deepseek-r1-0528.html">Calculator →</a></td>
@@ -571,12 +617,12 @@
           <td><a href="models/qwen-qwen-2-5-72b-instruct.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="mistral: mistral small 3.2 24b mistral ai mistralai/mistral-small-3.2-24b-instruct open-weight" data-open="1" data-in="0.1" data-out="0.3" data-ctx="256000" data-vram="15.6" data-gpu="280.8" data-monthly="10.50">
+        <tr class="model-row" data-name="mistral: mistral small 3.2 24b mistral ai mistralai/mistral-small-3.2-24b-instruct open-weight" data-open="1" data-in="0.075" data-out="0.2" data-ctx="256000" data-vram="15.6" data-gpu="280.8" data-monthly="7.50">
           <td><a href="models/mistralai-mistral-small-3-2-24b-instruct.html"><strong>Mistral: Mistral Small 3.2 24B</strong></a><br/><small style="color:var(--muted)">mistralai/mistral-small-3.2-24b-instruct</small></td>
           <td>Mistral AI</td>
-          <td>$0.10</td>
-          <td>$0.30</td>
-          <td class="sim-cell"><strong>$10.50/mo</strong></td>
+          <td>$0.075</td>
+          <td>$0.20</td>
+          <td class="sim-cell"><strong>$7.50/mo</strong></td>
           <td>256,000</td>
           <td><a href="vram/mistralai-mistral-small-3-2-24b-instruct-vram-requirements.html"><strong>15.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/mistralai-mistral-small-3-2-24b-instruct.html">Calculator →</a></td>
@@ -835,12 +881,12 @@
           <td><a href="models/anthropic-claude-sonnet-4-6.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="google: gemma 3 27b google google/gemma-3-27b-it open-weight" data-open="1" data-in="0.08" data-out="0.35" data-ctx="131072" data-vram="17.6" data-gpu="1000.8" data-monthly="10.05">
+        <tr class="model-row" data-name="google: gemma 3 27b google google/gemma-3-27b-it open-weight" data-open="1" data-in="0.08" data-out="0.16" data-ctx="131072" data-vram="17.6" data-gpu="1000.8" data-monthly="7.20">
           <td><a href="models/google-gemma-3-27b-it.html"><strong>Google: Gemma 3 27B</strong></a><br/><small style="color:var(--muted)">google/gemma-3-27b-it</small></td>
           <td>Google</td>
           <td>$0.08</td>
-          <td>$0.35</td>
-          <td class="sim-cell"><strong>$10.05/mo</strong></td>
+          <td>$0.16</td>
+          <td class="sim-cell"><strong>$7.20/mo</strong></td>
           <td>131,072</td>
           <td><a href="vram/google-gemma-3-27b-it-vram-requirements.html"><strong>17.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/google-gemma-3-27b-it.html">Calculator →</a></td>
@@ -1231,12 +1277,12 @@
           <td><a href="models/z-ai-glm-4-7.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="moonshotai: kimi k2.7 code moonshot ai moonshotai/kimi-k2.7-code open-weight" data-open="1" data-in="0.6" data-out="3.5" data-ctx="262144" data-vram="650.0" data-gpu="3873.6" data-monthly="88.50">
+        <tr class="model-row" data-name="moonshotai: kimi k2.7 code moonshot ai moonshotai/kimi-k2.7-code open-weight" data-open="1" data-in="0.66" data-out="3.5" data-ctx="262144" data-vram="650.0" data-gpu="3873.6" data-monthly="92.10">
           <td><a href="models/moonshotai-kimi-k2-7-code.html"><strong>MoonshotAI: Kimi K2.7 Code</strong></a><br/><small style="color:var(--muted)">moonshotai/kimi-k2.7-code</small></td>
           <td>Moonshot AI</td>
-          <td>$0.60</td>
+          <td>$0.66</td>
           <td>$3.50</td>
-          <td class="sim-cell"><strong>$88.50/mo</strong></td>
+          <td class="sim-cell"><strong>$92.10/mo</strong></td>
           <td>262,144</td>
           <td><a href="vram/moonshotai-kimi-k2-7-code-vram-requirements.html"><strong>650.0 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/moonshotai-kimi-k2-7-code.html">Calculator →</a></td>
@@ -1473,12 +1519,12 @@
           <td><a href="models/z-ai-glm-5.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="moonshotai: kimi k3.1 pro moonshot ai moonshotai/kimi-k3.1-pro open-weight" data-open="1" data-in="0.2403" data-out="8.4023" data-ctx="1048576" data-vram="45.5" data-gpu="1936.8" data-monthly="140.45">
+        <tr class="model-row" data-name="moonshotai: kimi k3.1 pro moonshot ai moonshotai/kimi-k3.1-pro open-weight" data-open="1" data-in="0.253" data-out="8.8" data-ctx="1048576" data-vram="45.5" data-gpu="1936.8" data-monthly="147.18">
           <td><a href="models/moonshotai-kimi-k3-1-pro.html"><strong>MoonshotAI: Kimi K3.1 Pro</strong></a><br/><small style="color:var(--muted)">moonshotai/kimi-k3.1-pro</small></td>
           <td>Moonshot AI</td>
-          <td>$0.2403</td>
-          <td>$8.4023</td>
-          <td class="sim-cell"><strong>$140.45/mo</strong></td>
+          <td>$0.253</td>
+          <td>$8.80</td>
+          <td class="sim-cell"><strong>$147.18/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/moonshotai-kimi-k3-1-pro-vram-requirements.html"><strong>45.5 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/moonshotai-kimi-k3-1-pro.html">Calculator →</a></td>
@@ -1539,12 +1585,12 @@
           <td><a href="models/google-gemini-3-1-flash-lite.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="deepseek: deepseek v4 flash 0731 deepseek deepseek/deepseek-v4-flash-0731 proprietary api" data-open="0" data-in="0.06" data-out="0.18" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="6.30">
+        <tr class="model-row" data-name="deepseek: deepseek v4 flash 0731 deepseek deepseek/deepseek-v4-flash-0731 proprietary api" data-open="0" data-in="0.062" data-out="0.3" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="8.22">
           <td><a href="models/deepseek-deepseek-v4-flash-0731.html"><strong>DeepSeek: DeepSeek V4 Flash 0731</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4-flash-0731</small></td>
           <td>DeepSeek</td>
-          <td>$0.06</td>
-          <td>$0.18</td>
-          <td class="sim-cell"><strong>$6.30/mo</strong></td>
+          <td>$0.062</td>
+          <td>$0.30</td>
+          <td class="sim-cell"><strong>$8.22/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/deepseek-deepseek-v4-flash-0731-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~9.1 GB eq.)</a></td>
           <td><a href="models/deepseek-deepseek-v4-flash-0731.html">Calculator →</a></td>
@@ -1671,12 +1717,12 @@
           <td><a href="models/mistralai-mistral-large-2512.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="z.ai: glm 5.1 z.ai (glm) z-ai/glm-5.1 open-weight" data-open="1" data-in="1.4" data-out="4.4" data-ctx="204800" data-vram="230.8" data-gpu="3873.6" data-monthly="150.00">
+        <tr class="model-row" data-name="z.ai: glm 5.1 z.ai (glm) z-ai/glm-5.1 open-weight" data-open="1" data-in="1.19" data-out="3.74" data-ctx="204800" data-vram="230.8" data-gpu="3873.6" data-monthly="127.50">
           <td><a href="models/z-ai-glm-5-1.html"><strong>Z.ai: GLM 5.1</strong></a><br/><small style="color:var(--muted)">z-ai/glm-5.1</small></td>
           <td>Z.AI (GLM)</td>
-          <td>$1.40</td>
-          <td>$4.40</td>
-          <td class="sim-cell"><strong>$150.00/mo</strong></td>
+          <td>$1.19</td>
+          <td>$3.74</td>
+          <td class="sim-cell"><strong>$127.50/mo</strong></td>
           <td>204,800</td>
           <td><a href="vram/z-ai-glm-5-1-vram-requirements.html"><strong>230.8 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/z-ai-glm-5-1.html">Calculator →</a></td>
@@ -1759,12 +1805,12 @@
           <td><a href="models/mistralai-mistral-large-4-0.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="z.ai: glm 5.2 z.ai (glm) z-ai/glm-5.2 open-weight" data-open="1" data-in="0.007" data-out="6.8" data-ctx="1048576" data-vram="230.8" data-gpu="3873.6" data-monthly="102.42">
+        <tr class="model-row" data-name="z.ai: glm 5.2 z.ai (glm) z-ai/glm-5.2 open-weight" data-open="1" data-in="0.62" data-out="2.42" data-ctx="1048576" data-vram="230.8" data-gpu="3873.6" data-monthly="73.50">
           <td><a href="models/z-ai-glm-5-2.html"><strong>Z.ai: GLM 5.2</strong></a><br/><small style="color:var(--muted)">z-ai/glm-5.2</small></td>
           <td>Z.AI (GLM)</td>
-          <td>$0.007</td>
-          <td>$6.80</td>
-          <td class="sim-cell"><strong>$102.42/mo</strong></td>
+          <td>$0.62</td>
+          <td>$2.42</td>
+          <td class="sim-cell"><strong>$73.50/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/z-ai-glm-5-2-vram-requirements.html"><strong>230.8 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/z-ai-glm-5-2.html">Calculator →</a></td>
@@ -1836,12 +1882,12 @@
           <td><a href="models/qwen-qwen3-coder.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="mistral: mistral medium 3 mistral ai mistralai/mistral-medium-3 proprietary api" data-open="0" data-in="0.4" data-out="2.0" data-ctx="131072" data-vram="45.5" data-gpu="1936.8" data-monthly="54.00">
+        <tr class="model-row" data-name="mistral: mistral medium 3 mistral ai mistralai/mistral-medium-3 proprietary api" data-open="0" data-in="0.44" data-out="2.2" data-ctx="131072" data-vram="45.5" data-gpu="1936.8" data-monthly="59.40">
           <td><a href="models/mistralai-mistral-medium-3.html"><strong>Mistral: Mistral Medium 3</strong></a><br/><small style="color:var(--muted)">mistralai/mistral-medium-3</small></td>
           <td>Mistral AI</td>
-          <td>$0.40</td>
-          <td>$2.00</td>
-          <td class="sim-cell"><strong>$54.00/mo</strong></td>
+          <td>$0.44</td>
+          <td>$2.20</td>
+          <td class="sim-cell"><strong>$59.40/mo</strong></td>
           <td>131,072</td>
           <td><a href="vram/mistralai-mistral-medium-3-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~45.5 GB eq.)</a></td>
           <td><a href="models/mistralai-mistral-medium-3.html">Calculator →</a></td>
@@ -1902,12 +1948,12 @@
           <td><a href="models/google-gemini-3-5-flash.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="deepseek: deepseek v4.1 flash deepseek deepseek/deepseek-v4.1-flash proprietary api" data-open="0" data-in="0.051" data-out="0.567" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="11.56">
+        <tr class="model-row" data-name="deepseek: deepseek v4.1 flash deepseek deepseek/deepseek-v4.1-flash proprietary api" data-open="0" data-in="0.0507" data-out="0.2028" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="6.08">
           <td><a href="models/deepseek-deepseek-v4-1-flash.html"><strong>DeepSeek: DeepSeek V4.1 Flash</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4.1-flash</small></td>
           <td>DeepSeek</td>
-          <td>$0.051</td>
-          <td>$0.567</td>
-          <td class="sim-cell"><strong>$11.56/mo</strong></td>
+          <td>$0.0507</td>
+          <td>$0.2028</td>
+          <td class="sim-cell"><strong>$6.08/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/deepseek-deepseek-v4-1-flash-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~9.1 GB eq.)</a></td>
           <td><a href="models/deepseek-deepseek-v4-1-flash.html">Calculator →</a></td>
@@ -1924,12 +1970,12 @@
           <td><a href="models/qwen-qwen3-coder-flash.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="mistral: mistral medium 3.1 mistral ai mistralai/mistral-medium-3.1 proprietary api" data-open="0" data-in="0.4" data-out="2.0" data-ctx="131072" data-vram="45.5" data-gpu="1936.8" data-monthly="54.00">
+        <tr class="model-row" data-name="mistral: mistral medium 3.1 mistral ai mistralai/mistral-medium-3.1 proprietary api" data-open="0" data-in="0.44" data-out="2.2" data-ctx="131072" data-vram="45.5" data-gpu="1936.8" data-monthly="59.40">
           <td><a href="models/mistralai-mistral-medium-3-1.html"><strong>Mistral: Mistral Medium 3.1</strong></a><br/><small style="color:var(--muted)">mistralai/mistral-medium-3.1</small></td>
           <td>Mistral AI</td>
-          <td>$0.40</td>
-          <td>$2.00</td>
-          <td class="sim-cell"><strong>$54.00/mo</strong></td>
+          <td>$0.44</td>
+          <td>$2.20</td>
+          <td class="sim-cell"><strong>$59.40/mo</strong></td>
           <td>131,072</td>
           <td><a href="vram/mistralai-mistral-medium-3-1-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~45.5 GB eq.)</a></td>
           <td><a href="models/mistralai-mistral-medium-3-1.html">Calculator →</a></td>
@@ -1990,12 +2036,12 @@
           <td><a href="models/google-gemini-3-5-flash-lite.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="deepseek: deepseek v4.1 flash 1017 deepseek deepseek/deepseek-v4.1-flash-1017 proprietary api" data-open="0" data-in="0.036" data-out="0.5" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="9.66">
+        <tr class="model-row" data-name="deepseek: deepseek v4.1 flash 1017 deepseek deepseek/deepseek-v4.1-flash-1017 proprietary api" data-open="0" data-in="0.15" data-out="0.6" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="18.00">
           <td><a href="models/deepseek-deepseek-v4-1-flash-1017.html"><strong>DeepSeek: DeepSeek V4.1 Flash 1017</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4.1-flash-1017</small></td>
           <td>DeepSeek</td>
-          <td>$0.036</td>
-          <td>$0.50</td>
-          <td class="sim-cell"><strong>$9.66/mo</strong></td>
+          <td>$0.15</td>
+          <td>$0.60</td>
+          <td class="sim-cell"><strong>$18.00/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/deepseek-deepseek-v4-1-flash-1017-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~9.1 GB eq.)</a></td>
           <td><a href="models/deepseek-deepseek-v4-1-flash-1017.html">Calculator →</a></td>
@@ -2078,12 +2124,12 @@
           <td><a href="models/google-gemini-3-6-flash.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="qwen: qwen3 next 80b a3b instruct qwen qwen/qwen3-next-80b-a3b-instruct open-weight" data-open="1" data-in="0.09" data-out="1.1" data-ctx="262144" data-vram="52.0" data-gpu="1936.8" data-monthly="21.90">
+        <tr class="model-row" data-name="qwen: qwen3 next 80b a3b instruct qwen qwen/qwen3-next-80b-a3b-instruct open-weight" data-open="1" data-in="0.1" data-out="1.1" data-ctx="262144" data-vram="52.0" data-gpu="1936.8" data-monthly="22.50">
           <td><a href="models/qwen-qwen3-next-80b-a3b-instruct.html"><strong>Qwen: Qwen3 Next 80B A3B Instruct</strong></a><br/><small style="color:var(--muted)">qwen/qwen3-next-80b-a3b-instruct</small></td>
           <td>Qwen</td>
-          <td>$0.09</td>
+          <td>$0.10</td>
           <td>$1.10</td>
-          <td class="sim-cell"><strong>$21.90/mo</strong></td>
+          <td class="sim-cell"><strong>$22.50/mo</strong></td>
           <td>262,144</td>
           <td><a href="vram/qwen-qwen3-next-80b-a3b-instruct-vram-requirements.html"><strong>52.0 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/qwen-qwen3-next-80b-a3b-instruct.html">Calculator →</a></td>
@@ -2441,15 +2487,15 @@
           <td><a href="models/openai-gpt-5-2-codex.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="google: gemini omni 1.1 flash google google/gemini-omni-1.1-flash proprietary api" data-open="0" data-in="1.5" data-out="9.0" data-ctx="131072" data-vram="5.2" data-gpu="280.8" data-monthly="225.00">
-          <td><a href="models/google-gemini-omni-1-1-flash.html"><strong>Google: Gemini Omni 1.1 Flash</strong></a><br/><small style="color:var(--muted)">google/gemini-omni-1.1-flash</small></td>
+        <tr class="model-row" data-name="google: gemini 4 neon google google/gemini-4-neon proprietary api" data-open="0" data-in="3.0" data-out="15.0" data-ctx="1048576" data-vram="20.8" data-gpu="1000.8" data-monthly="405.00">
+          <td><a href="models/google-gemini-4-neon.html"><strong>Google: Gemini 4 Neon</strong></a><br/><small style="color:var(--muted)">google/gemini-4-neon</small></td>
           <td>Google</td>
-          <td>$1.50</td>
-          <td>$9.00</td>
-          <td class="sim-cell"><strong>$225.00/mo</strong></td>
-          <td>131,072</td>
-          <td><a href="vram/google-gemini-omni-1-1-flash-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~5.2 GB eq.)</a></td>
-          <td><a href="models/google-gemini-omni-1-1-flash.html">Calculator →</a></td>
+          <td>$3.00</td>
+          <td>$15.00</td>
+          <td class="sim-cell"><strong>$405.00/mo</strong></td>
+          <td>1,048,576</td>
+          <td><a href="vram/google-gemini-4-neon-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
+          <td><a href="models/google-gemini-4-neon.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="qwen: qwen3.5 plus 2026-04-20 qwen qwen/qwen3.5-plus-20260420 proprietary api" data-open="0" data-in="0.3" data-out="1.8" data-ctx="1000000" data-vram="20.8" data-gpu="1000.8" data-monthly="45.00">
@@ -2485,15 +2531,15 @@
           <td><a href="models/openai-gpt-5-3-codex.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="google: gemini omni 1.2 flash google google/gemini-omni-1.2-flash proprietary api" data-open="0" data-in="1.5" data-out="9.0" data-ctx="131072" data-vram="5.2" data-gpu="280.8" data-monthly="225.00">
-          <td><a href="models/google-gemini-omni-1-2-flash.html"><strong>Google: Gemini Omni 1.2 Flash</strong></a><br/><small style="color:var(--muted)">google/gemini-omni-1.2-flash</small></td>
+        <tr class="model-row" data-name="google: gemini omni 1.1 flash google google/gemini-omni-1.1-flash proprietary api" data-open="0" data-in="1.5" data-out="9.0" data-ctx="131072" data-vram="5.2" data-gpu="280.8" data-monthly="225.00">
+          <td><a href="models/google-gemini-omni-1-1-flash.html"><strong>Google: Gemini Omni 1.1 Flash</strong></a><br/><small style="color:var(--muted)">google/gemini-omni-1.1-flash</small></td>
           <td>Google</td>
           <td>$1.50</td>
           <td>$9.00</td>
           <td class="sim-cell"><strong>$225.00/mo</strong></td>
           <td>131,072</td>
-          <td><a href="vram/google-gemini-omni-1-2-flash-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~5.2 GB eq.)</a></td>
-          <td><a href="models/google-gemini-omni-1-2-flash.html">Calculator →</a></td>
+          <td><a href="vram/google-gemini-omni-1-1-flash-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~5.2 GB eq.)</a></td>
+          <td><a href="models/google-gemini-omni-1-1-flash.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="qwen: qwen3.5-122b-a10b qwen qwen/qwen3.5-122b-a10b open-weight" data-open="1" data-in="0.26" data-out="2.08" data-ctx="262144" data-vram="79.3" data-gpu="3873.6" data-monthly="46.80">
@@ -2529,23 +2575,23 @@
           <td><a href="models/openai-gpt-5-4.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="google: gemma 2 27b google google/gemma-2-27b-it open-weight" data-open="1" data-in="0.65" data-out="0.65" data-ctx="8192" data-vram="17.6" data-gpu="1000.8" data-monthly="48.75">
-          <td><a href="models/google-gemma-2-27b-it.html"><strong>Google: Gemma 2 27B</strong></a><br/><small style="color:var(--muted)">google/gemma-2-27b-it</small></td>
+        <tr class="model-row" data-name="google: gemini omni 1.2 flash google google/gemini-omni-1.2-flash proprietary api" data-open="0" data-in="1.5" data-out="9.0" data-ctx="131072" data-vram="5.2" data-gpu="280.8" data-monthly="225.00">
+          <td><a href="models/google-gemini-omni-1-2-flash.html"><strong>Google: Gemini Omni 1.2 Flash</strong></a><br/><small style="color:var(--muted)">google/gemini-omni-1.2-flash</small></td>
           <td>Google</td>
-          <td>$0.65</td>
-          <td>$0.65</td>
-          <td class="sim-cell"><strong>$48.75/mo</strong></td>
-          <td>8,192</td>
-          <td><a href="vram/google-gemma-2-27b-it-vram-requirements.html"><strong>17.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
-          <td><a href="models/google-gemma-2-27b-it.html">Calculator →</a></td>
+          <td>$1.50</td>
+          <td>$9.00</td>
+          <td class="sim-cell"><strong>$225.00/mo</strong></td>
+          <td>131,072</td>
+          <td><a href="vram/google-gemini-omni-1-2-flash-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~5.2 GB eq.)</a></td>
+          <td><a href="models/google-gemini-omni-1-2-flash.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="qwen: qwen3.5-27b qwen qwen/qwen3.5-27b open-weight" data-open="1" data-in="0.26" data-out="2.6" data-ctx="262144" data-vram="17.6" data-gpu="1000.8" data-monthly="54.60">
+        <tr class="model-row" data-name="qwen: qwen3.5-27b qwen qwen/qwen3.5-27b open-weight" data-open="1" data-in="0.195" data-out="1.56" data-ctx="262144" data-vram="17.6" data-gpu="1000.8" data-monthly="35.10">
           <td><a href="models/qwen-qwen3-5-27b.html"><strong>Qwen: Qwen3.5-27B</strong></a><br/><small style="color:var(--muted)">qwen/qwen3.5-27b</small></td>
           <td>Qwen</td>
-          <td>$0.26</td>
-          <td>$2.60</td>
-          <td class="sim-cell"><strong>$54.60/mo</strong></td>
+          <td>$0.195</td>
+          <td>$1.56</td>
+          <td class="sim-cell"><strong>$35.10/mo</strong></td>
           <td>262,144</td>
           <td><a href="vram/qwen-qwen3-5-27b-vram-requirements.html"><strong>17.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/qwen-qwen3-5-27b.html">Calculator →</a></td>
@@ -2573,15 +2619,15 @@
           <td><a href="models/openai-gpt-5-4-mini.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="google: gemma 3 4b google google/gemma-3-4b-it open-weight" data-open="1" data-in="0.05" data-out="0.1" data-ctx="131072" data-vram="2.6" data-gpu="280.8" data-monthly="4.50">
-          <td><a href="models/google-gemma-3-4b-it.html"><strong>Google: Gemma 3 4B</strong></a><br/><small style="color:var(--muted)">google/gemma-3-4b-it</small></td>
+        <tr class="model-row" data-name="google: gemma 2 27b google google/gemma-2-27b-it open-weight" data-open="1" data-in="0.65" data-out="0.65" data-ctx="8192" data-vram="17.6" data-gpu="1000.8" data-monthly="48.75">
+          <td><a href="models/google-gemma-2-27b-it.html"><strong>Google: Gemma 2 27B</strong></a><br/><small style="color:var(--muted)">google/gemma-2-27b-it</small></td>
           <td>Google</td>
-          <td>$0.05</td>
-          <td>$0.10</td>
-          <td class="sim-cell"><strong>$4.50/mo</strong></td>
-          <td>131,072</td>
-          <td><a href="vram/google-gemma-3-4b-it-vram-requirements.html"><strong>2.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
-          <td><a href="models/google-gemma-3-4b-it.html">Calculator →</a></td>
+          <td>$0.65</td>
+          <td>$0.65</td>
+          <td class="sim-cell"><strong>$48.75/mo</strong></td>
+          <td>8,192</td>
+          <td><a href="vram/google-gemma-2-27b-it-vram-requirements.html"><strong>17.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
+          <td><a href="models/google-gemma-2-27b-it.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="qwen: qwen3.5-35b-a3b qwen qwen/qwen3.5-35b-a3b open-weight" data-open="1" data-in="0.14" data-out="1.0" data-ctx="262144" data-vram="22.8" data-gpu="1000.8" data-monthly="23.40">
@@ -2617,23 +2663,23 @@
           <td><a href="models/openai-gpt-5-4-nano.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="google: gemma 4 26b a4b google google/gemma-4-26b-a4b-it open-weight" data-open="1" data-in="0.09" data-out="0.3" data-ctx="262144" data-vram="16.9" data-gpu="1000.8" data-monthly="9.90">
-          <td><a href="models/google-gemma-4-26b-a4b-it.html"><strong>Google: Gemma 4 26B A4B</strong></a><br/><small style="color:var(--muted)">google/gemma-4-26b-a4b-it</small></td>
+        <tr class="model-row" data-name="google: gemma 3 4b google google/gemma-3-4b-it open-weight" data-open="1" data-in="0.05" data-out="0.1" data-ctx="131072" data-vram="2.6" data-gpu="280.8" data-monthly="4.50">
+          <td><a href="models/google-gemma-3-4b-it.html"><strong>Google: Gemma 3 4B</strong></a><br/><small style="color:var(--muted)">google/gemma-3-4b-it</small></td>
           <td>Google</td>
-          <td>$0.09</td>
-          <td>$0.30</td>
-          <td class="sim-cell"><strong>$9.90/mo</strong></td>
-          <td>262,144</td>
-          <td><a href="vram/google-gemma-4-26b-a4b-it-vram-requirements.html"><strong>16.9 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
-          <td><a href="models/google-gemma-4-26b-a4b-it.html">Calculator →</a></td>
+          <td>$0.05</td>
+          <td>$0.10</td>
+          <td class="sim-cell"><strong>$4.50/mo</strong></td>
+          <td>131,072</td>
+          <td><a href="vram/google-gemma-3-4b-it-vram-requirements.html"><strong>2.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
+          <td><a href="models/google-gemma-3-4b-it.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="qwen: qwen3.5-9b qwen qwen/qwen3.5-9b open-weight" data-open="1" data-in="0.161" data-out="0.237" data-ctx="262144" data-vram="5.9" data-gpu="280.8" data-monthly="13.21">
+        <tr class="model-row" data-name="qwen: qwen3.5-9b qwen qwen/qwen3.5-9b open-weight" data-open="1" data-in="0.142" data-out="0.208" data-ctx="262144" data-vram="5.9" data-gpu="280.8" data-monthly="11.64">
           <td><a href="models/qwen-qwen3-5-9b.html"><strong>Qwen: Qwen3.5-9B</strong></a><br/><small style="color:var(--muted)">qwen/qwen3.5-9b</small></td>
           <td>Qwen</td>
-          <td>$0.161</td>
-          <td>$0.237</td>
-          <td class="sim-cell"><strong>$13.21/mo</strong></td>
+          <td>$0.142</td>
+          <td>$0.208</td>
+          <td class="sim-cell"><strong>$11.64/mo</strong></td>
           <td>262,144</td>
           <td><a href="vram/qwen-qwen3-5-9b-vram-requirements.html"><strong>5.9 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/qwen-qwen3-5-9b.html">Calculator →</a></td>
@@ -2661,15 +2707,15 @@
           <td><a href="models/openai-gpt-5-4-pro.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="google: nano banana 2.1 google google/gemini-nano-banana-2.1 proprietary api" data-open="0" data-in="1.5" data-out="7.5" data-ctx="65536" data-vram="2.6" data-gpu="280.8" data-monthly="202.50">
-          <td><a href="models/google-gemini-nano-banana-2-1.html"><strong>Google: Nano Banana 2.1</strong></a><br/><small style="color:var(--muted)">google/gemini-nano-banana-2.1</small></td>
+        <tr class="model-row" data-name="google: gemma 4 26b a4b google google/gemma-4-26b-a4b-it open-weight" data-open="1" data-in="0.09" data-out="0.3" data-ctx="262144" data-vram="16.9" data-gpu="1000.8" data-monthly="9.90">
+          <td><a href="models/google-gemma-4-26b-a4b-it.html"><strong>Google: Gemma 4 26B A4B</strong></a><br/><small style="color:var(--muted)">google/gemma-4-26b-a4b-it</small></td>
           <td>Google</td>
-          <td>$1.50</td>
-          <td>$7.50</td>
-          <td class="sim-cell"><strong>$202.50/mo</strong></td>
-          <td>65,536</td>
-          <td><a href="vram/google-gemini-nano-banana-2-1-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~2.6 GB eq.)</a></td>
-          <td><a href="models/google-gemini-nano-banana-2-1.html">Calculator →</a></td>
+          <td>$0.09</td>
+          <td>$0.30</td>
+          <td class="sim-cell"><strong>$9.90/mo</strong></td>
+          <td>262,144</td>
+          <td><a href="vram/google-gemma-4-26b-a4b-it-vram-requirements.html"><strong>16.9 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
+          <td><a href="models/google-gemma-4-26b-a4b-it.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="qwen: qwen3.5-flash qwen qwen/qwen3.5-flash-02-23 proprietary api" data-open="0" data-in="0.065" data-out="0.26" data-ctx="1000000" data-vram="5.2" data-gpu="280.8" data-monthly="7.80">
@@ -2703,6 +2749,17 @@
           <td>1,050,000</td>
           <td><a href="vram/openai-gpt-5-5-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~45.5 GB eq.)</a></td>
           <td><a href="models/openai-gpt-5-5.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="google: nano banana 2.1 google google/gemini-nano-banana-2.1 proprietary api" data-open="0" data-in="1.5" data-out="7.5" data-ctx="65536" data-vram="2.6" data-gpu="280.8" data-monthly="202.50">
+          <td><a href="models/google-gemini-nano-banana-2-1.html"><strong>Google: Nano Banana 2.1</strong></a><br/><small style="color:var(--muted)">google/gemini-nano-banana-2.1</small></td>
+          <td>Google</td>
+          <td>$1.50</td>
+          <td>$7.50</td>
+          <td class="sim-cell"><strong>$202.50/mo</strong></td>
+          <td>65,536</td>
+          <td><a href="vram/google-gemini-nano-banana-2-1-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~2.6 GB eq.)</a></td>
+          <td><a href="models/google-gemini-nano-banana-2-1.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="qwen: qwen3.6 27b qwen qwen/qwen3.6-27b open-weight" data-open="1" data-in="0.32" data-out="3.2" data-ctx="262144" data-vram="17.6" data-gpu="1000.8" data-monthly="67.20">
@@ -2969,12 +3026,12 @@
           <td><a href="models/openai-gpt-6-astra.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="qwen: qwen3.8 27b qwen qwen/qwen3.8-27b open-weight" data-open="1" data-in="0.15" data-out="1.875" data-ctx="1024000" data-vram="17.6" data-gpu="1000.8" data-monthly="37.12">
+        <tr class="model-row" data-name="qwen: qwen3.8 27b qwen qwen/qwen3.8-27b open-weight" data-open="1" data-in="0.06" data-out="2.2" data-ctx="1024000" data-vram="17.6" data-gpu="1000.8" data-monthly="36.60">
           <td><a href="models/qwen-qwen3-8-27b.html"><strong>Qwen: Qwen3.8 27B</strong></a><br/><small style="color:var(--muted)">qwen/qwen3.8-27b</small></td>
           <td>Qwen</td>
-          <td>$0.15</td>
-          <td>$1.875</td>
-          <td class="sim-cell"><strong>$37.12/mo</strong></td>
+          <td>$0.06</td>
+          <td>$2.20</td>
+          <td class="sim-cell"><strong>$36.60/mo</strong></td>
           <td>1,024,000</td>
           <td><a href="vram/qwen-qwen3-8-27b-vram-requirements.html"><strong>17.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/qwen-qwen3-8-27b.html">Calculator →</a></td>
@@ -3189,17 +3246,6 @@
           <td><a href="models/openai-gpt-6-1-sol-pro.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="pareto 26.10 unbiased unbiased/pareto-26.10 proprietary api" data-open="0" data-in="0.8" data-out="3.2" data-ctx="1048576" data-vram="20.8" data-gpu="1000.8" data-monthly="96.00">
-          <td><a href="models/unbiased-pareto-26-10.html"><strong>Pareto 26.10</strong></a><br/><small style="color:var(--muted)">unbiased/pareto-26.10</small></td>
-          <td>Unbiased</td>
-          <td>$0.80</td>
-          <td>$3.20</td>
-          <td class="sim-cell"><strong>$96.00/mo</strong></td>
-          <td>1,048,576</td>
-          <td><a href="vram/unbiased-pareto-26-10-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
-          <td><a href="models/unbiased-pareto-26-10.html">Calculator →</a></td>
-        </tr>
-        
         </tbody>
       </table>
     </div>
@@ -3297,7 +3343,7 @@
         
         <a href="compare/openai-gpt-5-vs-deepseek-deepseek-r1-0528.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
           <strong style="color:#fff;">OpenAI: GPT-5 vs DeepSeek: R1 0528</strong>
-          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$1.25/1M vs $0.50/1M input tokens →</div>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$1.25/1M vs $0.571/1M input tokens →</div>
         </a>
         
         <a href="compare/openai-gpt-5-vs-meta-llama-llama-4-scout.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
@@ -3312,7 +3358,7 @@
         
         <a href="compare/openai-gpt-5-vs-mistralai-mistral-small-3-2-24b-instruct.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
           <strong style="color:#fff;">OpenAI: GPT-5 vs Mistral: Mistral Small 3.2 24B</strong>
-          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$1.25/1M vs $0.10/1M input tokens →</div>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$1.25/1M vs $0.075/1M input tokens →</div>
         </a>
         
         <a href="compare/openai-gpt-5-vs-x-ai-grok-4-20-multi-agent.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
@@ -3477,7 +3523,7 @@
         
         <a href="compare/anthropic-claude-sonnet-4-5-vs-deepseek-deepseek-r1-0528.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
           <strong style="color:#fff;">Anthropic: Claude Sonnet 4.5 vs DeepSeek: R1 0528</strong>
-          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$3.00/1M vs $0.50/1M input tokens →</div>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$3.00/1M vs $0.571/1M input tokens →</div>
         </a>
         
         <a href="compare/anthropic-claude-sonnet-4-5-vs-meta-llama-llama-4-scout.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
@@ -3492,7 +3538,7 @@
         
         <a href="compare/anthropic-claude-sonnet-4-5-vs-mistralai-mistral-small-3-2-24b-instruct.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
           <strong style="color:#fff;">Anthropic: Claude Sonnet 4.5 vs Mistral: Mistral Small 3.2 24B</strong>
-          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$3.00/1M vs $0.10/1M input tokens →</div>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$3.00/1M vs $0.075/1M input tokens →</div>
         </a>
         
         <a href="compare/anthropic-claude-sonnet-4-5-vs-x-ai-grok-4-20-multi-agent.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
@@ -3652,7 +3698,7 @@
         
         <a href="compare/google-gemini-2-5-pro-vs-deepseek-deepseek-r1-0528.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
           <strong style="color:#fff;">Google: Gemini 2.5 Pro vs DeepSeek: R1 0528</strong>
-          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$1.25/1M vs $0.50/1M input tokens →</div>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$1.25/1M vs $0.571/1M input tokens →</div>
         </a>
         
         <a href="compare/google-gemini-2-5-pro-vs-meta-llama-llama-4-scout.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
@@ -3770,15 +3816,26 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-17 11:35 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:02 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="index.html">All AI Models</a> ·
       <a href="vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="tokenbench.py">Terminal GPU Checker CLI</a> ·
       <a href="sitemap.xml">XML Sitemap</a>
     </p>
   </div>
 </footer>
+<script>
+  function copyCmd(btn) {
+    const cmd = btn.getAttribute('data-cmd') || '';
+    if (!cmd) return;
+    navigator.clipboard.writeText(cmd);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = orig, 1800);
+  }
+</script>
 </body>
 </html>

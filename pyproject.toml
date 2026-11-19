@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tokenbench"
+version = "2.1.0"
+description = "Zero-dependency local GPU VRAM & LLM compatibility checker with Ollama and vLLM launch commands"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+keywords = ["llm", "vram", "gpu", "ollama", "vllm", "ai-pricing", "local-llm"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://stigla610.github.io/ai-cost-engine/"
+Repository = "https://github.com/stigla610/ai-cost-engine"
+
+[project.scripts]
+tokenbench = "tokenbench:main"
+
+[tool.setuptools]
+py-modules = ["tokenbench"]

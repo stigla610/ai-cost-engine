@@ -223,6 +223,27 @@
       font-size: 0.92rem;
       color: #fde68a;
     }
+    .cmd-item { margin-bottom: 12px; }
+    .cmd-item:last-child { margin-bottom: 0; }
+    .cmd-label { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+    .cmd-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #070a12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+    }
+    .cmd-box code {
+      color: #a5f3fc;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.84rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .cmd-copy { flex-shrink: 0; padding: 5px 10px; font-size: 0.78rem; }
     footer {
       margin-top: 60px;
       border-top: 1px solid var(--border);
@@ -329,6 +350,7 @@
       </div>
     </div>
   </div>
+  
 </main>
 <script>
   const MODEL_NAME = "Z.ai: GLM 5.3 Flash (batch)";
@@ -379,15 +401,26 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-17 11:35 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:02 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·
       <a href="../vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="../gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="../tokenbench.py">Terminal GPU Checker CLI</a> ·
       <a href="../sitemap.xml">XML Sitemap</a>
     </p>
   </div>
 </footer>
+<script>
+  function copyCmd(btn) {
+    const cmd = btn.getAttribute('data-cmd') || '';
+    if (!cmd) return;
+    navigator.clipboard.writeText(cmd);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = orig, 1800);
+  }
+</script>
 </body>
 </html>

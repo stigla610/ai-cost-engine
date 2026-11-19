@@ -4,21 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DeepSeek: R1 0528 vs Mistral: Mistral Small 3.2 24B: API Pricing &amp; Token Cost Comparison (2026)</title>
-  <meta name="description" content="Interactive price comparison: DeepSeek: R1 0528 ($0.50/1M in) vs Mistral: Mistral Small 3.2 24B ($0.10/1M in). Calculate which LLM is cheaper for your workload." />
+  <meta name="description" content="Interactive price comparison: DeepSeek: R1 0528 ($0.571/1M in) vs Mistral: Mistral Small 3.2 24B ($0.075/1M in). Calculate which LLM is cheaper for your workload." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/compare/deepseek-deepseek-r1-0528-vs-mistralai-mistral-small-3-2-24b-instruct.html" />
   <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
   <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="DeepSeek: R1 0528 vs Mistral: Mistral Small 3.2 24B: API Pricing &amp; Token Cost Comparison (2026)" />
-  <meta property="og:description" content="Interactive price comparison: DeepSeek: R1 0528 ($0.50/1M in) vs Mistral: Mistral Small 3.2 24B ($0.10/1M in). Calculate which LLM is cheaper for your workload." />
+  <meta property="og:description" content="Interactive price comparison: DeepSeek: R1 0528 ($0.571/1M in) vs Mistral: Mistral Small 3.2 24B ($0.075/1M in). Calculate which LLM is cheaper for your workload." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/compare/deepseek-deepseek-r1-0528-vs-mistralai-mistral-small-3-2-24b-instruct.html" />
   <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="DeepSeek: R1 0528 vs Mistral: Mistral Small 3.2 24B: API Pricing &amp; Token Cost Comparison (2026)" />
-  <meta name="twitter:description" content="Interactive price comparison: DeepSeek: R1 0528 ($0.50/1M in) vs Mistral: Mistral Small 3.2 24B ($0.10/1M in). Calculate which LLM is cheaper for your workload." />
+  <meta name="twitter:description" content="Interactive price comparison: DeepSeek: R1 0528 ($0.571/1M in) vs Mistral: Mistral Small 3.2 24B ($0.075/1M in). Calculate which LLM is cheaper for your workload." />
   <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is DeepSeek: R1 0528 cheaper than Mistral: Mistral Small 3.2 24B?", "acceptedAnswer": {"@type": "Answer", "text": "Mistral: Mistral Small 3.2 24B has the lower blended token price. DeepSeek: R1 0528 costs $0.50/1M input and $2.15/1M output tokens, whereas Mistral: Mistral Small 3.2 24B costs $0.10/1M input and $0.30/1M output tokens."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is DeepSeek: R1 0528 cheaper than Mistral: Mistral Small 3.2 24B?", "acceptedAnswer": {"@type": "Answer", "text": "Mistral: Mistral Small 3.2 24B has the lower blended token price. DeepSeek: R1 0528 costs $0.571/1M input and $2.286/1M output tokens, whereas Mistral: Mistral Small 3.2 24B costs $0.075/1M input and $0.20/1M output tokens."}}]}</script>
   <style>
     :root {
       --bg: #0b0f19;
@@ -223,6 +223,27 @@
       font-size: 0.92rem;
       color: #fde68a;
     }
+    .cmd-item { margin-bottom: 12px; }
+    .cmd-item:last-child { margin-bottom: 0; }
+    .cmd-label { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+    .cmd-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #070a12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+    }
+    .cmd-box code {
+      color: #a5f3fc;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.84rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .cmd-copy { flex-shrink: 0; padding: 5px 10px; font-size: 0.78rem; }
     footer {
       margin-top: 60px;
       border-top: 1px solid var(--border);
@@ -317,13 +338,13 @@
             </tr>
             <tr>
               <td>Input Cost / 1M</td>
-              <td><strong>$0.50</strong></td>
-              <td><strong>$0.10</strong></td>
+              <td><strong>$0.571</strong></td>
+              <td><strong>$0.075</strong></td>
             </tr>
             <tr>
               <td>Output Cost / 1M</td>
-              <td><strong>$2.15</strong></td>
-              <td><strong>$0.30</strong></td>
+              <td><strong>$2.286</strong></td>
+              <td><strong>$0.20</strong></td>
             </tr>
             <tr>
               <td>Context Window</td>
@@ -357,10 +378,10 @@
   const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/compare/deepseek-deepseek-r1-0528-vs-mistralai-mistral-small-3-2-24b-instruct.html";
   const M1_NAME = "DeepSeek: R1 0528";
   const M2_NAME = "Mistral: Mistral Small 3.2 24B";
-  const M1_IN = 0.5;
-  const M1_OUT = 2.15;
-  const M2_IN = 0.1;
-  const M2_OUT = 0.3;
+  const M1_IN = 0.571;
+  const M1_OUT = 2.286;
+  const M2_IN = 0.075;
+  const M2_OUT = 0.2;
   function calcComp() {
     const inTok = parseFloat(document.getElementById('compInSlider').value);
     const outTok = parseFloat(document.getElementById('compOutSlider').value);
@@ -405,15 +426,26 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-17 11:35 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:02 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·
       <a href="../vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="../gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="../tokenbench.py">Terminal GPU Checker CLI</a> ·
       <a href="../sitemap.xml">XML Sitemap</a>
     </p>
   </div>
 </footer>
+<script>
+  function copyCmd(btn) {
+    const cmd = btn.getAttribute('data-cmd') || '';
+    if (!cmd) return;
+    navigator.clipboard.writeText(cmd);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = orig, 1800);
+  }
+</script>
 </body>
 </html>

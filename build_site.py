@@ -141,6 +141,172 @@ def is_open_weight(model_id, name):
 
     return False
 
+def get_deploy_commands(m, base_url):
+    """Map an open-weight model to Ollama, vLLM, Docker, and TokenBench CLI launch commands."""
+    mid = m["id"].lower().lstrip("~")
+    params_b = m["params_b"]
+    tail = m["id"].split("/")[-1].split(":")[0]
+
+    ollama_tag = tail
+    hf_repo = m["id"].split(":")[0].lstrip("~")
+
+    if mid.startswith("meta-llama/"):
+        if "llama-4-maverick" in mid:
+            ollama_tag, hf_repo = "llama4:maverick", "meta-llama/Llama-4-Maverick-17B-128E-Instruct"
+        elif "llama-4-scout" in mid:
+            ollama_tag, hf_repo = "llama4:scout", "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+        elif "llama-3.3-70b" in mid:
+            ollama_tag, hf_repo = "llama3.3:70b", "meta-llama/Llama-3.3-70B-Instruct"
+        elif "llama-3.1-70b" in mid:
+            ollama_tag, hf_repo = "llama3.1:70b", "meta-llama/Llama-3.1-70B-Instruct"
+        elif "llama-3.1-8b" in mid:
+            ollama_tag, hf_repo = "llama3.1:8b", "meta-llama/Llama-3.1-8B-Instruct"
+        elif "llama-3.2-3b" in mid:
+            ollama_tag, hf_repo = "llama3.2:3b", "meta-llama/Llama-3.2-3B-Instruct"
+        elif "llama-3.2-1b" in mid:
+            ollama_tag, hf_repo = "llama3.2:1b", "meta-llama/Llama-3.2-1B-Instruct"
+        else:
+            ml = re.search(r"llama-(\d+(?:\.\d+)?)-(\d+b)", mid)
+            if ml:
+                ver, sz = ml.group(1), ml.group(2)
+                ollama_tag = f"llama{ver}:{sz}"
+                hf_repo = f"meta-llama/Llama-{ver}-{sz.upper()}-Instruct"
+    elif mid.startswith("qwen/"):
+        if "coder" in mid and "32b" in mid:
+            ollama_tag, hf_repo = "qwen2.5-coder:32b", "Qwen/Qwen2.5-Coder-32B-Instruct"
+        elif "coder" in mid and "30b" in mid:
+            ollama_tag, hf_repo = "qwen3-coder:30b-a3b", "Qwen/Qwen3-Coder-30B-A3B-Instruct"
+        elif "coder" in mid:
+            ollama_tag, hf_repo = "qwen3-coder:480b", "Qwen/Qwen3-Coder-480B-A35B-Instruct"
+        elif "qwq" in mid:
+            ollama_tag, hf_repo = "qwq:32b", "Qwen/QwQ-32B"
+        elif "2.5-vl-72b" in mid:
+            ollama_tag, hf_repo = "qwen2.5vl:72b", "Qwen/Qwen2.5-VL-72B-Instruct"
+        elif "2.5-72b" in mid:
+            ollama_tag, hf_repo = "qwen2.5:72b", "Qwen/Qwen2.5-72B-Instruct"
+        else:
+            mq = re.search(r"qwen(\d+(?:\.\d+)?)-(\d+b)(?:-(a\d+b))?", mid)
+            if mq:
+                ver, sz, act = mq.group(1), mq.group(2), mq.group(3)
+                ollama_tag = f"qwen{ver}:{sz}" + (f"-{act}" if act else "")
+                hf_repo = f"Qwen/Qwen{ver}-{sz.upper()}" + (f"-{act.upper()}" if act else "")
+    elif mid.startswith("deepseek/"):
+        if "r1" in mid:
+            sz = "671b" if params_b >= 100 else f"{int(round(params_b))}b"
+            ollama_tag, hf_repo = f"deepseek-r1:{sz}", "deepseek-ai/DeepSeek-R1-0528"
+        elif "v3" in mid or "chat" in mid:
+            ollama_tag, hf_repo = "deepseek-v3", "deepseek-ai/DeepSeek-V3"
+    elif mid.startswith("google/gemma"):
+        mg = re.search(r"gemma-(\d+)-(\d+b)", mid)
+        if mg:
+            ollama_tag = f"gemma{mg.group(1)}:{mg.group(2)}"
+            hf_repo = f"google/{tail}"
+    elif mid.startswith("microsoft/phi"):
+        if "mini" in mid or "multimodal" in mid:
+            ollama_tag, hf_repo = "phi4-mini", "microsoft/Phi-4-mini-instruct"
+        else:
+            ollama_tag, hf_repo = "phi4:14b", "microsoft/phi-4"
+    elif mid.startswith("mistralai/"):
+        if "mistral-large" in mid:
+            ollama_tag, hf_repo = "mistral-large:123b", "mistralai/Mistral-Large-Instruct-2411"
+        elif "mistral-small" in mid:
+            ollama_tag, hf_repo = "mistral-small3.2:24b", "mistralai/Mistral-Small-3.2-24B-Instruct-2506"
+        elif "codestral" in mid:
+            ollama_tag, hf_repo = "codestral:22b", "mistralai/Codestral-22B-v0.1"
+        elif "devstral" in mid:
+            ollama_tag, hf_repo = "devstral:24b", "mistralai/Devstral-Small-2505"
+        elif "mixtral-8x22b" in mid:
+            ollama_tag, hf_repo = "mixtral:8x22b", "mistralai/Mixtral-8x22B-Instruct-v0.1"
+        elif "mixtral-8x7b" in mid:
+            ollama_tag, hf_repo = "mixtral:8x7b", "mistralai/Mixtral-8x7B-Instruct-v0.1"
+        elif "ministral-8b" in mid:
+            ollama_tag, hf_repo = "ministral-3:8b", "mistralai/Ministral-8B-Instruct-2410"
+        elif "mistral-nemo" in mid:
+            ollama_tag, hf_repo = "mistral-nemo:12b", "mistralai/Mistral-Nemo-Instruct-2407"
+    elif mid.startswith("openai/gpt-oss"):
+        mo = re.search(r"gpt-oss-(\d+b)", mid)
+        if mo:
+            ollama_tag, hf_repo = f"gpt-oss:{mo.group(1)}", f"openai/gpt-oss-{mo.group(1)}"
+    elif mid.startswith("cohere/"):
+        if "command-a" in mid:
+            ollama_tag, hf_repo = "command-a:111b", "CohereForAI/c4ai-command-a-03-2025"
+        elif "command-r-plus" in mid:
+            ollama_tag, hf_repo = "command-r-plus:104b", "CohereForAI/c4ai-command-r-plus"
+        elif "command-r" in mid:
+            ollama_tag, hf_repo = "command-r:35b", "CohereForAI/c4ai-command-r-v01"
+    elif mid.startswith("nvidia/"):
+        sz = f"{int(round(params_b))}b"
+        ollama_tag, hf_repo = f"nemotron:{sz}", m["id"].split(":")[0]
+    elif mid.startswith(("z-ai/", "thudm/")):
+        ollama_tag = "glm4:9b" if params_b <= 15 else "glm-4.5"
+        hf_repo = f"zai-org/{tail}"
+    elif mid.startswith("moonshotai/"):
+        ollama_tag, hf_repo = "kimi-k2", "moonshotai/Kimi-K2-Instruct"
+
+    q4 = m["vram_int4"]
+    tp_gpus = 1 if q4 <= 75 else (2 if q4 <= 155 else (4 if q4 <= 310 else 8))
+    max_len = min(int(m["context_length"]), 32768)
+
+    return {
+        "ollama_cmd": f"ollama run {ollama_tag}",
+        "vllm_cmd": f"vllm serve {hf_repo} --max-model-len {max_len} --tensor-parallel-size {tp_gpus} --gpu-memory-utilization 0.92",
+        "docker_cmd": f"docker run --gpus all -p 8000:8000 --ipc=host vllm/vllm-openai:latest --model {hf_repo} --tensor-parallel-size {tp_gpus}",
+        "cli_cmd": f"curl -sL {base_url}/tokenbench.py | python3 -",
+        "tp_gpus": tp_gpus,
+    }
+
+def render_cmd_box(label, cmd):
+    esc_cmd = html.escape(cmd)
+    return f"""
+      <div class="cmd-item">
+        <div class="cmd-label">{html.escape(label)}</div>
+        <div class="cmd-box">
+          <code>{esc_cmd}</code>
+          <button type="button" class="btn-ghost cmd-copy" data-cmd="{esc_cmd}" onclick="copyCmd(this)">📋 Copy</button>
+        </div>
+      </div>"""
+
+def render_deploy_card(m, config):
+    if not m["is_open_weight"]:
+        return ""
+    base_url = config["base_url"].rstrip("/")
+    cmds = get_deploy_commands(m, base_url)
+    aff_runpod = config["affiliates"]["runpod"]
+    aff_vast = config["affiliates"]["vastai"]
+    return f"""
+  <div class="card" style="margin-top:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
+      <h2 style="margin-bottom:0;">🚀 Deploy &amp; Run Commands (Ollama, vLLM &amp; Cloud GPU Docker)</h2>
+      <span class="badge badge-green" style="margin-bottom:0;">Recommended TP: {cmds['tp_gpus']}x GPU</span>
+    </div>
+    <p style="color:var(--muted);font-size:0.9rem;margin-bottom:14px;">Copy and paste to run <strong>{html.escape(m['name'])}</strong> locally or launch an OpenAI-compatible API server on a Cloud GPU pod:</p>
+    {render_cmd_box("1. Ollama (Local 4-Bit GGUF)", cmds["ollama_cmd"])}
+    {render_cmd_box("2. vLLM (OpenAI-Compatible Production API)", cmds["vllm_cmd"])}
+    {render_cmd_box("3. Docker / Cloud GPU Pod (RunPod & Vast.ai)", cmds["docker_cmd"])}
+    {render_cmd_box("4. Local GPU Compatibility CLI Check (Detects nvidia-smi / Apple Silicon)", cmds["cli_cmd"])}
+    <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="{html.escape(aff_runpod['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">Launch vLLM / Ollama Template on RunPod →</a>
+      <a href="{html.escape(aff_vast['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">Rent Cheap GPUs on Vast.ai →</a>
+    </div>
+  </div>"""
+
+def render_cli_card(config):
+    base_url = config["base_url"].rstrip("/")
+    unix_cmd = f"curl -sL {base_url}/tokenbench.py | python3 -"
+    win_cmd = f"irm {base_url}/tokenbench.py | python -"
+    return f"""
+  <div class="card" style="margin:24px 0;border-color:rgba(16,185,129,0.4);">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:6px;">
+      <h2 style="margin-bottom:0;">🖥️ Check Your Local GPU in Terminal (Zero-Install CLI)</h2>
+      <span class="badge badge-green" style="margin-bottom:0;">Zero Dependencies · Python 3</span>
+    </div>
+    <p style="color:var(--muted);font-size:0.9rem;margin-bottom:14px;">Auto-detects your NVIDIA GPU (<code>nvidia-smi</code>) or Apple Silicon Unified Memory and prints which Llama, Qwen, DeepSeek, Gemma, and Mistral models fit—with exact <code>ollama run</code> and <code>vllm serve</code> commands. Supports <code>--vram 24 --ctx 32768 --live</code>.</p>
+    <div class="grid-2" style="margin:0;gap:14px;">
+      {render_cmd_box("Linux / macOS (Terminal)", unix_cmd)}
+      {render_cmd_box("Windows (PowerShell)", win_cmd)}
+    </div>
+  </div>"""
+
 def estimate_params_b(model_id, name):
     combined = f"{model_id} {name}".lower()
 
@@ -586,6 +752,27 @@ def shared_head(title, description, canonical_url, config, json_ld=None):
       font-size: 0.92rem;
       color: #fde68a;
     }}
+    .cmd-item {{ margin-bottom: 12px; }}
+    .cmd-item:last-child {{ margin-bottom: 0; }}
+    .cmd-label {{ font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; }}
+    .cmd-box {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #070a12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+    }}
+    .cmd-box code {{
+      color: #a5f3fc;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.84rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }}
+    .cmd-copy {{ flex-shrink: 0; padding: 5px 10px; font-size: 0.78rem; }}
     footer {{
       margin-top: 60px;
       border-top: 1px solid var(--border);
@@ -636,10 +823,21 @@ def shared_footer(config, updated_str, prefix=""):
       <a href="{prefix}index.html">All AI Models</a> ·
       <a href="{prefix}vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="{prefix}gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="{prefix}tokenbench.py">Terminal GPU Checker CLI</a> ·
       <a href="{prefix}sitemap.xml">XML Sitemap</a>
     </p>
   </div>
 </footer>
+<script>
+  function copyCmd(btn) {{
+    const cmd = btn.getAttribute('data-cmd') || '';
+    if (!cmd) return;
+    navigator.clipboard.writeText(cmd);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = orig, 1800);
+  }}
+</script>
 </body>
 </html>
 """
@@ -806,7 +1004,7 @@ def build_model_page(m, all_models, config, updated_str):
     </div>
     <a href="{html.escape(aff['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta">{html.escape(aff['cta_text'])} →</a>
   </div>
-
+  {render_deploy_card(m, config)}
   <div class="card" style="margin-top:24px;">
     <h2>Compare {html.escape(m['name'])} With Other Popular Models</h2>
     <ul style="margin-top:12px;padding-left:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%, 260px),1fr));gap:8px;">
@@ -992,6 +1190,7 @@ def build_vram_page(m, config, updated_str):
       </div>
     </div>
   </div>
+  {render_deploy_card(m, config)}
 </main>
 <script>
   const MODEL_NAME = {json.dumps(m['name'])};
@@ -1156,7 +1355,7 @@ def build_vram_hub_page(models, config, updated_str):
       </div>
     </div>
   </div>
-
+  {render_cli_card(config)}
   <h2 style="color:#fff;margin-top:36px;margin-bottom:8px;">Open-Weight &amp; Popular Model VRAM Guides</h2>
   <p style="color:var(--muted);margin-bottom:16px;">Select any model below to view quantization memory tiers and check if your GPU can run it.</p>
   <div class="grid-3">
@@ -1611,7 +1810,7 @@ def build_index_page(models, comparisons, config, updated_str, total_pages):
       <a href="{html.escape(aff_sec['url'])}" target="_blank" rel="nofollow sponsored" class="btn-cta btn-green">{html.escape(aff_sec['cta_text'])}</a>
     </div>
   </div>
-
+  {render_cli_card(config)}
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px;">
       <h2>Live AI Model Pricing &amp; VRAM Directory (Per 1M Tokens)</h2>
@@ -1839,6 +2038,9 @@ def main():
     os.makedirs(comp_dir, exist_ok=True)
     os.makedirs(os.path.join(DIST_DIR, "vram"), exist_ok=True)
     build_brand_assets(DIST_DIR)
+    cli_src = os.path.join(BASE_DIR, "tokenbench.py")
+    if os.path.exists(cli_src):
+        shutil.copyfile(cli_src, os.path.join(DIST_DIR, "tokenbench.py"))
 
     urls = []
     base_url = config["base_url"].rstrip("/")

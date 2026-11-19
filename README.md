@@ -11,6 +11,55 @@
 
 ---
 
+## 🖥️ Local GPU Hardware Checker CLI (`tokenbench`)
+
+Zero-dependency Python 3 CLI that auto-detects your local GPU VRAM (`nvidia-smi`, Apple Silicon Unified Memory, or Windows GPU) and tells you which open-weight models fit in FP16, `Q8_0`, or `Q4_K_M`—complete with copy-paste **`ollama run`** and **`vllm serve`** commands.
+
+### Run Instantly (No Install)
+
+**Linux / macOS:**
+```bash
+curl -sL https://stigla610.github.io/ai-cost-engine/tokenbench.py | python3 -
+```
+
+**Windows (PowerShell):**
+```powershell
+irm https://stigla610.github.io/ai-cost-engine/tokenbench.py | python -
+```
+
+### Or Install Locally via `pip`
+```bash
+git clone https://github.com/stigla610/ai-cost-engine.git
+cd ai-cost-engine
+pip install .
+tokenbench --vram 24 --ctx 32768 --search qwen
+```
+
+**Supported CLI Flags:**
+* `--vram 24` — Override detected VRAM in GB
+* `--ctx 32768` — Account for larger KV-cache context windows
+* `--search llama` — Filter by model family (`llama`, `qwen`, `deepseek`, `gemma`, `mistral`)
+* `--live` — Pull live pricing and 130+ open-weight models from OpenRouter API
+* `--json` — Machine-readable JSON output
+
+```text
+⚡ TokenBench Local GPU & LLM Compatibility Checker
+==============================================================================
+  Hardware : NVIDIA GPU: NVIDIA GeForce RTX 4090 (24 GB)
+  Usable   : 24 GB VRAM   |   Context: 32,768 tokens   |   Catalog: curated
+==============================================================================
+
+Model                          Params       Q4       Q8     FP16  Fit          Run Command
+------------------------------------------------------------------------------
+Qwen3 8B                           8B    5.8G    9.9G   18.8G  ✅ FP16       ollama run qwen3:8b
+Qwen3 14B                         14B   10.2G   17.4G   32.9G  🟢 Q8_0       ollama run qwen3:14b
+Qwen3 30B A3B (MoE)               30B   21.8G   37.2G   70.5G  ⚡ Q4_K_M     ollama run qwen3:30b-a3b
+Qwen3 32B                         32B   23.2G   39.7G   75.2G  ⚡ Q4_K_M     ollama run qwen3:32b
+Qwen2.5 Coder 32B                 32B   23.2G   39.7G   75.2G  ⚡ Q4_K_M     ollama run qwen2.5-coder:32b
+```
+
+---
+
 ## 🛠️ Interactive Calculators & Directories
 
 * **[Batch Workload API Cost Simulator](https://stigla610.github.io/ai-cost-engine/index.html)** — Slide your daily input/output token volume to rank 260+ models (OpenAI, Anthropic, Google Gemini, DeepSeek, Meta Llama, Qwen, Mistral, xAI Grok) from cheapest to most expensive per month.

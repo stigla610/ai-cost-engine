@@ -4,21 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Xiaomi: MiMo-V2.5-Pro API Cost Calculator &amp; Open-Weight GPU Break-Even (2026)</title>
-  <meta name="description" content="Calculate exact Xiaomi: MiMo-V2.5-Pro API token costs ($0.435/1M input, $0.87/1M output) and compare against self-hosting an open-weight GPU alternative." />
+  <meta name="description" content="Calculate exact Xiaomi: MiMo-V2.5-Pro API token costs ($0.48/1M input, $1.80/1M output) and compare against self-hosting an open-weight GPU alternative." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/models/xiaomi-mimo-v2-5-pro.html" />
   <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
   <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="Xiaomi: MiMo-V2.5-Pro API Cost Calculator &amp; Open-Weight GPU Break-Even (2026)" />
-  <meta property="og:description" content="Calculate exact Xiaomi: MiMo-V2.5-Pro API token costs ($0.435/1M input, $0.87/1M output) and compare against self-hosting an open-weight GPU alternative." />
+  <meta property="og:description" content="Calculate exact Xiaomi: MiMo-V2.5-Pro API token costs ($0.48/1M input, $1.80/1M output) and compare against self-hosting an open-weight GPU alternative." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/models/xiaomi-mimo-v2-5-pro.html" />
   <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Xiaomi: MiMo-V2.5-Pro API Cost Calculator &amp; Open-Weight GPU Break-Even (2026)" />
-  <meta name="twitter:description" content="Calculate exact Xiaomi: MiMo-V2.5-Pro API token costs ($0.435/1M input, $0.87/1M output) and compare against self-hosting an open-weight GPU alternative." />
+  <meta name="twitter:description" content="Calculate exact Xiaomi: MiMo-V2.5-Pro API token costs ($0.48/1M input, $1.80/1M output) and compare against self-hosting an open-weight GPU alternative." />
   <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Xiaomi: MiMo-V2.5-Pro API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Xiaomi: MiMo-V2.5-Pro costs $0.435 per 1M input tokens and $0.87 per 1M output tokens, with a context window of 1,024,000 tokens."}}, {"@type": "Question", "name": "Can you self-host Xiaomi: MiMo-V2.5-Pro or switch to a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Xiaomi: MiMo-V2.5-Pro is a proprietary API model, so its weights are not downloadable. However, if your API spend exceeds $1,937/month (~114.2M tokens/day), running an equivalent open-weight model (Llama, Qwen, or DeepSeek) on a dedicated NVIDIA H100 SXM (80GB VRAM) ($2.69/hr) on RunPod Cloud GPUs can cut costs substantially."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Xiaomi: MiMo-V2.5-Pro API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Xiaomi: MiMo-V2.5-Pro costs $0.48 per 1M input tokens and $1.80 per 1M output tokens, with a context window of 262,144 tokens."}}, {"@type": "Question", "name": "Can you self-host Xiaomi: MiMo-V2.5-Pro or switch to a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Xiaomi: MiMo-V2.5-Pro is a proprietary API model, so its weights are not downloadable. However, if your API spend exceeds $1,937/month (~73.7M tokens/day), running an equivalent open-weight model (Llama, Qwen, or DeepSeek) on a dedicated NVIDIA H100 SXM (80GB VRAM) ($2.69/hr) on RunPod Cloud GPUs can cut costs substantially."}}]}</script>
   <style>
     :root {
       --bg: #0b0f19;
@@ -223,6 +223,27 @@
       font-size: 0.92rem;
       color: #fde68a;
     }
+    .cmd-item { margin-bottom: 12px; }
+    .cmd-item:last-child { margin-bottom: 0; }
+    .cmd-label { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+    .cmd-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #070a12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+    }
+    .cmd-box code {
+      color: #a5f3fc;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.84rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .cmd-copy { flex-shrink: 0; padding: 5px 10px; font-size: 0.78rem; }
     footer {
       margin-top: 60px;
       border-top: 1px solid var(--border);
@@ -319,15 +340,15 @@
       </div>
       <div class="stat-row">
         <span>Input Price (per 1M tokens)</span>
-        <strong>$0.435</strong>
+        <strong>$0.48</strong>
       </div>
       <div class="stat-row">
         <span>Output Price (per 1M tokens)</span>
-        <strong>$0.87</strong>
+        <strong>$1.80</strong>
       </div>
       <div class="stat-row">
         <span>Max Context Window</span>
-        <strong>1,024,000 tokens</strong>
+        <strong>262,144 tokens</strong>
       </div>
       <div class="stat-row">
         <span>Open-Weight Eq. VRAM (~70B Class)</span>
@@ -335,7 +356,7 @@
       </div>
       <div class="stat-row">
         <span>API vs. GPU Daily Break-Even</span>
-        <strong>~114.2M tokens/day</strong>
+        <strong>~73.7M tokens/day</strong>
       </div>
 
       <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
@@ -353,7 +374,7 @@
     </div>
     <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Deploy on RunPod (From $0.20/hr) →</a>
   </div>
-
+  
   <div class="card" style="margin-top:24px;">
     <h2>Compare Xiaomi: MiMo-V2.5-Pro With Other Popular Models</h2>
     <ul style="margin-top:12px;padding-left:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%, 260px),1fr));gap:8px;">
@@ -364,8 +385,8 @@
 <script>
   const MODEL_NAME = "Xiaomi: MiMo-V2.5-Pro";
   const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/models/xiaomi-mimo-v2-5-pro.html";
-  const IN_RATE = 0.435;
-  const OUT_RATE = 0.87;
+  const IN_RATE = 0.48;
+  const OUT_RATE = 1.8;
   const GPU_MONTHLY = 1936.8;
   const IS_OPEN = false;
   function initFromParams() {
@@ -418,15 +439,26 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-17 11:35 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:02 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·
       <a href="../vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="../gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="../tokenbench.py">Terminal GPU Checker CLI</a> ·
       <a href="../sitemap.xml">XML Sitemap</a>
     </p>
   </div>
 </footer>
+<script>
+  function copyCmd(btn) {
+    const cmd = btn.getAttribute('data-cmd') || '';
+    if (!cmd) return;
+    navigator.clipboard.writeText(cmd);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = orig, 1800);
+  }
+</script>
 </body>
 </html>
