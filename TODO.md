@@ -7,13 +7,8 @@
 - [x] Hugging Face Space backlink & widget (`https://huggingface.co/spaces/stigla610/llm-vram-cost-calculator`)
 - [x] GitHub Awesome-list Pull Requests (`rafska/awesome-local-llm#391`, `EndoTheDev/Awesome-Ollama#162`)
 - [x] Dev.to Article 1 published (`https://dev.to/stigla610/llm-api-vs-dedicated-cloud-gpu-break-even-math-in-2026-live-data-1n53`)
-- [x] **GoatCounter** live analytics & outbound click tracking enabled (`https://stigla.goatcounter.com/`, code: `stigla`)
+- [x] **GoatCounter** live analytics & outbound click tracking enabled (`https://stigla.goatcounter.com/`, code: `stigla`, email `stigla610@gmail.com` confirmed)
 - [x] **Hashnode** publication created (`https://tokenbench-ai.hashnode.dev`) & Article 1 cross-posted (`https://tokenbench-ai.hashnode.dev/llm-api-vs-dedicated-cloud-gpu-break-even-math-in-2026-live-data`)
-
----
-
-## 🔄 In Progress / Next
-- [ ] Confirm GoatCounter email (`stigla610@gmail.com`) if prompted in inbox
 
 ---
 
