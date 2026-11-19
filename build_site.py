@@ -307,6 +307,114 @@ def render_cli_card(config):
     </div>
   </div>"""
 
+def get_hardware_url(tier, config):
+    url = f"https://www.amazon.com/s?k={tier['query']}"
+    tag = (config.get("amazon_associate_tag") or "").strip()
+    if tag:
+        url += f"&tag={tag}"
+    return url
+
+def pick_local_hardware_tier(vram_needed, config):
+    tiers = config.get("local_hardware_tiers", [])
+    for t in tiers:
+        if t["max_vram_gb"] >= vram_needed:
+            return t, True
+    return (tiers[-1] if tiers else None), False
+
+def render_hardware_buy_card(m, config):
+    tiers = config.get("local_hardware_tiers", [])
+    if not tiers:
+        return ""
+    hw, fits_single_box = pick_local_hardware_tier(m["vram_int4"], config)
+    if not hw:
+        return ""
+    hw_url = get_hardware_url(hw, config)
+    gpu = config["gpu_tiers"][m["gpu_tier_idx"]]
+    aff_cloud = config["affiliates"][gpu["provider_key"]]
+    cloud_monthly = round(gpu["hourly_usd"] * 24 * 30, 2)
+    elec_monthly = round((hw["watts"] / 1000.0) * 24 * 30 * 0.18, 2)
+
+    if fits_single_box:
+        headline = f"Buy Local Hardware vs. Rent Cloud GPU for {html.escape(m['name'])}"
+        summary = (
+            f"Running <strong>{html.escape(m['name'])}</strong> (~{m['vram_int4']} GB in 4-bit) fits locally on "
+            f"<strong>{html.escape(hw['name'])}</strong> (~${hw['approx_price_usd']:,} upfront, ~${elec_monthly:.2f}/mo electricity at $0.18/kWh). "
+            f"Or rent a <strong>{html.escape(gpu['name'])}</strong> on-demand for <strong>${gpu['hourly_usd']:.2f}/hr</strong> with zero hardware CapEx."
+        )
+        badge_txt = f"Fits Locally on {hw['max_vram_gb']}GB Tier"
+    else:
+        rtx24 = tiers[1] if len(tiers) > 1 else hw
+        hw_url = get_hardware_url(rtx24, config)
+        hw = rtx24
+        elec_monthly = round((hw["watts"] / 1000.0) * 24 * 30 * 0.18, 2)
+        headline = f"Cluster Hardware vs. Cloud GPU Rental (~{m['vram_int4']} GB Q4)"
+        summary = (
+            f"At <strong>{m['vram_int4']} GB</strong> (4-bit), this model exceeds single-GPU consumer hardware and requires a multi-GPU node or Cloud cluster "
+            f"(<strong>{html.escape(gpu['name'])}</strong> at <strong>${gpu['hourly_usd']:.2f}/hr</strong>). "
+            f"Want to run smaller 7B–32B distilled models locally instead? Check out a 24GB <strong>{html.escape(hw['name'])}</strong> (~${hw['approx_price_usd']:,})."
+        )
+        badge_txt = "Multi-GPU / Cloud Cluster Recommended"
+
+    payback_months = round(hw["approx_price_usd"] / max(cloud_monthly - elec_monthly, 1.0), 1)
+    payback_str = f"~{payback_months} months (24/7 use)" if fits_single_box and cloud_monthly > elec_monthly else "Cloud pay-as-you-go wins for burst traffic"
+
+    return f"""
+  <div class="card" style="margin-top:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
+      <h2 style="margin-bottom:0;">🛒 {headline}</h2>
+      <span class="badge" style="margin-bottom:0;">{badge_txt}</span>
+    </div>
+    <p style="color:var(--muted);font-size:0.92rem;margin-bottom:14px;">{summary}</p>
+    <div class="grid-2" style="margin:10px 0 0;">
+      <div class="card" style="background:#0b0f19;padding:16px;">
+        <span class="badge badge-green">Option A: Own Local Hardware</span>
+        <h3 style="font-size:1.05rem;">{html.escape(hw['name'])}</h3>
+        <div class="stat-row"><span>Typical Retail / Refurb Price</span><strong>~${hw['approx_price_usd']:,}</strong></div>
+        <div class="stat-row"><span>24/7 Power Draw ({hw['watts']}W @ $0.18/kWh)</span><strong>~${elec_monthly:.2f}/mo</strong></div>
+        <div class="stat-row"><span>Hardware Payback vs 24/7 Cloud</span><strong>{payback_str}</strong></div>
+        <div style="margin-top:14px;">
+          <a href="{html.escape(hw_url)}" target="_blank" rel="nofollow sponsored" data-track-cta="amazon_{hw['id']}" class="btn-cta btn-green">Check GPU Price on Amazon →</a>
+        </div>
+      </div>
+      <div class="card" style="background:#0b0f19;padding:16px;">
+        <span class="badge">Option B: On-Demand Cloud GPU</span>
+        <h3 style="font-size:1.05rem;">{html.escape(gpu['name'])}</h3>
+        <div class="stat-row"><span>Upfront Hardware Cost</span><strong>$0</strong></div>
+        <div class="stat-row"><span>Hourly On-Demand Rate</span><strong>${gpu['hourly_usd']:.2f}/hr (${cloud_monthly:,.0f}/mo 24/7)</strong></div>
+        <div class="stat-row"><span>Best For</span><strong>Burst workloads, zero maintenance</strong></div>
+        <div style="margin-top:14px;">
+          <a href="{html.escape(aff_cloud['url'])}" target="_blank" rel="nofollow sponsored" data-track-cta="cloud_{gpu['id']}" class="btn-cta">{html.escape(aff_cloud['cta_text'])} →</a>
+        </div>
+      </div>
+    </div>
+  </div>"""
+
+def render_hardware_hub_section(config):
+    tiers = config.get("local_hardware_tiers", [])
+    if not tiers:
+        return ""
+    cards = ""
+    for t in tiers:
+        url = get_hardware_url(t, config)
+        elec = round((t["watts"] / 1000.0) * 24 * 30 * 0.18, 2)
+        cards += f"""
+        <div class="card">
+          <span class="badge badge-green">Up to {t['max_vram_gb']} GB VRAM · {t['watts']}W</span>
+          <h3>{html.escape(t['name'])}</h3>
+          <p style="color:var(--muted);font-size:0.88rem;margin:8px 0 12px;">{html.escape(t['best_for'])}</p>
+          <div class="stat-row"><span>Est. Hardware Price</span><strong>~${t['approx_price_usd']:,}</strong></div>
+          <div class="stat-row"><span>24/7 Electricity ($0.18/kWh)</span><strong>~${elec:.2f}/mo</strong></div>
+          <div style="margin-top:14px;">
+            <a href="{html.escape(url)}" target="_blank" rel="nofollow sponsored" data-track-cta="amazon_{t['id']}" class="btn-cta btn-green">Check Current Price on Amazon →</a>
+          </div>
+        </div>"""
+    return f"""
+  <h2 style="color:#fff;margin-top:36px;margin-bottom:8px;">🛒 Local LLM Hardware Buying Guide (Best GPUs &amp; Unified Memory Rigs)</h2>
+  <p style="color:var(--muted);margin-bottom:16px;">Compare local GPU &amp; Apple Silicon tiers by usable VRAM, 24/7 electricity draw, and model capacity before buying hardware.</p>
+  <div class="grid-2">
+    {cards}
+  </div>"""
+
 def estimate_params_b(model_id, name):
     combined = f"{model_id} {name}".lower()
 
@@ -527,6 +635,27 @@ def shared_head(title, description, canonical_url, config, json_ld=None):
         schema_tag = f'<script type="application/ld+json">{json.dumps(json_ld)}</script>'
     gsc = config.get("google_site_verification", "").strip()
     gsc_tag = f'<meta name="google-site-verification" content="{html.escape(gsc)}" />' if gsc else ""
+
+    analytics = config.get("analytics") or {}
+    analytics_tags = []
+    gc_code = (analytics.get("goatcounter_code") or "").strip()
+    if gc_code:
+        analytics_tags.append(
+            f'<script data-goatcounter="https://{html.escape(gc_code)}.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>'
+        )
+    cf_tok = (analytics.get("cloudflare_token") or "").strip()
+    if cf_tok:
+        analytics_tags.append(
+            f'<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{json.dumps({"token": cf_tok})}\'></script>'
+        )
+    ga4_id = (analytics.get("ga4_measurement_id") or "").strip()
+    if ga4_id:
+        analytics_tags.append(
+            f'<script async src="https://www.googletagmanager.com/gtag/js?id={html.escape(ga4_id)}"></script>'
+            f'<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());gtag("config","{html.escape(ga4_id)}");</script>'
+        )
+    analytics_html = "\n  ".join(analytics_tags)
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -548,6 +677,7 @@ def shared_head(title, description, canonical_url, config, json_ld=None):
   <meta name="twitter:image" content="{base_url}/og-card.svg" />
   {gsc_tag}
   {schema_tag}
+  {analytics_html}
   <style>
     :root {{
       --bg: #0b0f19;
@@ -807,23 +937,27 @@ def shared_nav(prefix="", config=None):
       <a href="{prefix}index.html">API Cost Calculator</a>
       <a href="{prefix}vram-electricity-calculator.html">VRAM &amp; Electricity Calculator</a>
       <a href="{prefix}gpu-cloud-pricing.html">Cloud GPU Rates</a>
+      <a href="{prefix}benchmarks.html">2026 Benchmarks &amp; Guides</a>
       <a href="{prefix}index.html#comparisons">Model Comparisons</a>
-      <a href="{html.escape(runpod_url)}" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
+      <a href="{html.escape(runpod_url)}" target="_blank" rel="nofollow sponsored" data-track-cta="nav_runpod" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
     </nav>
   </div>
 </header>
 """
 
 def shared_footer(config, updated_str, prefix=""):
+    sponsor_url = (config.get("sponsor_inquiry_url") or "https://github.com/stigla610/ai-cost-engine/issues").strip()
     return f"""<footer>
   <div class="container">
     <p><strong>{html.escape(config['site_name'])}</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: {updated_str}.</p>
-    <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
+    <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="{prefix}index.html">All AI Models</a> ·
       <a href="{prefix}vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="{prefix}gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="{prefix}benchmarks.html">2026 Benchmarks &amp; Guides</a> ·
       <a href="{prefix}tokenbench.py">Terminal GPU Checker CLI</a> ·
+      <a href="{html.escape(sponsor_url)}" target="_blank" rel="noopener">📣 Sponsor a GPU Tier / Advertise</a> ·
       <a href="{prefix}sitemap.xml">XML Sitemap</a>
     </p>
   </div>
@@ -837,6 +971,24 @@ def shared_footer(config, updated_str, prefix=""):
     btn.textContent = '✅ Copied!';
     setTimeout(() => btn.textContent = orig, 1800);
   }}
+  (function() {{
+    document.addEventListener('click', function(e) {{
+      const link = e.target && e.target.closest ? e.target.closest('a[rel*="sponsored"], a[data-track-cta]') : null;
+      if (!link) return;
+      const ctaId = link.getAttribute('data-track-cta') || link.hostname || 'affiliate';
+      try {{
+        const store = JSON.parse(localStorage.getItem('tb_cta_clicks') || '{{}}');
+        store[ctaId] = (store[ctaId] || 0) + 1;
+        localStorage.setItem('tb_cta_clicks', JSON.stringify(store));
+      }} catch (_) {{}}
+      if (window.goatcounter && typeof window.goatcounter.count === 'function') {{
+        window.goatcounter.count({{ path: 'cta/' + ctaId, title: 'CTA: ' + ctaId, event: true }});
+      }}
+      if (typeof window.gtag === 'function') {{
+        window.gtag('event', 'affiliate_click', {{ event_category: 'outbound', event_label: ctaId }});
+      }}
+    }});
+  }})();
 </script>
 </body>
 </html>
@@ -1191,6 +1343,7 @@ def build_vram_page(m, config, updated_str):
     </div>
   </div>
   {render_deploy_card(m, config)}
+  {render_hardware_buy_card(m, config)}
 </main>
 <script>
   const MODEL_NAME = {json.dumps(m['name'])};
@@ -1356,6 +1509,7 @@ def build_vram_hub_page(models, config, updated_str):
     </div>
   </div>
   {render_cli_card(config)}
+  {render_hardware_hub_section(config)}
   <h2 style="color:#fff;margin-top:36px;margin-bottom:8px;">Open-Weight &amp; Popular Model VRAM Guides</h2>
   <p style="color:var(--muted);margin-bottom:16px;">Select any model below to view quantization memory tiers and check if your GPU can run it.</p>
   <div class="grid-3">
@@ -1701,10 +1855,294 @@ def build_gpu_page(config, updated_str):
   <div class="grid-3">
     {cards}
   </div>
+
+  <div class="affiliate-box" style="margin-top:32px;border-color:var(--accent-purple);">
+    <div>
+      <span class="badge" style="background:rgba(129,140,248,0.18);color:var(--accent-purple);">B2B Sponsorship Slot</span>
+      <h3>Run an AI Cloud, GPU Marketplace, or Inference API?</h3>
+      <p style="color:var(--muted);max-width:720px;">Feature your H100 / A100 / serverless GPU pricing across 1,550+ AI cost &amp; VRAM calculator pages and our local <code>tokenbench</code> CLI.</p>
+    </div>
+    <a href="{html.escape(config.get('sponsor_inquiry_url', 'https://github.com/stigla610/ai-cost-engine/issues'))}" target="_blank" rel="noopener" data-track-cta="sponsor_inquiry" class="btn-cta">📣 Sponsor a Featured GPU Tier →</a>
+  </div>
 </main>
 """
     page += shared_footer(config, updated_str, prefix="")
     return page
+
+def build_benchmarks_page(models, config, updated_str):
+    base_url = config["base_url"].rstrip("/")
+    canonical = f"{base_url}/benchmarks.html"
+    title = "2026 LLM API Cost, Cloud GPU Break-Even & VRAM Scaling Benchmarks"
+    desc = "Live 2026 benchmark reports: LLM API vs. Cloud GPU break-even volume, KV-cache VRAM scaling (8K–128K context), and cheapest models ranked by daily token volume."
+
+    primary = [m for m in models if not m["is_secondary"]]
+    a100_mo = round(config["gpu_tiers"][1]["hourly_usd"] * 24 * 30, 2)
+    h100_mo = round(config["gpu_tiers"][2]["hourly_usd"] * 24 * 30, 2)
+
+    # Guide 1: Break-even rows across top flagship & open-weight models
+    breakeven_rows = ""
+    for m in primary[:18]:
+        mo_2_5m = ((2.0 * m["input_1m"]) + (0.5 * m["output_1m"])) * 30.0
+        mo_12_5m = ((10.0 * m["input_1m"]) + (2.5 * m["output_1m"])) * 30.0
+        mo_60m = ((50.0 * m["input_1m"]) + (10.0 * m["output_1m"])) * 30.0
+        gpu = config["gpu_tiers"][m["gpu_tier_idx"]]
+        daily_gpu = gpu["hourly_usd"] * 24.0
+        be_tokens = round(daily_gpu / max(m["blended_1m"], 0.05), 1)
+        breakeven_rows += f"""
+        <tr>
+          <td><a href="models/{m['slug']}.html"><strong>{html.escape(m['name'])}</strong></a></td>
+          <td>{"Open-Weight" if m["is_open_weight"] else "Proprietary API"}</td>
+          <td>{format_price(m['input_1m'])} / {format_price(m['output_1m'])}</td>
+          <td>${mo_2_5m:,.2f}/mo</td>
+          <td>${mo_12_5m:,.2f}/mo</td>
+          <td>${mo_60m:,.2f}/mo</td>
+          <td><strong>~{be_tokens}M/day</strong> ({html.escape(gpu['name'].split('(')[0].strip())})</td>
+        </tr>"""
+
+    # Guide 2: KV Cache VRAM scaling for common open-weight sizes
+    kv_sizes = [
+        ("8B (Llama 3.1 8B / Qwen3 8B)", 8.0),
+        ("14B (Phi-4 / Qwen3 14B)", 14.0),
+        ("32B (Qwen3 32B / Qwen2.5 Coder)", 32.0),
+        ("70B (Llama 3.3 70B / Qwen 72B)", 70.0),
+        ("123B (Mistral Large)", 123.0),
+        ("235B MoE (Qwen3 235B-A22B)", 235.0),
+    ]
+    kv_rows = ""
+    for label, p in kv_sizes:
+        def q4_at(ctx):
+            return round((p * 0.65) + max(0.0, (ctx - 8192) / 8192.0) * (p * 0.025), 1)
+        def q8_at(ctx):
+            return round((p * 1.15) + (max(0.0, (ctx - 8192) / 8192.0) * (p * 0.025) * 1.2), 1)
+        kv_rows += f"""
+        <tr>
+          <td><strong>{html.escape(label)}</strong></td>
+          <td>{q4_at(8192)} GB</td>
+          <td>{q4_at(32768)} GB</td>
+          <td><strong style="color:var(--accent-green)">{q4_at(131072)} GB</strong></td>
+          <td>{q8_at(8192)} GB</td>
+          <td>{q8_at(32768)} GB</td>
+        </tr>"""
+
+    # Guide 3: Cheapest primary models sorted by 10M/day (8M in + 2M out) monthly bill
+    cheapest_sorted = sorted(primary, key=lambda x: (8.0 * x["input_1m"]) + (2.0 * x["output_1m"]))[:18]
+    cheapest_rows = ""
+    for rank, m in enumerate(cheapest_sorted, 1):
+        mo_10m = ((8.0 * m["input_1m"]) + (2.0 * m["output_1m"])) * 30.0
+        cheapest_rows += f"""
+        <tr>
+          <td>#{rank}</td>
+          <td><a href="models/{m['slug']}.html"><strong>{html.escape(m['name'])}</strong></a></td>
+          <td>{html.escape(m['provider'])}</td>
+          <td>{"Open-Weight" if m["is_open_weight"] else "Proprietary API"}</td>
+          <td>{format_price(m['input_1m'])}</td>
+          <td>{format_price(m['output_1m'])}</td>
+          <td><strong style="color:var(--accent-green)">${mo_10m:,.2f}/mo</strong></td>
+        </tr>"""
+
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "description": desc,
+        "url": canonical,
+        "dateModified": updated_str,
+        "author": {"@type": "Organization", "name": config["site_name"]},
+    }
+
+    page = shared_head(title, desc, canonical, config, json_ld=json_ld)
+    page += shared_nav(prefix="", config=config)
+    page += f"""
+<main class="container">
+  <section class="hero">
+    <span class="badge">Live Data Benchmarks · Updated {updated_str}</span>
+    <h1>2026 LLM API Cost, Cloud GPU Break-Even &amp; VRAM Benchmarks</h1>
+    <p>Data-backed engineering guides generated directly from live API pricing across {len(models):,} models—showing exact GPU break-even thresholds, long-context KV-cache VRAM scaling, and lowest-cost inference tiers.</p>
+  </section>
+
+  <div class="card" id="breakeven" style="margin-bottom:24px;">
+    <span class="badge badge-green">Report 1</span>
+    <h2>LLM API vs. Dedicated Cloud GPU Break-Even (2026)</h2>
+    <p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">
+      An on-demand <strong>NVIDIA A100 80GB</strong> runs roughly <strong>${a100_mo:,.0f}/mo</strong> (24/7 @ $1.39/hr) and an <strong>H100 SXM</strong> runs <strong>${h100_mo:,.0f}/mo</strong> (@ $2.69/hr). Here is how live API bills compare at Startup (2.5M tokens/day), Scale-Up (12.5M/day), and Agent Fleet (60M/day) workloads:
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Type</th>
+            <th>In / Out per 1M</th>
+            <th>2.5M/day</th>
+            <th>12.5M/day</th>
+            <th>60M/day</th>
+            <th>GPU Break-Even</th>
+          </tr>
+        </thead>
+        <tbody>{breakeven_rows}</tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" id="vram-scaling" style="margin-bottom:24px;">
+    <span class="badge">Report 2</span>
+    <h2>Local LLM VRAM &amp; KV-Cache Scaling (8K vs. 32K vs. 128K Context)</h2>
+    <p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">
+      Many local LLM guides only measure model weights at 2K–4K context. Once you push context to 32K or 128K tokens, KV-cache memory grows significantly—for example, a 70B Q4 model jumps from <strong>45.5 GB</strong> (8K) to <strong>71.8 GB</strong> (128K). Check your own hardware using <a href="vram-electricity-calculator.html">the interactive VRAM &amp; Electricity Calculator</a>.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Model Parameter Tier</th>
+            <th>Q4 @ 8K Context</th>
+            <th>Q4 @ 32K Context</th>
+            <th>Q4 @ 128K Context</th>
+            <th>Q8 @ 8K Context</th>
+            <th>Q8 @ 32K Context</th>
+          </tr>
+        </thead>
+        <tbody>{kv_rows}</tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" id="cheapest">
+    <span class="badge badge-green">Report 3</span>
+    <h2>Cheapest Production LLMs Ranked (10M Tokens/Day Workload)</h2>
+    <p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">
+      Lowest blended-cost primary models (8M input + 2M output tokens/day = 300M tokens/month), ranked live:
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Model</th>
+            <th>Provider</th>
+            <th>Type</th>
+            <th>Input / 1M</th>
+            <th>Output / 1M</th>
+            <th>10M/day Monthly Bill</th>
+          </tr>
+        </thead>
+        <tbody>{cheapest_rows}</tbody>
+      </table>
+    </div>
+  </div>
+
+  {render_cli_card(config)}
+</main>
+"""
+    page += shared_footer(config, updated_str, prefix="")
+    return page
+
+def build_external_articles(models, config, updated_str):
+    """Generate ready-to-publish Markdown articles for Dev.to / Hashnode / Medium in ./articles/."""
+    articles_dir = os.path.join(BASE_DIR, "articles")
+    os.makedirs(articles_dir, exist_ok=True)
+    base_url = config["base_url"].rstrip("/")
+    primary = [m for m in models if not m["is_secondary"]]
+
+    # Article 1: API vs Cloud GPU Break-Even
+    a1_rows = []
+    for m in primary[:15]:
+        mo_25 = ((20.0 * m["input_1m"]) + (5.0 * m["output_1m"])) * 30.0
+        mo_60 = ((50.0 * m["input_1m"]) + (10.0 * m["output_1m"])) * 30.0
+        gpu = config["gpu_tiers"][m["gpu_tier_idx"]]
+        be = round((gpu["hourly_usd"] * 24.0) / max(m["blended_1m"], 0.05), 1)
+        a1_rows.append(
+            f"| [{m['name']}]({base_url}/models/{m['slug']}.html) | {format_price(m['input_1m'])} / {format_price(m['output_1m'])} | ${mo_25:,.2f}/mo | ${mo_60:,.2f}/mo | ~{be}M/day |"
+        )
+    art1 = f"""---
+title: "LLM API vs. Dedicated Cloud GPU Break-Even Math in 2026 (Live Data)"
+published: true
+tags: ai, llm, gpu, cloud
+canonical_url: {base_url}/benchmarks.html#breakeven
+---
+
+At what point does paying per-million API tokens become more expensive than renting a dedicated NVIDIA A100 (`$1.39/hr`, `~$1,001/mo`) or H100 (`$2.69/hr`, `~$1,937/mo`)?
+
+Using live pricing pulled across {len(models)} models on [TokenBench]({base_url}/), here are the exact monthly bills and daily token break-even points:
+
+| Model | Input / Output (1M) | 25M Tokens/Day | 60M Tokens/Day | Dedicated GPU Break-Even |
+| :--- | :--- | :--- | :--- | :--- |
+{chr(10).join(a1_rows)}
+
+### Try It With Your Own Token Volume
+* **Simulate all 260+ models simultaneously:** [{base_url}/]({base_url}/)
+* **Compare home GPU electricity (`$/kWh`) vs. cloud rentals:** [{base_url}/vram-electricity-calculator.html]({base_url}/vram-electricity-calculator.html)
+* **Check what fits on your local GPU in terminal:**
+```bash
+curl -sL {base_url}/tokenbench.py | python3 -
+```
+"""
+    with open(os.path.join(articles_dir, "01-llm-api-vs-cloud-gpu-breakeven-2026.md"), "w", encoding="utf-8") as f:
+        f.write(art1)
+
+    # Article 2: Local LLM VRAM & KV-Cache Guide
+    open_models = [m for m in primary if m["is_open_weight"]][:16]
+    a2_rows = []
+    for m in open_models:
+        p = m["params_b"]
+        q4_32k = round((p * 0.65) + max(0.0, (32768 - 8192) / 8192.0) * (p * 0.025), 1)
+        a2_rows.append(
+            f"| [{m['name']}]({base_url}/vram/{m['slug']}-vram-requirements.html) | ~{p:g}B | **{m['vram_int4']} GB** | {q4_32k} GB | {m['vram_int8']} GB | {m['vram_fp16']} GB |"
+        )
+    art2 = f"""---
+title: "How Much VRAM Do Open-Weight LLMs Actually Need at 8K vs. 32K Context?"
+published: true
+tags: localllama, ollama, vllm, machinelearning
+canonical_url: {base_url}/vram-electricity-calculator.html
+---
+
+Most VRAM cheat sheets only count model weights at tiny context lengths. Once you crank your context window up to 32K–128K tokens for coding or RAG, the KV cache adds gigabytes of extra VRAM.
+
+Here are the exact requirements (weights + KV-cache headroom) across top open-weight models from [TokenBench]({base_url}/vram-electricity-calculator.html):
+
+| Open-Weight Model | Params | Q4 @ 8K Context | Q4 @ 32K Context | Q8 @ 8K Context | FP16 @ 8K |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+{chr(10).join(a2_rows)}
+
+### Auto-Check Your GPU in 1 Second
+Run the zero-dependency Python CLI (`nvidia-smi` + Apple Silicon Unified Memory detection) to see which models fit on your hardware right now with copy-paste `ollama run` and `vllm serve` commands:
+
+```bash
+curl -sL {base_url}/tokenbench.py | python3 -
+```
+
+Interactive calculator + electricity (`$/kWh`) estimator: [{base_url}/vram-electricity-calculator.html]({base_url}/vram-electricity-calculator.html)
+"""
+    with open(os.path.join(articles_dir, "02-local-llm-vram-kv-cache-guide-2026.md"), "w", encoding="utf-8") as f:
+        f.write(art2)
+
+    # Article 3: Cheapest LLM APIs Ranked
+    cheapest = sorted(primary, key=lambda x: (8.0 * x["input_1m"]) + (2.0 * x["output_1m"]))[:18]
+    a3_rows = []
+    for i, m in enumerate(cheapest, 1):
+        mo_10 = ((8.0 * m["input_1m"]) + (2.0 * m["output_1m"])) * 30.0
+        a3_rows.append(
+            f"| #{i} | [{m['name']}]({base_url}/models/{m['slug']}.html) | {m['provider']} | {format_price(m['input_1m'])} | {format_price(m['output_1m'])} | **${mo_10:,.2f}/mo** |"
+        )
+    art3 = f"""---
+title: "Cheapest Production LLM APIs in 2026 (Ranked for 10M Tokens/Day)"
+published: true
+tags: ai, llm, openai, deepseek
+canonical_url: {base_url}/benchmarks.html#cheapest
+---
+
+If you are running agents, batch classification, or summarization pipelines at 10M tokens/day (8M input + 2M output), token rates vary by over **100x** between providers.
+
+Below is the live ranking updated {updated_str} via [TokenBench]({base_url}/):
+
+| Rank | Model | Provider | Input / 1M | Output / 1M | 10M/Day Monthly Bill |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+{chr(10).join(a3_rows)}
+
+Compare side-by-side costs or simulate custom token ratios on the live dashboard: [{base_url}/]({base_url}/)
+"""
+    with open(os.path.join(articles_dir, "03-cheapest-llm-apis-ranked-by-workload-2026.md"), "w", encoding="utf-8") as f:
+        f.write(art3)
 
 def build_index_page(models, comparisons, config, updated_str, total_pages):
     base_url = config["base_url"].rstrip("/")
@@ -2091,6 +2529,13 @@ def main():
     with open(os.path.join(DIST_DIR, "gpu-cloud-pricing.html"), "w", encoding="utf-8") as f:
         f.write(gpu_html)
     urls.insert(0, f"{base_url}/gpu-cloud-pricing.html")
+
+    # 5.5. Build Benchmarks & Editorial Guides Page + External Markdown Articles
+    benchmarks_html = build_benchmarks_page(models, config, updated_str)
+    with open(os.path.join(DIST_DIR, "benchmarks.html"), "w", encoding="utf-8") as f:
+        f.write(benchmarks_html)
+    urls.insert(0, f"{base_url}/benchmarks.html")
+    build_external_articles(models, config, updated_str)
 
     # 6. Build Main Index Hub
     index_html = build_index_page(models, comparisons, config, updated_str, len(urls) + 1)

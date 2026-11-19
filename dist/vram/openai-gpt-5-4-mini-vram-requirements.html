@@ -19,6 +19,7 @@
   <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much VRAM is needed to run OpenAI: GPT-5.4 Mini or an open-weight equivalent?", "acceptedAnswer": {"@type": "Answer", "text": "OpenAI: GPT-5.4 Mini is a closed-source API and cannot be downloaded directly. To run a comparable ~8B parameter open-weight model locally, you need roughly 17.6 GB VRAM in FP16, 9.2 GB VRAM in 8-bit (Q8_0), or 5.2 GB VRAM in 4-bit (Q4_K_M / AWQ) quantization."}}]}</script>
+  
   <style>
     :root {
       --bg: #0b0f19;
@@ -274,8 +275,9 @@
       <a href="../index.html">API Cost Calculator</a>
       <a href="../vram-electricity-calculator.html">VRAM &amp; Electricity Calculator</a>
       <a href="../gpu-cloud-pricing.html">Cloud GPU Rates</a>
+      <a href="../benchmarks.html">2026 Benchmarks &amp; Guides</a>
       <a href="../index.html#comparisons">Model Comparisons</a>
-      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
+      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" data-track-cta="nav_runpod" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
     </nav>
   </div>
 </header>
@@ -351,6 +353,36 @@
     </div>
   </div>
   
+  
+  <div class="card" style="margin-top:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
+      <h2 style="margin-bottom:0;">🛒 Buy Local Hardware vs. Rent Cloud GPU for OpenAI: GPT-5.4 Mini</h2>
+      <span class="badge" style="margin-bottom:0;">Fits Locally on 16GB Tier</span>
+    </div>
+    <p style="color:var(--muted);font-size:0.92rem;margin-bottom:14px;">Running <strong>OpenAI: GPT-5.4 Mini</strong> (~5.2 GB in 4-bit) fits locally on <strong>NVIDIA GeForce RTX 4060 Ti (16GB VRAM)</strong> (~$449 upfront, ~$21.38/mo electricity at $0.18/kWh). Or rent a <strong>NVIDIA RTX 4090 (24GB VRAM)</strong> on-demand for <strong>$0.39/hr</strong> with zero hardware CapEx.</p>
+    <div class="grid-2" style="margin:10px 0 0;">
+      <div class="card" style="background:#0b0f19;padding:16px;">
+        <span class="badge badge-green">Option A: Own Local Hardware</span>
+        <h3 style="font-size:1.05rem;">NVIDIA GeForce RTX 4060 Ti (16GB VRAM)</h3>
+        <div class="stat-row"><span>Typical Retail / Refurb Price</span><strong>~$449</strong></div>
+        <div class="stat-row"><span>24/7 Power Draw (165W @ $0.18/kWh)</span><strong>~$21.38/mo</strong></div>
+        <div class="stat-row"><span>Hardware Payback vs 24/7 Cloud</span><strong>~1.7 months (24/7 use)</strong></div>
+        <div style="margin-top:14px;">
+          <a href="https://www.amazon.com/s?k=NVIDIA+RTX+4060+Ti+16GB+GPU" target="_blank" rel="nofollow sponsored" data-track-cta="amazon_rtx_4060_ti_16gb" class="btn-cta btn-green">Check GPU Price on Amazon →</a>
+        </div>
+      </div>
+      <div class="card" style="background:#0b0f19;padding:16px;">
+        <span class="badge">Option B: On-Demand Cloud GPU</span>
+        <h3 style="font-size:1.05rem;">NVIDIA RTX 4090 (24GB VRAM)</h3>
+        <div class="stat-row"><span>Upfront Hardware Cost</span><strong>$0</strong></div>
+        <div class="stat-row"><span>Hourly On-Demand Rate</span><strong>$0.39/hr ($281/mo 24/7)</strong></div>
+        <div class="stat-row"><span>Best For</span><strong>Burst workloads, zero maintenance</strong></div>
+        <div style="margin-top:14px;">
+          <a href="https://cloud.vast.ai/?ref_id=864932" target="_blank" rel="nofollow sponsored" data-track-cta="cloud_rtx4090" class="btn-cta">Rent GPUs on Vast.ai (Save up to 70%) →</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 <script>
   const MODEL_NAME = "OpenAI: GPT-5.4 Mini";
@@ -401,13 +433,15 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:02 UTC.</p>
-    <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:07 UTC.</p>
+    <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·
       <a href="../vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="../gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="../benchmarks.html">2026 Benchmarks &amp; Guides</a> ·
       <a href="../tokenbench.py">Terminal GPU Checker CLI</a> ·
+      <a href="https://github.com/stigla610/ai-cost-engine/issues/new?title=Sponsorship+%2F+Featured+GPU+Provider+Inquiry" target="_blank" rel="noopener">📣 Sponsor a GPU Tier / Advertise</a> ·
       <a href="../sitemap.xml">XML Sitemap</a>
     </p>
   </div>
@@ -421,6 +455,24 @@
     btn.textContent = '✅ Copied!';
     setTimeout(() => btn.textContent = orig, 1800);
   }
+  (function() {
+    document.addEventListener('click', function(e) {
+      const link = e.target && e.target.closest ? e.target.closest('a[rel*="sponsored"], a[data-track-cta]') : null;
+      if (!link) return;
+      const ctaId = link.getAttribute('data-track-cta') || link.hostname || 'affiliate';
+      try {
+        const store = JSON.parse(localStorage.getItem('tb_cta_clicks') || '{}');
+        store[ctaId] = (store[ctaId] || 0) + 1;
+        localStorage.setItem('tb_cta_clicks', JSON.stringify(store));
+      } catch (_) {}
+      if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+        window.goatcounter.count({ path: 'cta/' + ctaId, title: 'CTA: ' + ctaId, event: true });
+      }
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'affiliate_click', { event_category: 'outbound', event_label: ctaId });
+      }
+    });
+  })();
 </script>
 </body>
 </html>

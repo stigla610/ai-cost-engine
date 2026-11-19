@@ -7,6 +7,51 @@
   "max_individual_model_pages": 450,
   "max_comparison_pages": 650,
   "max_vram_pages": 450,
+  "analytics": {
+    "goatcounter_code": "",
+    "cloudflare_token": "",
+    "ga4_measurement_id": ""
+  },
+  "amazon_associate_tag": "",
+  "sponsor_inquiry_url": "https://github.com/stigla610/ai-cost-engine/issues/new?title=Sponsorship+%2F+Featured+GPU+Provider+Inquiry",
+  "local_hardware_tiers": [
+    {
+      "id": "rtx_4060_ti_16gb",
+      "name": "NVIDIA GeForce RTX 4060 Ti (16GB VRAM)",
+      "max_vram_gb": 16,
+      "approx_price_usd": 449,
+      "watts": 165,
+      "query": "NVIDIA+RTX+4060+Ti+16GB+GPU",
+      "best_for": "7B to 14B models (Llama 3.1 8B, Qwen3 14B, Phi-4, Gemma 3 12B) in 4-bit Q4_K_M"
+    },
+    {
+      "id": "rtx_3090_4090_24gb",
+      "name": "NVIDIA GeForce RTX 3090 / RTX 4090 (24GB VRAM)",
+      "max_vram_gb": 24,
+      "approx_price_usd": 899,
+      "watts": 350,
+      "query": "NVIDIA+GeForce+RTX+3090+24GB+GPU",
+      "best_for": "14B to 32B models (Qwen3 32B, Gemma 4 31B, Mistral Small 24B, Codestral 22B)"
+    },
+    {
+      "id": "rtx_5090_32gb",
+      "name": "NVIDIA GeForce RTX 5090 (32GB GDDR7 VRAM)",
+      "max_vram_gb": 32,
+      "approx_price_usd": 1999,
+      "watts": 575,
+      "query": "NVIDIA+GeForce+RTX+5090+32GB+GPU",
+      "best_for": "32B models at 32K–64K context & 8-bit Q8_0 24B models with 1.79 TB/s bandwidth"
+    },
+    {
+      "id": "mac_studio_unified",
+      "name": "Apple Mac Mini M4 Pro (64GB) / Mac Studio (128GB Unified)",
+      "max_vram_gb": 96,
+      "approx_price_usd": 2199,
+      "watts": 90,
+      "query": "Apple+Mac+Studio+M4+Max+Unified+Memory",
+      "best_for": "70B to 123B models (Llama 3.3 70B, Qwen2.5 72B, Mistral Large, Llama 4 Scout) at ultra-low 90W power"
+    }
+  ],
   "affiliates": {
     "runpod": {
       "name": "RunPod Cloud GPUs",

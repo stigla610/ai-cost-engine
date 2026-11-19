@@ -19,6 +19,7 @@
   <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "TokenBench LLM VRAM & GPU Electricity Calculator", "url": "https://stigla610.github.io/ai-cost-engine/vram-electricity-calculator.html", "applicationCategory": "DeveloperApplication", "operatingSystem": "All", "description": "Calculate exact VRAM requirements (FP16, Q8, Q4) for any LLM including context window KV cache, and compare your home GPU electricity bill ($/kWh) against Cloud GPUs.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}</script>
+  
   <style>
     :root {
       --bg: #0b0f19;
@@ -274,8 +275,9 @@
       <a href="index.html">API Cost Calculator</a>
       <a href="vram-electricity-calculator.html">VRAM &amp; Electricity Calculator</a>
       <a href="gpu-cloud-pricing.html">Cloud GPU Rates</a>
+      <a href="benchmarks.html">2026 Benchmarks &amp; Guides</a>
       <a href="index.html#comparisons">Model Comparisons</a>
-      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
+      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" data-track-cta="nav_runpod" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
     </nav>
   </div>
 </header>
@@ -382,6 +384,52 @@
       </div>
     </div>
   </div>
+  
+  <h2 style="color:#fff;margin-top:36px;margin-bottom:8px;">🛒 Local LLM Hardware Buying Guide (Best GPUs &amp; Unified Memory Rigs)</h2>
+  <p style="color:var(--muted);margin-bottom:16px;">Compare local GPU &amp; Apple Silicon tiers by usable VRAM, 24/7 electricity draw, and model capacity before buying hardware.</p>
+  <div class="grid-2">
+    
+        <div class="card">
+          <span class="badge badge-green">Up to 16 GB VRAM · 165W</span>
+          <h3>NVIDIA GeForce RTX 4060 Ti (16GB VRAM)</h3>
+          <p style="color:var(--muted);font-size:0.88rem;margin:8px 0 12px;">7B to 14B models (Llama 3.1 8B, Qwen3 14B, Phi-4, Gemma 3 12B) in 4-bit Q4_K_M</p>
+          <div class="stat-row"><span>Est. Hardware Price</span><strong>~$449</strong></div>
+          <div class="stat-row"><span>24/7 Electricity ($0.18/kWh)</span><strong>~$21.38/mo</strong></div>
+          <div style="margin-top:14px;">
+            <a href="https://www.amazon.com/s?k=NVIDIA+RTX+4060+Ti+16GB+GPU" target="_blank" rel="nofollow sponsored" data-track-cta="amazon_rtx_4060_ti_16gb" class="btn-cta btn-green">Check Current Price on Amazon →</a>
+          </div>
+        </div>
+        <div class="card">
+          <span class="badge badge-green">Up to 24 GB VRAM · 350W</span>
+          <h3>NVIDIA GeForce RTX 3090 / RTX 4090 (24GB VRAM)</h3>
+          <p style="color:var(--muted);font-size:0.88rem;margin:8px 0 12px;">14B to 32B models (Qwen3 32B, Gemma 4 31B, Mistral Small 24B, Codestral 22B)</p>
+          <div class="stat-row"><span>Est. Hardware Price</span><strong>~$899</strong></div>
+          <div class="stat-row"><span>24/7 Electricity ($0.18/kWh)</span><strong>~$45.36/mo</strong></div>
+          <div style="margin-top:14px;">
+            <a href="https://www.amazon.com/s?k=NVIDIA+GeForce+RTX+3090+24GB+GPU" target="_blank" rel="nofollow sponsored" data-track-cta="amazon_rtx_3090_4090_24gb" class="btn-cta btn-green">Check Current Price on Amazon →</a>
+          </div>
+        </div>
+        <div class="card">
+          <span class="badge badge-green">Up to 32 GB VRAM · 575W</span>
+          <h3>NVIDIA GeForce RTX 5090 (32GB GDDR7 VRAM)</h3>
+          <p style="color:var(--muted);font-size:0.88rem;margin:8px 0 12px;">32B models at 32K–64K context &amp; 8-bit Q8_0 24B models with 1.79 TB/s bandwidth</p>
+          <div class="stat-row"><span>Est. Hardware Price</span><strong>~$1,999</strong></div>
+          <div class="stat-row"><span>24/7 Electricity ($0.18/kWh)</span><strong>~$74.52/mo</strong></div>
+          <div style="margin-top:14px;">
+            <a href="https://www.amazon.com/s?k=NVIDIA+GeForce+RTX+5090+32GB+GPU" target="_blank" rel="nofollow sponsored" data-track-cta="amazon_rtx_5090_32gb" class="btn-cta btn-green">Check Current Price on Amazon →</a>
+          </div>
+        </div>
+        <div class="card">
+          <span class="badge badge-green">Up to 96 GB VRAM · 90W</span>
+          <h3>Apple Mac Mini M4 Pro (64GB) / Mac Studio (128GB Unified)</h3>
+          <p style="color:var(--muted);font-size:0.88rem;margin:8px 0 12px;">70B to 123B models (Llama 3.3 70B, Qwen2.5 72B, Mistral Large, Llama 4 Scout) at ultra-low 90W power</p>
+          <div class="stat-row"><span>Est. Hardware Price</span><strong>~$2,199</strong></div>
+          <div class="stat-row"><span>24/7 Electricity ($0.18/kWh)</span><strong>~$11.66/mo</strong></div>
+          <div style="margin-top:14px;">
+            <a href="https://www.amazon.com/s?k=Apple+Mac+Studio+M4+Max+Unified+Memory" target="_blank" rel="nofollow sponsored" data-track-cta="amazon_mac_studio_unified" class="btn-cta btn-green">Check Current Price on Amazon →</a>
+          </div>
+        </div>
+  </div>
   <h2 style="color:#fff;margin-top:36px;margin-bottom:8px;">Open-Weight &amp; Popular Model VRAM Guides</h2>
   <p style="color:var(--muted);margin-bottom:16px;">Select any model below to view quantization memory tiers and check if your GPU can run it.</p>
   <div class="grid-3">
@@ -465,13 +513,15 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:02 UTC.</p>
-    <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:07 UTC.</p>
+    <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="index.html">All AI Models</a> ·
       <a href="vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="benchmarks.html">2026 Benchmarks &amp; Guides</a> ·
       <a href="tokenbench.py">Terminal GPU Checker CLI</a> ·
+      <a href="https://github.com/stigla610/ai-cost-engine/issues/new?title=Sponsorship+%2F+Featured+GPU+Provider+Inquiry" target="_blank" rel="noopener">📣 Sponsor a GPU Tier / Advertise</a> ·
       <a href="sitemap.xml">XML Sitemap</a>
     </p>
   </div>
@@ -485,6 +535,24 @@
     btn.textContent = '✅ Copied!';
     setTimeout(() => btn.textContent = orig, 1800);
   }
+  (function() {
+    document.addEventListener('click', function(e) {
+      const link = e.target && e.target.closest ? e.target.closest('a[rel*="sponsored"], a[data-track-cta]') : null;
+      if (!link) return;
+      const ctaId = link.getAttribute('data-track-cta') || link.hostname || 'affiliate';
+      try {
+        const store = JSON.parse(localStorage.getItem('tb_cta_clicks') || '{}');
+        store[ctaId] = (store[ctaId] || 0) + 1;
+        localStorage.setItem('tb_cta_clicks', JSON.stringify(store));
+      } catch (_) {}
+      if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+        window.goatcounter.count({ path: 'cta/' + ctaId, title: 'CTA: ' + ctaId, event: true });
+      }
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'affiliate_click', { event_category: 'outbound', event_label: ctaId });
+      }
+    });
+  })();
 </script>
 </body>
 </html>

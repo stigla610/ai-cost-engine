@@ -4,21 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Qwen: Qwen3.5-9B API Cost Calculator &amp; Self-Host GPU Break-Even (2026)</title>
-  <meta name="description" content="Calculate exact Qwen: Qwen3.5-9B token costs ($0.142/1M input, $0.208/1M output), local VRAM requirements (5.9GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta name="description" content="Calculate exact Qwen: Qwen3.5-9B token costs ($0.17/1M input, $0.25/1M output), local VRAM requirements (5.9GB Q4), and Cloud GPU self-hosting break-even." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/models/qwen-qwen3-5-9b.html" />
   <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
   <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="Qwen: Qwen3.5-9B API Cost Calculator &amp; Self-Host GPU Break-Even (2026)" />
-  <meta property="og:description" content="Calculate exact Qwen: Qwen3.5-9B token costs ($0.142/1M input, $0.208/1M output), local VRAM requirements (5.9GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta property="og:description" content="Calculate exact Qwen: Qwen3.5-9B token costs ($0.17/1M input, $0.25/1M output), local VRAM requirements (5.9GB Q4), and Cloud GPU self-hosting break-even." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/models/qwen-qwen3-5-9b.html" />
   <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Qwen: Qwen3.5-9B API Cost Calculator &amp; Self-Host GPU Break-Even (2026)" />
-  <meta name="twitter:description" content="Calculate exact Qwen: Qwen3.5-9B token costs ($0.142/1M input, $0.208/1M output), local VRAM requirements (5.9GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta name="twitter:description" content="Calculate exact Qwen: Qwen3.5-9B token costs ($0.17/1M input, $0.25/1M output), local VRAM requirements (5.9GB Q4), and Cloud GPU self-hosting break-even." />
   <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Qwen: Qwen3.5-9B API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Qwen: Qwen3.5-9B costs $0.142 per 1M input tokens and $0.208 per 1M output tokens, with a context window of 262,144 tokens."}}, {"@type": "Question", "name": "When is it cheaper to self-host Qwen: Qwen3.5-9B on a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Renting a dedicated NVIDIA RTX 4090 (24GB VRAM) costs roughly $0.39/hour ($9.36/day). If your workload exceeds 57.8M blended tokens per day, self-hosting Qwen: Qwen3.5-9B on Vast.ai GPU Marketplace can significantly reduce your monthly inference bill."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Qwen: Qwen3.5-9B API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Qwen: Qwen3.5-9B costs $0.17 per 1M input tokens and $0.25 per 1M output tokens, with a context window of 262,144 tokens."}}, {"@type": "Question", "name": "When is it cheaper to self-host Qwen: Qwen3.5-9B on a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Renting a dedicated NVIDIA RTX 4090 (24GB VRAM) costs roughly $0.39/hour ($9.36/day). If your workload exceeds 48.2M blended tokens per day, self-hosting Qwen: Qwen3.5-9B on Vast.ai GPU Marketplace can significantly reduce your monthly inference bill."}}]}</script>
+  
   <style>
     :root {
       --bg: #0b0f19;
@@ -274,8 +275,9 @@
       <a href="../index.html">API Cost Calculator</a>
       <a href="../vram-electricity-calculator.html">VRAM &amp; Electricity Calculator</a>
       <a href="../gpu-cloud-pricing.html">Cloud GPU Rates</a>
+      <a href="../benchmarks.html">2026 Benchmarks &amp; Guides</a>
       <a href="../index.html#comparisons">Model Comparisons</a>
-      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
+      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" data-track-cta="nav_runpod" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
     </nav>
   </div>
 </header>
@@ -340,11 +342,11 @@
       </div>
       <div class="stat-row">
         <span>Input Price (per 1M tokens)</span>
-        <strong>$0.142</strong>
+        <strong>$0.17</strong>
       </div>
       <div class="stat-row">
         <span>Output Price (per 1M tokens)</span>
-        <strong>$0.208</strong>
+        <strong>$0.25</strong>
       </div>
       <div class="stat-row">
         <span>Max Context Window</span>
@@ -356,7 +358,7 @@
       </div>
       <div class="stat-row">
         <span>API vs. GPU Daily Break-Even</span>
-        <strong>~57.8M tokens/day</strong>
+        <strong>~48.2M tokens/day</strong>
       </div>
 
       <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
@@ -428,8 +430,8 @@
 <script>
   const MODEL_NAME = "Qwen: Qwen3.5-9B";
   const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/models/qwen-qwen3-5-9b.html";
-  const IN_RATE = 0.142;
-  const OUT_RATE = 0.208;
+  const IN_RATE = 0.17;
+  const OUT_RATE = 0.25;
   const GPU_MONTHLY = 280.8;
   const IS_OPEN = true;
   function initFromParams() {
@@ -482,13 +484,15 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:02 UTC.</p>
-    <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:07 UTC.</p>
+    <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·
       <a href="../vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="../gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="../benchmarks.html">2026 Benchmarks &amp; Guides</a> ·
       <a href="../tokenbench.py">Terminal GPU Checker CLI</a> ·
+      <a href="https://github.com/stigla610/ai-cost-engine/issues/new?title=Sponsorship+%2F+Featured+GPU+Provider+Inquiry" target="_blank" rel="noopener">📣 Sponsor a GPU Tier / Advertise</a> ·
       <a href="../sitemap.xml">XML Sitemap</a>
     </p>
   </div>
@@ -502,6 +506,24 @@
     btn.textContent = '✅ Copied!';
     setTimeout(() => btn.textContent = orig, 1800);
   }
+  (function() {
+    document.addEventListener('click', function(e) {
+      const link = e.target && e.target.closest ? e.target.closest('a[rel*="sponsored"], a[data-track-cta]') : null;
+      if (!link) return;
+      const ctaId = link.getAttribute('data-track-cta') || link.hostname || 'affiliate';
+      try {
+        const store = JSON.parse(localStorage.getItem('tb_cta_clicks') || '{}');
+        store[ctaId] = (store[ctaId] || 0) + 1;
+        localStorage.setItem('tb_cta_clicks', JSON.stringify(store));
+      } catch (_) {}
+      if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+        window.goatcounter.count({ path: 'cta/' + ctaId, title: 'CTA: ' + ctaId, event: true });
+      }
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'affiliate_click', { event_category: 'outbound', event_label: ctaId });
+      }
+    });
+  })();
 </script>
 </body>
 </html>

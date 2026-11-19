@@ -19,6 +19,7 @@
   <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "TokenBench & GPU Cost Engine", "url": "https://stigla610.github.io/ai-cost-engine/index.html", "applicationCategory": "DeveloperApplication", "operatingSystem": "All", "description": "Compare live API token pricing across 300+ AI models (OpenAI, Anthropic, DeepSeek, Meta Llama, Qwen, Mistral, Google Gemini), simulate monthly workload bills, calculate LLM VRAM requirements, and compare Cloud GPU rental rates.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}</script>
+  
   <style>
     :root {
       --bg: #0b0f19;
@@ -274,15 +275,16 @@
       <a href="index.html">API Cost Calculator</a>
       <a href="vram-electricity-calculator.html">VRAM &amp; Electricity Calculator</a>
       <a href="gpu-cloud-pricing.html">Cloud GPU Rates</a>
+      <a href="benchmarks.html">2026 Benchmarks &amp; Guides</a>
       <a href="index.html#comparisons">Model Comparisons</a>
-      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
+      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" data-track-cta="nav_runpod" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
     </nav>
   </div>
 </header>
 
 <main class="container">
   <section class="hero">
-    <span class="badge">Auto-Updated Daily · 1,553+ Live AI Pricing &amp; VRAM Calculators</span>
+    <span class="badge">Auto-Updated Daily · 1,554+ Live AI Pricing &amp; VRAM Calculators</span>
     <h1>AI API Token Cost, VRAM &amp; Cloud GPU Break-Even Engine</h1>
     <p>Instantly compare per-million token costs across OpenAI, Anthropic, Google, DeepSeek, Qwen, Mistral, and Meta Llama models—and simulate your exact monthly bill across all 260 models at once.</p>
   </section>
@@ -1585,12 +1587,12 @@
           <td><a href="models/google-gemini-3-1-flash-lite.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="deepseek: deepseek v4 flash 0731 deepseek deepseek/deepseek-v4-flash-0731 proprietary api" data-open="0" data-in="0.062" data-out="0.3" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="8.22">
+        <tr class="model-row" data-name="deepseek: deepseek v4 flash 0731 deepseek deepseek/deepseek-v4-flash-0731 proprietary api" data-open="0" data-in="0.047" data-out="0.3" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="7.32">
           <td><a href="models/deepseek-deepseek-v4-flash-0731.html"><strong>DeepSeek: DeepSeek V4 Flash 0731</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4-flash-0731</small></td>
           <td>DeepSeek</td>
-          <td>$0.062</td>
+          <td>$0.047</td>
           <td>$0.30</td>
-          <td class="sim-cell"><strong>$8.22/mo</strong></td>
+          <td class="sim-cell"><strong>$7.32/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/deepseek-deepseek-v4-flash-0731-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~9.1 GB eq.)</a></td>
           <td><a href="models/deepseek-deepseek-v4-flash-0731.html">Calculator →</a></td>
@@ -2674,12 +2676,12 @@
           <td><a href="models/google-gemma-3-4b-it.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="qwen: qwen3.5-9b qwen qwen/qwen3.5-9b open-weight" data-open="1" data-in="0.142" data-out="0.208" data-ctx="262144" data-vram="5.9" data-gpu="280.8" data-monthly="11.64">
+        <tr class="model-row" data-name="qwen: qwen3.5-9b qwen qwen/qwen3.5-9b open-weight" data-open="1" data-in="0.17" data-out="0.25" data-ctx="262144" data-vram="5.9" data-gpu="280.8" data-monthly="13.95">
           <td><a href="models/qwen-qwen3-5-9b.html"><strong>Qwen: Qwen3.5-9B</strong></a><br/><small style="color:var(--muted)">qwen/qwen3.5-9b</small></td>
           <td>Qwen</td>
-          <td>$0.142</td>
-          <td>$0.208</td>
-          <td class="sim-cell"><strong>$11.64/mo</strong></td>
+          <td>$0.17</td>
+          <td>$0.25</td>
+          <td class="sim-cell"><strong>$13.95/mo</strong></td>
           <td>262,144</td>
           <td><a href="vram/qwen-qwen3-5-9b-vram-requirements.html"><strong>5.9 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/qwen-qwen3-5-9b.html">Calculator →</a></td>
@@ -3816,13 +3818,15 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:02 UTC.</p>
-    <p style="margin-top:8px;">Links to cloud GPU &amp; infrastructure providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:07 UTC.</p>
+    <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="index.html">All AI Models</a> ·
       <a href="vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
       <a href="gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="benchmarks.html">2026 Benchmarks &amp; Guides</a> ·
       <a href="tokenbench.py">Terminal GPU Checker CLI</a> ·
+      <a href="https://github.com/stigla610/ai-cost-engine/issues/new?title=Sponsorship+%2F+Featured+GPU+Provider+Inquiry" target="_blank" rel="noopener">📣 Sponsor a GPU Tier / Advertise</a> ·
       <a href="sitemap.xml">XML Sitemap</a>
     </p>
   </div>
@@ -3836,6 +3840,24 @@
     btn.textContent = '✅ Copied!';
     setTimeout(() => btn.textContent = orig, 1800);
   }
+  (function() {
+    document.addEventListener('click', function(e) {
+      const link = e.target && e.target.closest ? e.target.closest('a[rel*="sponsored"], a[data-track-cta]') : null;
+      if (!link) return;
+      const ctaId = link.getAttribute('data-track-cta') || link.hostname || 'affiliate';
+      try {
+        const store = JSON.parse(localStorage.getItem('tb_cta_clicks') || '{}');
+        store[ctaId] = (store[ctaId] || 0) + 1;
+        localStorage.setItem('tb_cta_clicks', JSON.stringify(store));
+      } catch (_) {}
+      if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+        window.goatcounter.count({ path: 'cta/' + ctaId, title: 'CTA: ' + ctaId, event: true });
+      }
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'affiliate_click', { event_category: 'outbound', event_label: ctaId });
+      }
+    });
+  })();
 </script>
 </body>
 </html>

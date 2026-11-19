@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 LLM API Cost, Cloud GPU Break-Even &amp; VRAM Scaling Benchmarks</title>
+  <meta name="description" content="Live 2026 benchmark reports: LLM API vs. Cloud GPU break-even volume, KV-cache VRAM scaling (8K–128K context), and cheapest models ranked by daily token volume." />
+  <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/benchmarks.html" />
+  <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
+  <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
+  <meta property="og:title" content="2026 LLM API Cost, Cloud GPU Break-Even &amp; VRAM Scaling Benchmarks" />
+  <meta property="og:description" content="Live 2026 benchmark reports: LLM API vs. Cloud GPU break-even volume, KV-cache VRAM scaling (8K–128K context), and cheapest models ranked by daily token volume." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/benchmarks.html" />
+  <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 LLM API Cost, Cloud GPU Break-Even &amp; VRAM Scaling Benchmarks" />
+  <meta name="twitter:description" content="Live 2026 benchmark reports: LLM API vs. Cloud GPU break-even volume, KV-cache VRAM scaling (8K–128K context), and cheapest models ranked by daily token volume." />
+  <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
+  <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "2026 LLM API Cost, Cloud GPU Break-Even & VRAM Scaling Benchmarks", "description": "Live 2026 benchmark reports: LLM API vs. Cloud GPU break-even volume, KV-cache VRAM scaling (8K\u2013128K context), and cheapest models ranked by daily token volume.", "url": "https://stigla610.github.io/ai-cost-engine/benchmarks.html", "dateModified": "2026-11-19 13:07 UTC", "author": {"@type": "Organization", "name": "TokenBench & GPU Cost Engine"}}</script>
+  
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #131b2e;
+      --card-hover: #1a2540;
+      --border: #23304f;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-green: #10b981;
+      --accent-purple: #818cf8;
+      --warn: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; width: 100%; }
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 15, 25, 0.92);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 16px; font-size: 0.92rem; align-items: center; flex-wrap: wrap; }
+    .btn-cta {
+      background: linear-gradient(135deg, #0284c7, #4f46e5);
+      color: #fff !important;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      display: inline-block;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      text-decoration: none !important;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-cta:hover { transform: translateY(-1px); opacity: 0.95; }
+    .btn-green {
+      background: linear-gradient(135deg, #059669, #10b981);
+    }
+    .btn-ghost {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(56, 189, 248, 0.18);
+    }
+    .share-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+    }
+    .hero { padding: 38px 0 24px; }
+    .hero h1 { font-size: 2.15rem; line-height: 1.25; margin-bottom: 12px; color: #fff; word-break: break-word; }
+    .hero p { color: var(--muted); font-size: 1.05rem; max-width: 840px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px; margin: 24px 0; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 18px; margin: 24px 0; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      min-width: 0;
+    }
+    .card h2, .card h3 { color: #fff; margin-bottom: 10px; }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .badge-green {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+    }
+    .badge-warn {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warn);
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.94rem;
+      flex-wrap: wrap;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .price-big { font-size: 1.75rem; font-weight: 800; color: var(--accent-green); }
+    .slider-group { margin-bottom: 16px; }
+    .slider-group label { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 6px; font-size: 0.92rem; gap: 8px; flex-wrap: wrap; }
+    input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 10px 14px;
+      background: #0b0f19;
+      border: 1px solid var(--border);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 12px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.91rem; min-width: 640px; }
+    th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 600; background: rgba(255,255,255,0.02); white-space: nowrap; }
+    th.sortable { cursor: pointer; user-select: none; transition: color 0.15s ease; }
+    th.sortable:hover { color: var(--accent); }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .filter-pill {
+      background: #0b0f19;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .filter-pill:hover, .filter-pill.active {
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(56, 189, 248, 0.15);
+    }
+    .affiliate-box {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(79, 70, 229, 0.12));
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .notice-box {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 0.92rem;
+      color: #fde68a;
+    }
+    .cmd-item { margin-bottom: 12px; }
+    .cmd-item:last-child { margin-bottom: 0; }
+    .cmd-label { font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+    .cmd-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #070a12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+    }
+    .cmd-box code {
+      color: #a5f3fc;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.84rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .cmd-copy { flex-shrink: 0; padding: 5px 10px; font-size: 0.78rem; }
+    footer {
+      margin-top: 60px;
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0 14px; }
+      .hero { padding: 24px 0 16px; }
+      .hero h1 { font-size: 1.55rem; }
+      .hero p { font-size: 0.95rem; }
+      .nav { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .nav-links { width: 100%; gap: 8px 12px; font-size: 0.84rem; }
+      .btn-cta { padding: 8px 12px; font-size: 0.84rem; white-space: normal; text-align: center; }
+      .card { padding: 16px; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 14px; }
+      table { min-width: 540px; font-size: 0.84rem; }
+      th, td { padding: 9px 8px; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a href="index.html" class="brand">⚡ Token<span>Bench</span></a>
+    <nav class="nav-links">
+      <a href="index.html">API Cost Calculator</a>
+      <a href="vram-electricity-calculator.html">VRAM &amp; Electricity Calculator</a>
+      <a href="gpu-cloud-pricing.html">Cloud GPU Rates</a>
+      <a href="benchmarks.html">2026 Benchmarks &amp; Guides</a>
+      <a href="index.html#comparisons">Model Comparisons</a>
+      <a href="https://runpod.io?ref=lyp3u1tj" target="_blank" rel="nofollow sponsored" data-track-cta="nav_runpod" class="btn-cta">Rent Cloud GPUs (From $0.20/hr)</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <span class="badge">Live Data Benchmarks · Updated 2026-11-19 13:07 UTC</span>
+    <h1>2026 LLM API Cost, Cloud GPU Break-Even &amp; VRAM Benchmarks</h1>
+    <p>Data-backed engineering guides generated directly from live API pricing across 450 models—showing exact GPU break-even thresholds, long-context KV-cache VRAM scaling, and lowest-cost inference tiers.</p>
+  </section>
+
+  <div class="card" id="breakeven" style="margin-bottom:24px;">
+    <span class="badge badge-green">Report 1</span>
+    <h2>LLM API vs. Dedicated Cloud GPU Break-Even (2026)</h2>
+    <p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">
+      An on-demand <strong>NVIDIA A100 80GB</strong> runs roughly <strong>$1,001/mo</strong> (24/7 @ $1.39/hr) and an <strong>H100 SXM</strong> runs <strong>$1,937/mo</strong> (@ $2.69/hr). Here is how live API bills compare at Startup (2.5M tokens/day), Scale-Up (12.5M/day), and Agent Fleet (60M/day) workloads:
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Type</th>
+            <th>In / Out per 1M</th>
+            <th>2.5M/day</th>
+            <th>12.5M/day</th>
+            <th>60M/day</th>
+            <th>GPU Break-Even</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><a href="models/openai-gpt-5.html"><strong>OpenAI: GPT-5</strong></a></td>
+          <td>Proprietary API</td>
+          <td>$1.25 / $10.00</td>
+          <td>$225.00/mo</td>
+          <td>$1,125.00/mo</td>
+          <td>$4,875.00/mo</td>
+          <td><strong>~16.7M/day</strong> (NVIDIA H100 SXM)</td>
+        </tr>
+        <tr>
+          <td><a href="models/anthropic-claude-sonnet-4-5.html"><strong>Anthropic: Claude Sonnet 4.5</strong></a></td>
+          <td>Proprietary API</td>
+          <td>$3.00 / $15.00</td>
+          <td>$405.00/mo</td>
+          <td>$2,025.00/mo</td>
+          <td>$9,000.00/mo</td>
+          <td><strong>~9.8M/day</strong> (NVIDIA H100 SXM)</td>
+        </tr>
+        <tr>
+          <td><a href="models/google-gemini-2-5-pro.html"><strong>Google: Gemini 2.5 Pro</strong></a></td>
+          <td>Proprietary API</td>
+          <td>$1.25 / $10.00</td>
+          <td>$225.00/mo</td>
+          <td>$1,125.00/mo</td>
+          <td>$4,875.00/mo</td>
+          <td><strong>~16.7M/day</strong> (NVIDIA H100 SXM)</td>
+        </tr>
+        <tr>
+          <td><a href="models/deepseek-deepseek-chat.html"><strong>DeepSeek: DeepSeek V3</strong></a></td>
+          <td>Open-Weight</td>
+          <td>$0.2574 / $1.0287</td>
+          <td>$30.87/mo</td>
+          <td>$154.37/mo</td>
+          <td>$694.71/mo</td>
+          <td><strong>~264.2M/day</strong> (2x NVIDIA H100)</td>
+        </tr>
+        <tr>
+          <td><a href="models/meta-llama-llama-4-maverick.html"><strong>Meta: Llama 4 Maverick</strong></a></td>
+          <td>Open-Weight</td>
+          <td>$0.35 / $1.00</td>
+          <td>$36.00/mo</td>
+          <td>$180.00/mo</td>
+          <td>$825.00/mo</td>
+          <td><strong>~236.9M/day</strong> (2x NVIDIA H100)</td>
+        </tr>
+        <tr>
+          <td><a href="models/qwen-qwen3-32b.html"><strong>Qwen: Qwen3 32B</strong></a></td>
+          <td>Open-Weight</td>
+          <td>$0.08 / $0.28</td>
+          <td>$9.00/mo</td>
+          <td>$45.00/mo</td>
+          <td>$204.00/mo</td>
+          <td><strong>~238.3M/day</strong> (NVIDIA A100)</td>
+        </tr>
+        <tr>
+          <td><a href="models/mistralai-mistral-large.html"><strong>Mistral Large</strong></a></td>
+          <td>Open-Weight</td>
+          <td>$2.00 / $6.00</td>
+          <td>$210.00/mo</td>
+          <td>$1,050.00/mo</td>
+          <td>$4,800.00/mo</td>
+          <td><strong>~40.4M/day</strong> (2x NVIDIA H100)</td>
+        </tr>
+        <tr>
+          <td><a href="models/x-ai-grok-4-20.html"><strong>SpaceXAI: Grok 4.20</strong></a></td>
+          <td>Proprietary API</td>
+          <td>$1.25 / $2.50</td>
+          <td>$112.50/mo</td>
+          <td>$562.50/mo</td>
+          <td>$2,625.00/mo</td>
+          <td><strong>~39.7M/day</strong> (NVIDIA H100 SXM)</td>
+        </tr>
+        <tr>
+          <td><a href="models/nvidia-nemotron-3-nano-30b-a3b.html"><strong>NVIDIA: Nemotron 3 Nano 30B A3B</strong></a></td>
+          <td>Open-Weight</td>
+          <td>$0.06 / $0.24</td>
+          <td>$7.20/mo</td>
+          <td>$36.00/mo</td>
+          <td>$162.00/mo</td>
+          <td><strong>~292.6M/day</strong> (NVIDIA A100)</td>
+        </tr>
+        <tr>
+          <td><a href="models/cohere-command-a.html"><strong>Cohere: Command A</strong></a></td>
+          <td>Open-Weight</td>
+          <td>$2.50 / $10.00</td>
+          <td>$300.00/mo</td>
+          <td>$1,500.00/mo</td>
+          <td>$6,750.00/mo</td>
+          <td><strong>~27.2M/day</strong> (2x NVIDIA H100)</td>
+        </tr>
+        <tr>
+          <td><a href="models/z-ai-glm-4-5.html"><strong>Z.ai: GLM 4.5</strong></a></td>
+          <td>Open-Weight</td>
+          <td>$0.60 / $2.20</td>
+          <td>$69.00/mo</td>
+          <td>$345.00/mo</td>
+          <td>$1,560.00/mo</td>
+          <td><strong>~119.6M/day</strong> (2x NVIDIA H100)</td>
+        </tr>
+        <tr>
+          <td><a href="models/moonshotai-kimi-k2.html"><strong>MoonshotAI: Kimi K2 0711</strong></a></td>
+          <td>Open-Weight</td>
+          <td>$0.57 / $2.30</td>
+          <td>$68.70/mo</td>
+          <td>$343.50/mo</td>
+          <td>$1,545.00/mo</td>
+          <td><strong>~118.6M/day</strong> (2x NVIDIA H100)</td>
+        </tr>
+        <tr>
+          <td><a href="models/meta-muse-ember.html"><strong>Meta: Muse Ember</strong></a></td>
+          <td>Proprietary API</td>
+          <td>$0.10 / $0.50</td>
+          <td>$13.50/mo</td>
+          <td>$67.50/mo</td>
+          <td>$300.00/mo</td>
+          <td><strong>~151.6M/day</strong> (NVIDIA A100)</td>
+        </tr>
+        <tr>
+          <td><a href="models/microsoft-phi-4.html"><strong>Microsoft: Phi 4</strong></a></td>
+          <td>Open-Weight</td>
+          <td>$0.07 / $0.14</td>
+          <td>$6.30/mo</td>
+          <td>$31.50/mo</td>
+          <td>$147.00/mo</td>
+          <td><strong>~102.9M/day</strong> (NVIDIA RTX 4090)</td>
+        </tr>
+        <tr>
+          <td><a href="models/aion-labs-aion-3-5.html"><strong>AionLabs: Aion 3.5</strong></a></td>
+          <td>Proprietary API</td>
+          <td>$3.00 / $6.00</td>
+          <td>$270.00/mo</td>
+          <td>$1,350.00/mo</td>
+          <td>$6,300.00/mo</td>
+          <td><strong>~8.6M/day</strong> (NVIDIA A100)</td>
+        </tr>
+        <tr>
+          <td><a href="models/openai-gpt-4o.html"><strong>OpenAI: GPT-4o</strong></a></td>
+          <td>Proprietary API</td>
+          <td>$2.50 / $10.00</td>
+          <td>$300.00/mo</td>
+          <td>$1,500.00/mo</td>
+          <td>$6,750.00/mo</td>
+          <td><strong>~7.0M/day</strong> (NVIDIA A100)</td>
+        </tr>
+        <tr>
+          <td><a href="models/anthropic-claude-opus-4-5.html"><strong>Anthropic: Claude Opus 4.5</strong></a></td>
+          <td>Proprietary API</td>
+          <td>$5.00 / $25.00</td>
+          <td>$675.00/mo</td>
+          <td>$3,375.00/mo</td>
+          <td>$15,000.00/mo</td>
+          <td><strong>~5.9M/day</strong> (NVIDIA H100 SXM)</td>
+        </tr>
+        <tr>
+          <td><a href="models/google-gemini-2-5-flash.html"><strong>Google: Gemini 2.5 Flash</strong></a></td>
+          <td>Proprietary API</td>
+          <td>$0.30 / $2.50</td>
+          <td>$55.50/mo</td>
+          <td>$277.50/mo</td>
+          <td>$1,200.00/mo</td>
+          <td><strong>~9.8M/day</strong> (NVIDIA RTX 4090)</td>
+        </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" id="vram-scaling" style="margin-bottom:24px;">
+    <span class="badge">Report 2</span>
+    <h2>Local LLM VRAM &amp; KV-Cache Scaling (8K vs. 32K vs. 128K Context)</h2>
+    <p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">
+      Many local LLM guides only measure model weights at 2K–4K context. Once you push context to 32K or 128K tokens, KV-cache memory grows significantly—for example, a 70B Q4 model jumps from <strong>45.5 GB</strong> (8K) to <strong>71.8 GB</strong> (128K). Check your own hardware using <a href="vram-electricity-calculator.html">the interactive VRAM &amp; Electricity Calculator</a>.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Model Parameter Tier</th>
+            <th>Q4 @ 8K Context</th>
+            <th>Q4 @ 32K Context</th>
+            <th>Q4 @ 128K Context</th>
+            <th>Q8 @ 8K Context</th>
+            <th>Q8 @ 32K Context</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><strong>8B (Llama 3.1 8B / Qwen3 8B)</strong></td>
+          <td>5.2 GB</td>
+          <td>5.8 GB</td>
+          <td><strong style="color:var(--accent-green)">8.2 GB</strong></td>
+          <td>9.2 GB</td>
+          <td>9.9 GB</td>
+        </tr>
+        <tr>
+          <td><strong>14B (Phi-4 / Qwen3 14B)</strong></td>
+          <td>9.1 GB</td>
+          <td>10.2 GB</td>
+          <td><strong style="color:var(--accent-green)">14.4 GB</strong></td>
+          <td>16.1 GB</td>
+          <td>17.4 GB</td>
+        </tr>
+        <tr>
+          <td><strong>32B (Qwen3 32B / Qwen2.5 Coder)</strong></td>
+          <td>20.8 GB</td>
+          <td>23.2 GB</td>
+          <td><strong style="color:var(--accent-green)">32.8 GB</strong></td>
+          <td>36.8 GB</td>
+          <td>39.7 GB</td>
+        </tr>
+        <tr>
+          <td><strong>70B (Llama 3.3 70B / Qwen 72B)</strong></td>
+          <td>45.5 GB</td>
+          <td>50.8 GB</td>
+          <td><strong style="color:var(--accent-green)">71.8 GB</strong></td>
+          <td>80.5 GB</td>
+          <td>86.8 GB</td>
+        </tr>
+        <tr>
+          <td><strong>123B (Mistral Large)</strong></td>
+          <td>80.0 GB</td>
+          <td>89.2 GB</td>
+          <td><strong style="color:var(--accent-green)">126.1 GB</strong></td>
+          <td>141.4 GB</td>
+          <td>152.5 GB</td>
+        </tr>
+        <tr>
+          <td><strong>235B MoE (Qwen3 235B-A22B)</strong></td>
+          <td>152.8 GB</td>
+          <td>170.4 GB</td>
+          <td><strong style="color:var(--accent-green)">240.9 GB</strong></td>
+          <td>270.2 GB</td>
+          <td>291.4 GB</td>
+        </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" id="cheapest">
+    <span class="badge badge-green">Report 3</span>
+    <h2>Cheapest Production LLMs Ranked (10M Tokens/Day Workload)</h2>
+    <p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">
+      Lowest blended-cost primary models (8M input + 2M output tokens/day = 300M tokens/month), ranked live:
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Model</th>
+            <th>Provider</th>
+            <th>Type</th>
+            <th>Input / 1M</th>
+            <th>Output / 1M</th>
+            <th>10M/day Monthly Bill</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>#1</td>
+          <td><a href="models/inclusionai-ling-3-0-tiny.html"><strong>inclusionAI: Ling 3.0 Tiny</strong></a></td>
+          <td>Inclusionai</td>
+          <td>Proprietary API</td>
+          <td>$0.015</td>
+          <td>$0.045</td>
+          <td><strong style="color:var(--accent-green)">$6.30/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#2</td>
+          <td><a href="models/meta-llama-llama-3-1-8b-instruct.html"><strong>Meta: Llama 3.1 8B Instruct</strong></a></td>
+          <td>Meta Llama</td>
+          <td>Open-Weight</td>
+          <td>$0.02</td>
+          <td>$0.04</td>
+          <td><strong style="color:var(--accent-green)">$7.20/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#3</td>
+          <td><a href="models/mistralai-mistral-nemo.html"><strong>Mistral: Mistral Nemo</strong></a></td>
+          <td>Mistral AI</td>
+          <td>Open-Weight</td>
+          <td>$0.029</td>
+          <td>$0.03</td>
+          <td><strong style="color:var(--accent-green)">$8.76/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#4</td>
+          <td><a href="models/inclusionai-ling-3-0-flash.html"><strong>inclusionAI: Ling 3.0 Flash</strong></a></td>
+          <td>Inclusionai</td>
+          <td>Proprietary API</td>
+          <td>$0.021</td>
+          <td>$0.063</td>
+          <td><strong style="color:var(--accent-green)">$8.82/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#5</td>
+          <td><a href="models/scaledown-extract.html"><strong>ScaleDown: Extract</strong></a></td>
+          <td>Scaledown</td>
+          <td>Proprietary API</td>
+          <td>$0.04</td>
+          <td>$0.00</td>
+          <td><strong style="color:var(--accent-green)">$9.60/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#6</td>
+          <td><a href="models/scaledown-summarize.html"><strong>ScaleDown: Summarize</strong></a></td>
+          <td>Scaledown</td>
+          <td>Proprietary API</td>
+          <td>$0.04</td>
+          <td>$0.00</td>
+          <td><strong style="color:var(--accent-green)">$9.60/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#7</td>
+          <td><a href="models/openai-gpt-oss-20b.html"><strong>OpenAI: gpt-oss-20b</strong></a></td>
+          <td>OpenAI</td>
+          <td>Open-Weight</td>
+          <td>$0.018</td>
+          <td>$0.09</td>
+          <td><strong style="color:var(--accent-green)">$9.72/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#8</td>
+          <td><a href="models/nex-agi-nex-n2-5-mini.html"><strong>Nex AGI: Nex-N2.5-Mini</strong></a></td>
+          <td>Nex Agi</td>
+          <td>Proprietary API</td>
+          <td>$0.025</td>
+          <td>$0.10</td>
+          <td><strong style="color:var(--accent-green)">$12.00/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#9</td>
+          <td><a href="models/sao10k-l3-lunaris-8b.html"><strong>Sao10K: Llama 3 8B Lunaris</strong></a></td>
+          <td>Sao10K</td>
+          <td>Open-Weight</td>
+          <td>$0.04</td>
+          <td>$0.05</td>
+          <td><strong style="color:var(--accent-green)">$12.60/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#10</td>
+          <td><a href="models/qwen-qwen3-7-flash.html"><strong>Qwen: Qwen3.7 Flash</strong></a></td>
+          <td>Qwen</td>
+          <td>Proprietary API</td>
+          <td>$0.03</td>
+          <td>$0.13</td>
+          <td><strong style="color:var(--accent-green)">$15.00/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#11</td>
+          <td><a href="models/inference-net-schematron-v2-turbo.html"><strong>Inference.net: Schematron V2 Turbo</strong></a></td>
+          <td>Inference Net</td>
+          <td>Proprietary API</td>
+          <td>$0.03</td>
+          <td>$0.15</td>
+          <td><strong style="color:var(--accent-green)">$16.20/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#12</td>
+          <td><a href="models/amazon-nova-micro-v1.html"><strong>Amazon: Nova Micro 1.0</strong></a></td>
+          <td>Amazon</td>
+          <td>Proprietary API</td>
+          <td>$0.035</td>
+          <td>$0.14</td>
+          <td><strong style="color:var(--accent-green)">$16.80/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#13</td>
+          <td><a href="models/mistralai-mistral-small-24b-instruct-2501.html"><strong>Mistral: Mistral Small 3</strong></a></td>
+          <td>Mistral AI</td>
+          <td>Open-Weight</td>
+          <td>$0.05</td>
+          <td>$0.08</td>
+          <td><strong style="color:var(--accent-green)">$16.80/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#14</td>
+          <td><a href="models/tencent-hy4-flash.html"><strong>Tencent: Hy4 flash</strong></a></td>
+          <td>Tencent</td>
+          <td>Proprietary API</td>
+          <td>$0.035</td>
+          <td>$0.1405</td>
+          <td><strong style="color:var(--accent-green)">$16.83/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#15</td>
+          <td><a href="models/cohere-command-r7b-12-2024.html"><strong>Cohere: Command R7B (12-2024)</strong></a></td>
+          <td>Cohere</td>
+          <td>Open-Weight</td>
+          <td>$0.0375</td>
+          <td>$0.15</td>
+          <td><strong style="color:var(--accent-green)">$18.00/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#16</td>
+          <td><a href="models/google-gemma-3-4b-it.html"><strong>Google: Gemma 3 4B</strong></a></td>
+          <td>Google</td>
+          <td>Open-Weight</td>
+          <td>$0.05</td>
+          <td>$0.10</td>
+          <td><strong style="color:var(--accent-green)">$18.00/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#17</td>
+          <td><a href="models/meta-llama-llama-3-2-1b-instruct.html"><strong>Meta: Llama 3.2 1B Instruct</strong></a></td>
+          <td>Meta Llama</td>
+          <td>Open-Weight</td>
+          <td>$0.027</td>
+          <td>$0.201</td>
+          <td><strong style="color:var(--accent-green)">$18.54/mo</strong></td>
+        </tr>
+        <tr>
+          <td>#18</td>
+          <td><a href="models/inclusionai-ling-3-1-flash.html"><strong>inclusionAI: Ling 3.1 Flash</strong></a></td>
+          <td>Inclusionai</td>
+          <td>Proprietary API</td>
+          <td>$0.045</td>
+          <td>$0.135</td>
+          <td><strong style="color:var(--accent-green)">$18.90/mo</strong></td>
+        </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  
+  <div class="card" style="margin:24px 0;border-color:rgba(16,185,129,0.4);">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:6px;">
+      <h2 style="margin-bottom:0;">🖥️ Check Your Local GPU in Terminal (Zero-Install CLI)</h2>
+      <span class="badge badge-green" style="margin-bottom:0;">Zero Dependencies · Python 3</span>
+    </div>
+    <p style="color:var(--muted);font-size:0.9rem;margin-bottom:14px;">Auto-detects your NVIDIA GPU (<code>nvidia-smi</code>) or Apple Silicon Unified Memory and prints which Llama, Qwen, DeepSeek, Gemma, and Mistral models fit—with exact <code>ollama run</code> and <code>vllm serve</code> commands. Supports <code>--vram 24 --ctx 32768 --live</code>.</p>
+    <div class="grid-2" style="margin:0;gap:14px;">
+      
+      <div class="cmd-item">
+        <div class="cmd-label">Linux / macOS (Terminal)</div>
+        <div class="cmd-box">
+          <code>curl -sL https://stigla610.github.io/ai-cost-engine/tokenbench.py | python3 -</code>
+          <button type="button" class="btn-ghost cmd-copy" data-cmd="curl -sL https://stigla610.github.io/ai-cost-engine/tokenbench.py | python3 -" onclick="copyCmd(this)">📋 Copy</button>
+        </div>
+      </div>
+      
+      <div class="cmd-item">
+        <div class="cmd-label">Windows (PowerShell)</div>
+        <div class="cmd-box">
+          <code>irm https://stigla610.github.io/ai-cost-engine/tokenbench.py | python -</code>
+          <button type="button" class="btn-ghost cmd-copy" data-cmd="irm https://stigla610.github.io/ai-cost-engine/tokenbench.py | python -" onclick="copyCmd(this)">📋 Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="container">
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:07 UTC.</p>
+    <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
+    <p style="margin-top:8px;">
+      <a href="index.html">All AI Models</a> ·
+      <a href="vram-electricity-calculator.html">VRAM &amp; Local GPU Electricity Calculator</a> ·
+      <a href="gpu-cloud-pricing.html">Cloud GPU Price Directory</a> ·
+      <a href="benchmarks.html">2026 Benchmarks &amp; Guides</a> ·
+      <a href="tokenbench.py">Terminal GPU Checker CLI</a> ·
+      <a href="https://github.com/stigla610/ai-cost-engine/issues/new?title=Sponsorship+%2F+Featured+GPU+Provider+Inquiry" target="_blank" rel="noopener">📣 Sponsor a GPU Tier / Advertise</a> ·
+      <a href="sitemap.xml">XML Sitemap</a>
+    </p>
+  </div>
+</footer>
+<script>
+  function copyCmd(btn) {
+    const cmd = btn.getAttribute('data-cmd') || '';
+    if (!cmd) return;
+    navigator.clipboard.writeText(cmd);
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = orig, 1800);
+  }
+  (function() {
+    document.addEventListener('click', function(e) {
+      const link = e.target && e.target.closest ? e.target.closest('a[rel*="sponsored"], a[data-track-cta]') : null;
+      if (!link) return;
+      const ctaId = link.getAttribute('data-track-cta') || link.hostname || 'affiliate';
+      try {
+        const store = JSON.parse(localStorage.getItem('tb_cta_clicks') || '{}');
+        store[ctaId] = (store[ctaId] || 0) + 1;
+        localStorage.setItem('tb_cta_clicks', JSON.stringify(store));
+      } catch (_) {}
+      if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+        window.goatcounter.count({ path: 'cta/' + ctaId, title: 'CTA: ' + ctaId, event: true });
+      }
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'affiliate_click', { event_category: 'outbound', event_label: ctaId });
+      }
+    });
+  })();
+</script>
+</body>
+</html>
