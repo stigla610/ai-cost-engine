@@ -295,11 +295,12 @@
         <span class="badge badge-green" style="margin-bottom:4px;">Live Batch Workload Simulator</span>
         <h2 style="margin-bottom:2px;">Simulate Your Monthly Bill Across All 260 Models</h2>
       </div>
-      <div class="filter-bar" style="margin-bottom:0;">
-        <button type="button" class="filter-pill" onclick="setWorkloadPreset(200000, 50000)">Indie App (250K/day)</button>
-        <button type="button" class="filter-pill active" onclick="setWorkloadPreset(2000000, 500000)">Startup (2.5M/day)</button>
-        <button type="button" class="filter-pill" onclick="setWorkloadPreset(10000000, 2500000)">Scale-Up (12.5M/day)</button>
-        <button type="button" class="filter-pill" onclick="setWorkloadPreset(50000000, 10000000)">Agent Fleet (60M/day)</button>
+      <div class="filter-bar" style="margin-bottom:0;" id="workloadPresets">
+        <button type="button" class="filter-pill" onclick="setWorkloadPreset(200000, 50000, this)">Indie App (250K/day)</button>
+        <button type="button" class="filter-pill active" onclick="setWorkloadPreset(2000000, 500000, this)">Startup (2.5M/day)</button>
+        <button type="button" class="filter-pill" onclick="setWorkloadPreset(10000000, 2500000, this)">Scale-Up (12.5M/day)</button>
+        <button type="button" class="filter-pill" onclick="setWorkloadPreset(50000000, 10000000, this)">Agent Fleet (60M/day)</button>
+        <button type="button" class="filter-pill" onclick="setWorkloadPreset(5000000, 5000000, this)">Output-Heavy 50/50 (10M/day)</button>
       </div>
     </div>
     <div class="grid-2" style="margin:12px 0 6px;">
@@ -313,7 +314,7 @@
       </div>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:8px;">
-      <small style="color:var(--muted);">💡 Tip: Click any column header below (e.g. <strong>Est. Monthly</strong> or <strong>Input / 1M</strong>) to sort all models from cheapest to most expensive.</small>
+      <small style="color:var(--muted);">💡 <span id="simMixLabel" style="color:var(--text);font-weight:600;">Current Mix: 80% input / 20% output</span> · Click any column header below (e.g. <strong>Est. Monthly</strong> or <strong>Input / 1M</strong>) to sort all models from cheapest to most expensive.</small>
       <button type="button" class="btn-ghost" onclick="copyIndexLink(this)">🔗 Copy Shareable Benchmark Link</button>
     </div>
   </div>
@@ -465,8 +466,8 @@
           <td><a href="models/mistralai-mistral-large.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="spacexai: grok 4.20 xai x-ai/grok-4.20 proprietary api" data-open="0" data-in="1.25" data-out="2.5" data-ctx="2000000" data-vram="45.5" data-gpu="1936.8" data-monthly="112.50">
-          <td><a href="models/x-ai-grok-4-20.html"><strong>SpaceXAI: Grok 4.20</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.20</small></td>
+        <tr class="model-row" data-name="spacexsi: grok 4.20 xai x-ai/grok-4.20 proprietary api" data-open="0" data-in="1.25" data-out="2.5" data-ctx="2000000" data-vram="45.5" data-gpu="1936.8" data-monthly="112.50">
+          <td><a href="models/x-ai-grok-4-20.html"><strong>SpaceXSI: Grok 4.20</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.20</small></td>
           <td>xAI</td>
           <td>$1.25</td>
           <td>$2.50</td>
@@ -630,8 +631,8 @@
           <td><a href="models/mistralai-mistral-small-3-2-24b-instruct.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="spacexai: grok 4.20 multi-agent xai x-ai/grok-4.20-multi-agent proprietary api" data-open="0" data-in="1.25" data-out="2.5" data-ctx="2000000" data-vram="45.5" data-gpu="1936.8" data-monthly="112.50">
-          <td><a href="models/x-ai-grok-4-20-multi-agent.html"><strong>SpaceXAI: Grok 4.20 Multi-Agent</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.20-multi-agent</small></td>
+        <tr class="model-row" data-name="spacexsi: grok 4.20 multi-agent xai x-ai/grok-4.20-multi-agent proprietary api" data-open="0" data-in="1.25" data-out="2.5" data-ctx="2000000" data-vram="45.5" data-gpu="1936.8" data-monthly="112.50">
+          <td><a href="models/x-ai-grok-4-20-multi-agent.html"><strong>SpaceXSI: Grok 4.20 Multi-Agent</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.20-multi-agent</small></td>
           <td>xAI</td>
           <td>$1.25</td>
           <td>$2.50</td>
@@ -784,8 +785,8 @@
           <td><a href="models/mistralai-codestral-2508.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="spacexai: grok 4.3 xai x-ai/grok-4.3 proprietary api" data-open="0" data-in="1.25" data-out="2.5" data-ctx="1000000" data-vram="45.5" data-gpu="1936.8" data-monthly="112.50">
-          <td><a href="models/x-ai-grok-4-3.html"><strong>SpaceXAI: Grok 4.3</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.3</small></td>
+        <tr class="model-row" data-name="spacexsi: grok 4.3 xai x-ai/grok-4.3 proprietary api" data-open="0" data-in="1.25" data-out="2.5" data-ctx="1000000" data-vram="45.5" data-gpu="1936.8" data-monthly="112.50">
+          <td><a href="models/x-ai-grok-4-3.html"><strong>SpaceXSI: Grok 4.3</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.3</small></td>
           <td>xAI</td>
           <td>$1.25</td>
           <td>$2.50</td>
@@ -883,12 +884,12 @@
           <td><a href="models/anthropic-claude-sonnet-4-6.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="google: gemma 3 27b google google/gemma-3-27b-it open-weight" data-open="1" data-in="0.08" data-out="0.16" data-ctx="131072" data-vram="17.6" data-gpu="1000.8" data-monthly="7.20">
+        <tr class="model-row" data-name="google: gemma 3 27b google google/gemma-3-27b-it open-weight" data-open="1" data-in="0.08" data-out="0.45" data-ctx="131072" data-vram="17.6" data-gpu="1000.8" data-monthly="11.55">
           <td><a href="models/google-gemma-3-27b-it.html"><strong>Google: Gemma 3 27B</strong></a><br/><small style="color:var(--muted)">google/gemma-3-27b-it</small></td>
           <td>Google</td>
           <td>$0.08</td>
-          <td>$0.16</td>
-          <td class="sim-cell"><strong>$7.20/mo</strong></td>
+          <td>$0.45</td>
+          <td class="sim-cell"><strong>$11.55/mo</strong></td>
           <td>131,072</td>
           <td><a href="vram/google-gemma-3-27b-it-vram-requirements.html"><strong>17.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/google-gemma-3-27b-it.html">Calculator →</a></td>
@@ -938,8 +939,8 @@
           <td><a href="models/mistralai-mixtral-8x22b-instruct.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="spacexai: grok 4.5 xai x-ai/grok-4.5 proprietary api" data-open="0" data-in="2.0" data-out="6.0" data-ctx="500000" data-vram="45.5" data-gpu="1936.8" data-monthly="210.00">
-          <td><a href="models/x-ai-grok-4-5.html"><strong>SpaceXAI: Grok 4.5</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.5</small></td>
+        <tr class="model-row" data-name="spacexsi: grok 4.5 xai x-ai/grok-4.5 proprietary api" data-open="0" data-in="2.0" data-out="6.0" data-ctx="500000" data-vram="45.5" data-gpu="1936.8" data-monthly="210.00">
+          <td><a href="models/x-ai-grok-4-5.html"><strong>SpaceXSI: Grok 4.5</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.5</small></td>
           <td>xAI</td>
           <td>$2.00</td>
           <td>$6.00</td>
@@ -1048,12 +1049,12 @@
           <td><a href="models/google-gemma-3-12b-it.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="deepseek: deepseek v3 0324 deepseek deepseek/deepseek-chat-v3-0324 open-weight" data-open="1" data-in="0.29" data-out="1.14" data-ctx="163840" data-vram="436.2" data-gpu="3873.6" data-monthly="34.50">
+        <tr class="model-row" data-name="deepseek: deepseek v3 0324 deepseek deepseek/deepseek-chat-v3-0324 open-weight" data-open="1" data-in="0.25" data-out="1.0" data-ctx="163840" data-vram="436.2" data-gpu="3873.6" data-monthly="30.00">
           <td><a href="models/deepseek-deepseek-chat-v3-0324.html"><strong>DeepSeek: DeepSeek V3 0324</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-chat-v3-0324</small></td>
           <td>DeepSeek</td>
-          <td>$0.29</td>
-          <td>$1.14</td>
-          <td class="sim-cell"><strong>$34.50/mo</strong></td>
+          <td>$0.25</td>
+          <td>$1.00</td>
+          <td class="sim-cell"><strong>$30.00/mo</strong></td>
           <td>163,840</td>
           <td><a href="vram/deepseek-deepseek-chat-v3-0324-vram-requirements.html"><strong>436.2 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/deepseek-deepseek-chat-v3-0324.html">Calculator →</a></td>
@@ -1092,8 +1093,8 @@
           <td><a href="models/mistralai-mistral-large-2407.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="spacexai: grok 4.6 xai x-ai/grok-4.6 proprietary api" data-open="0" data-in="2.0" data-out="6.0" data-ctx="500000" data-vram="45.5" data-gpu="1936.8" data-monthly="210.00">
-          <td><a href="models/x-ai-grok-4-6.html"><strong>SpaceXAI: Grok 4.6</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.6</small></td>
+        <tr class="model-row" data-name="spacexsi: grok 4.6 xai x-ai/grok-4.6 proprietary api" data-open="0" data-in="2.0" data-out="6.0" data-ctx="500000" data-vram="45.5" data-gpu="1936.8" data-monthly="210.00">
+          <td><a href="models/x-ai-grok-4-6.html"><strong>SpaceXSI: Grok 4.6</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.6</small></td>
           <td>xAI</td>
           <td>$2.00</td>
           <td>$6.00</td>
@@ -1169,12 +1170,12 @@
           <td><a href="models/aion-labs-aion-3-0-mini.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="openai: gpt-oss-120b openai openai/gpt-oss-120b open-weight" data-open="1" data-in="0.15" data-out="0.6" data-ctx="131072" data-vram="78.0" data-gpu="3873.6" data-monthly="18.00">
+        <tr class="model-row" data-name="openai: gpt-oss-120b openai openai/gpt-oss-120b open-weight" data-open="1" data-in="0.09" data-out="0.36" data-ctx="131072" data-vram="78.0" data-gpu="3873.6" data-monthly="10.80">
           <td><a href="models/openai-gpt-oss-120b.html"><strong>OpenAI: gpt-oss-120b</strong></a><br/><small style="color:var(--muted)">openai/gpt-oss-120b</small></td>
           <td>OpenAI</td>
-          <td>$0.15</td>
-          <td>$0.60</td>
-          <td class="sim-cell"><strong>$18.00/mo</strong></td>
+          <td>$0.09</td>
+          <td>$0.36</td>
+          <td class="sim-cell"><strong>$10.80/mo</strong></td>
           <td>131,072</td>
           <td><a href="vram/openai-gpt-oss-120b-vram-requirements.html"><strong>78.0 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/openai-gpt-oss-120b.html">Calculator →</a></td>
@@ -1213,15 +1214,15 @@
           <td><a href="models/deepseek-deepseek-v3-1-terminus.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="meta: llama 3.2 1b instruct meta llama meta-llama/llama-3.2-1b-instruct open-weight" data-open="1" data-in="0.027" data-out="0.201" data-ctx="60000" data-vram="0.7" data-gpu="280.8" data-monthly="4.63">
-          <td><a href="models/meta-llama-llama-3-2-1b-instruct.html"><strong>Meta: Llama 3.2 1B Instruct</strong></a><br/><small style="color:var(--muted)">meta-llama/llama-3.2-1b-instruct</small></td>
+        <tr class="model-row" data-name="meta: llama 3.2 3b instruct meta llama meta-llama/llama-3.2-3b-instruct open-weight" data-open="1" data-in="0.05" data-out="0.33" data-ctx="131072" data-vram="2.0" data-gpu="280.8" data-monthly="7.95">
+          <td><a href="models/meta-llama-llama-3-2-3b-instruct.html"><strong>Meta: Llama 3.2 3B Instruct</strong></a><br/><small style="color:var(--muted)">meta-llama/llama-3.2-3b-instruct</small></td>
           <td>Meta Llama</td>
-          <td>$0.027</td>
-          <td>$0.201</td>
-          <td class="sim-cell"><strong>$4.63/mo</strong></td>
-          <td>60,000</td>
-          <td><a href="vram/meta-llama-llama-3-2-1b-instruct-vram-requirements.html"><strong>0.7 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
-          <td><a href="models/meta-llama-llama-3-2-1b-instruct.html">Calculator →</a></td>
+          <td>$0.05</td>
+          <td>$0.33</td>
+          <td class="sim-cell"><strong>$7.95/mo</strong></td>
+          <td>131,072</td>
+          <td><a href="vram/meta-llama-llama-3-2-3b-instruct-vram-requirements.html"><strong>2.0 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
+          <td><a href="models/meta-llama-llama-3-2-3b-instruct.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="qwen: qwen-plus qwen qwen/qwen-plus proprietary api" data-open="0" data-in="0.26" data-out="0.78" data-ctx="1000000" data-vram="20.8" data-gpu="1000.8" data-monthly="27.30">
@@ -1246,8 +1247,8 @@
           <td><a href="models/mistralai-devstral-2512.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="spacexai: grok 4.7 xai x-ai/grok-4.7 proprietary api" data-open="0" data-in="2.0" data-out="6.0" data-ctx="500000" data-vram="45.5" data-gpu="1936.8" data-monthly="210.00">
-          <td><a href="models/x-ai-grok-4-7.html"><strong>SpaceXAI: Grok 4.7</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.7</small></td>
+        <tr class="model-row" data-name="spacexsi: grok 4.7 xai x-ai/grok-4.7 proprietary api" data-open="0" data-in="2.0" data-out="6.0" data-ctx="500000" data-vram="45.5" data-gpu="1936.8" data-monthly="210.00">
+          <td><a href="models/x-ai-grok-4-7.html"><strong>SpaceXSI: Grok 4.7</strong></a><br/><small style="color:var(--muted)">x-ai/grok-4.7</small></td>
           <td>xAI</td>
           <td>$2.00</td>
           <td>$6.00</td>
@@ -1257,34 +1258,34 @@
           <td><a href="models/x-ai-grok-4-7.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="nvidia: nemotron 3.5 super vl nvidia nvidia/nemotron-3.5-super-vl open-weight" data-open="1" data-in="0.15" data-out="0.5" data-ctx="1048576" data-vram="20.8" data-gpu="1000.8" data-monthly="16.50">
+        <tr class="model-row" data-name="nvidia: nemotron 3.5 super vl nvidia nvidia/nemotron-3.5-super-vl open-weight" data-open="1" data-in="0.15" data-out="0.47" data-ctx="1048576" data-vram="20.8" data-gpu="1000.8" data-monthly="16.05">
           <td><a href="models/nvidia-nemotron-3-5-super-vl.html"><strong>NVIDIA: Nemotron 3.5 Super VL</strong></a><br/><small style="color:var(--muted)">nvidia/nemotron-3.5-super-vl</small></td>
           <td>NVIDIA</td>
           <td>$0.15</td>
-          <td>$0.50</td>
-          <td class="sim-cell"><strong>$16.50/mo</strong></td>
+          <td>$0.47</td>
+          <td class="sim-cell"><strong>$16.05/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/nvidia-nemotron-3-5-super-vl-vram-requirements.html"><strong>20.8 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/nvidia-nemotron-3-5-super-vl.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="z.ai: glm 4.7 z.ai (glm) z-ai/glm-4.7 open-weight" data-open="1" data-in="0.4" data-out="1.75" data-ctx="204800" data-vram="20.8" data-gpu="1000.8" data-monthly="50.25">
+        <tr class="model-row" data-name="z.ai: glm 4.7 z.ai (glm) z-ai/glm-4.7 open-weight" data-open="1" data-in="0.6" data-out="2.2" data-ctx="204800" data-vram="20.8" data-gpu="1000.8" data-monthly="69.00">
           <td><a href="models/z-ai-glm-4-7.html"><strong>Z.ai: GLM 4.7</strong></a><br/><small style="color:var(--muted)">z-ai/glm-4.7</small></td>
           <td>Z.AI (GLM)</td>
-          <td>$0.40</td>
-          <td>$1.75</td>
-          <td class="sim-cell"><strong>$50.25/mo</strong></td>
+          <td>$0.60</td>
+          <td>$2.20</td>
+          <td class="sim-cell"><strong>$69.00/mo</strong></td>
           <td>204,800</td>
           <td><a href="vram/z-ai-glm-4-7-vram-requirements.html"><strong>20.8 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/z-ai-glm-4-7.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="moonshotai: kimi k2.7 code moonshot ai moonshotai/kimi-k2.7-code open-weight" data-open="1" data-in="0.66" data-out="3.5" data-ctx="262144" data-vram="650.0" data-gpu="3873.6" data-monthly="92.10">
+        <tr class="model-row" data-name="moonshotai: kimi k2.7 code moonshot ai moonshotai/kimi-k2.7-code open-weight" data-open="1" data-in="0.6" data-out="3.0" data-ctx="262144" data-vram="650.0" data-gpu="3873.6" data-monthly="81.00">
           <td><a href="models/moonshotai-kimi-k2-7-code.html"><strong>MoonshotAI: Kimi K2.7 Code</strong></a><br/><small style="color:var(--muted)">moonshotai/kimi-k2.7-code</small></td>
           <td>Moonshot AI</td>
-          <td>$0.66</td>
-          <td>$3.50</td>
-          <td class="sim-cell"><strong>$92.10/mo</strong></td>
+          <td>$0.60</td>
+          <td>$3.00</td>
+          <td class="sim-cell"><strong>$81.00/mo</strong></td>
           <td>262,144</td>
           <td><a href="vram/moonshotai-kimi-k2-7-code-vram-requirements.html"><strong>650.0 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/moonshotai-kimi-k2-7-code.html">Calculator →</a></td>
@@ -1356,17 +1357,6 @@
           <td><a href="models/deepseek-deepseek-v3-2-exp.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="meta: llama 3.2 3b instruct meta llama meta-llama/llama-3.2-3b-instruct open-weight" data-open="1" data-in="0.0509" data-out="0.335" data-ctx="131072" data-vram="2.0" data-gpu="280.8" data-monthly="8.08">
-          <td><a href="models/meta-llama-llama-3-2-3b-instruct.html"><strong>Meta: Llama 3.2 3B Instruct</strong></a><br/><small style="color:var(--muted)">meta-llama/llama-3.2-3b-instruct</small></td>
-          <td>Meta Llama</td>
-          <td>$0.0509</td>
-          <td>$0.335</td>
-          <td class="sim-cell"><strong>$8.08/mo</strong></td>
-          <td>131,072</td>
-          <td><a href="vram/meta-llama-llama-3-2-3b-instruct-vram-requirements.html"><strong>2.0 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
-          <td><a href="models/meta-llama-llama-3-2-3b-instruct.html">Calculator →</a></td>
-        </tr>
-        
         <tr class="model-row" data-name="qwen: qwen2.5 vl 72b instruct qwen qwen/qwen2.5-vl-72b-instruct open-weight" data-open="1" data-in="0.8" data-out="1.0" data-ctx="128000" data-vram="46.8" data-gpu="1936.8" data-monthly="63.00">
           <td><a href="models/qwen-qwen2-5-vl-72b-instruct.html"><strong>Qwen: Qwen2.5 VL 72B Instruct</strong></a><br/><small style="color:var(--muted)">qwen/qwen2.5-vl-72b-instruct</small></td>
           <td>Qwen</td>
@@ -1387,17 +1377,6 @@
           <td>262,144</td>
           <td><a href="vram/mistralai-ministral-14b-2512-vram-requirements.html"><strong>9.1 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/mistralai-ministral-14b-2512.html">Calculator →</a></td>
-        </tr>
-        
-        <tr class="model-row" data-name="spacexai: grok build 0.1 xai x-ai/grok-build-0.1 proprietary api" data-open="0" data-in="1.0" data-out="2.0" data-ctx="256000" data-vram="45.5" data-gpu="1936.8" data-monthly="90.00">
-          <td><a href="models/x-ai-grok-build-0-1.html"><strong>SpaceXAI: Grok Build 0.1</strong></a><br/><small style="color:var(--muted)">x-ai/grok-build-0.1</small></td>
-          <td>xAI</td>
-          <td>$1.00</td>
-          <td>$2.00</td>
-          <td class="sim-cell"><strong>$90.00/mo</strong></td>
-          <td>256,000</td>
-          <td><a href="vram/x-ai-grok-build-0-1-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~45.5 GB eq.)</a></td>
-          <td><a href="models/x-ai-grok-build-0-1.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="z.ai: glm 4.7 flash z.ai (glm) z-ai/glm-4.7-flash open-weight" data-open="1" data-in="0.0605" data-out="0.4" data-ctx="200000" data-vram="5.2" data-gpu="280.8" data-monthly="9.63">
@@ -1521,12 +1500,12 @@
           <td><a href="models/z-ai-glm-5.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="moonshotai: kimi k3.1 pro moonshot ai moonshotai/kimi-k3.1-pro open-weight" data-open="1" data-in="0.253" data-out="8.8" data-ctx="1048576" data-vram="45.5" data-gpu="1936.8" data-monthly="147.18">
+        <tr class="model-row" data-name="moonshotai: kimi k3.1 pro moonshot ai moonshotai/kimi-k3.1-pro open-weight" data-open="1" data-in="0.2403" data-out="8.4023" data-ctx="1048576" data-vram="45.5" data-gpu="1936.8" data-monthly="140.45">
           <td><a href="models/moonshotai-kimi-k3-1-pro.html"><strong>MoonshotAI: Kimi K3.1 Pro</strong></a><br/><small style="color:var(--muted)">moonshotai/kimi-k3.1-pro</small></td>
           <td>Moonshot AI</td>
-          <td>$0.253</td>
-          <td>$8.80</td>
-          <td class="sim-cell"><strong>$147.18/mo</strong></td>
+          <td>$0.2403</td>
+          <td>$8.4023</td>
+          <td class="sim-cell"><strong>$140.45/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/moonshotai-kimi-k3-1-pro-vram-requirements.html"><strong>45.5 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/moonshotai-kimi-k3-1-pro.html">Calculator →</a></td>
@@ -1587,12 +1566,12 @@
           <td><a href="models/google-gemini-3-1-flash-lite.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="deepseek: deepseek v4 flash 0731 deepseek deepseek/deepseek-v4-flash-0731 proprietary api" data-open="0" data-in="0.062" data-out="0.3" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="8.22">
+        <tr class="model-row" data-name="deepseek: deepseek v4 flash 0731 deepseek deepseek/deepseek-v4-flash-0731 proprietary api" data-open="0" data-in="0.0443" data-out="0.3" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="7.16">
           <td><a href="models/deepseek-deepseek-v4-flash-0731.html"><strong>DeepSeek: DeepSeek V4 Flash 0731</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4-flash-0731</small></td>
           <td>DeepSeek</td>
-          <td>$0.062</td>
+          <td>$0.0443</td>
           <td>$0.30</td>
-          <td class="sim-cell"><strong>$8.22/mo</strong></td>
+          <td class="sim-cell"><strong>$7.16/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/deepseek-deepseek-v4-flash-0731-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~9.1 GB eq.)</a></td>
           <td><a href="models/deepseek-deepseek-v4-flash-0731.html">Calculator →</a></td>
@@ -1686,12 +1665,12 @@
           <td><a href="models/google-gemini-3-1-flash-lite-preview.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="deepseek: deepseek v4 flash vision exp deepseek deepseek/deepseek-v4-flash-vision-exp proprietary api" data-open="0" data-in="0.44" data-out="1.32" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="46.20">
+        <tr class="model-row" data-name="deepseek: deepseek v4 flash vision exp deepseek deepseek/deepseek-v4-flash-vision-exp proprietary api" data-open="0" data-in="0.2156" data-out="0.6468" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="22.64">
           <td><a href="models/deepseek-deepseek-v4-flash-vision-exp.html"><strong>DeepSeek: DeepSeek V4 Flash Vision Exp</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4-flash-vision-exp</small></td>
           <td>DeepSeek</td>
-          <td>$0.44</td>
-          <td>$1.32</td>
-          <td class="sim-cell"><strong>$46.20/mo</strong></td>
+          <td>$0.2156</td>
+          <td>$0.6468</td>
+          <td class="sim-cell"><strong>$22.64/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/deepseek-deepseek-v4-flash-vision-exp-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~9.1 GB eq.)</a></td>
           <td><a href="models/deepseek-deepseek-v4-flash-vision-exp.html">Calculator →</a></td>
@@ -1719,12 +1698,12 @@
           <td><a href="models/mistralai-mistral-large-2512.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="z.ai: glm 5.1 z.ai (glm) z-ai/glm-5.1 open-weight" data-open="1" data-in="1.19" data-out="3.74" data-ctx="204800" data-vram="230.8" data-gpu="3873.6" data-monthly="127.50">
+        <tr class="model-row" data-name="z.ai: glm 5.1 z.ai (glm) z-ai/glm-5.1 open-weight" data-open="1" data-in="1.4" data-out="4.4" data-ctx="204800" data-vram="230.8" data-gpu="3873.6" data-monthly="150.00">
           <td><a href="models/z-ai-glm-5-1.html"><strong>Z.ai: GLM 5.1</strong></a><br/><small style="color:var(--muted)">z-ai/glm-5.1</small></td>
           <td>Z.AI (GLM)</td>
-          <td>$1.19</td>
-          <td>$3.74</td>
-          <td class="sim-cell"><strong>$127.50/mo</strong></td>
+          <td>$1.40</td>
+          <td>$4.40</td>
+          <td class="sim-cell"><strong>$150.00/mo</strong></td>
           <td>204,800</td>
           <td><a href="vram/z-ai-glm-5-1-vram-requirements.html"><strong>230.8 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/z-ai-glm-5-1.html">Calculator →</a></td>
@@ -1785,12 +1764,12 @@
           <td><a href="models/deepseek-deepseek-v4-pro.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="qwen: qwen3 coder 30b a3b instruct qwen qwen/qwen3-coder-30b-a3b-instruct open-weight" data-open="1" data-in="0.15" data-out="0.6" data-ctx="262144" data-vram="19.5" data-gpu="1000.8" data-monthly="18.00">
+        <tr class="model-row" data-name="qwen: qwen3 coder 30b a3b instruct qwen qwen/qwen3-coder-30b-a3b-instruct open-weight" data-open="1" data-in="0.07" data-out="0.28" data-ctx="262144" data-vram="19.5" data-gpu="1000.8" data-monthly="8.40">
           <td><a href="models/qwen-qwen3-coder-30b-a3b-instruct.html"><strong>Qwen: Qwen3 Coder 30B A3B Instruct</strong></a><br/><small style="color:var(--muted)">qwen/qwen3-coder-30b-a3b-instruct</small></td>
           <td>Qwen</td>
-          <td>$0.15</td>
-          <td>$0.60</td>
-          <td class="sim-cell"><strong>$18.00/mo</strong></td>
+          <td>$0.07</td>
+          <td>$0.28</td>
+          <td class="sim-cell"><strong>$8.40/mo</strong></td>
           <td>262,144</td>
           <td><a href="vram/qwen-qwen3-coder-30b-a3b-instruct-vram-requirements.html"><strong>19.5 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/qwen-qwen3-coder-30b-a3b-instruct.html">Calculator →</a></td>
@@ -1862,12 +1841,12 @@
           <td><a href="models/google-gemini-3-1-pro-preview-customtools.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="deepseek: deepseek v4 pro 0813 deepseek deepseek/deepseek-v4-pro-0813 proprietary api" data-open="0" data-in="0.111" data-out="4.44" data-ctx="1048576" data-vram="436.2" data-gpu="3873.6" data-monthly="73.26">
+        <tr class="model-row" data-name="deepseek: deepseek v4 pro 0813 deepseek deepseek/deepseek-v4-pro-0813 proprietary api" data-open="0" data-in="1.32" data-out="3.96" data-ctx="1048576" data-vram="436.2" data-gpu="3873.6" data-monthly="138.60">
           <td><a href="models/deepseek-deepseek-v4-pro-0813.html"><strong>DeepSeek: DeepSeek V4 Pro 0813</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4-pro-0813</small></td>
           <td>DeepSeek</td>
-          <td>$0.111</td>
-          <td>$4.44</td>
-          <td class="sim-cell"><strong>$73.26/mo</strong></td>
+          <td>$1.32</td>
+          <td>$3.96</td>
+          <td class="sim-cell"><strong>$138.60/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/deepseek-deepseek-v4-pro-0813-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~436.2 GB eq.)</a></td>
           <td><a href="models/deepseek-deepseek-v4-pro-0813.html">Calculator →</a></td>
@@ -1950,12 +1929,12 @@
           <td><a href="models/google-gemini-3-5-flash.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="deepseek: deepseek v4.1 flash deepseek deepseek/deepseek-v4.1-flash proprietary api" data-open="0" data-in="0.0507" data-out="0.2028" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="6.08">
+        <tr class="model-row" data-name="deepseek: deepseek v4.1 flash deepseek deepseek/deepseek-v4.1-flash proprietary api" data-open="0" data-in="0.0498" data-out="0.1992" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="5.98">
           <td><a href="models/deepseek-deepseek-v4-1-flash.html"><strong>DeepSeek: DeepSeek V4.1 Flash</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4.1-flash</small></td>
           <td>DeepSeek</td>
-          <td>$0.0507</td>
-          <td>$0.2028</td>
-          <td class="sim-cell"><strong>$6.08/mo</strong></td>
+          <td>$0.0498</td>
+          <td>$0.1992</td>
+          <td class="sim-cell"><strong>$5.98/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/deepseek-deepseek-v4-1-flash-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~9.1 GB eq.)</a></td>
           <td><a href="models/deepseek-deepseek-v4-1-flash.html">Calculator →</a></td>
@@ -1983,12 +1962,12 @@
           <td><a href="models/mistralai-mistral-medium-3-1.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="z.ai: glm 5.3 flash z.ai (glm) z-ai/glm-5.3-flash open-weight" data-open="1" data-in="0.15" data-out="0.5" data-ctx="1048576" data-vram="230.8" data-gpu="3873.6" data-monthly="16.50">
+        <tr class="model-row" data-name="z.ai: glm 5.3 flash z.ai (glm) z-ai/glm-5.3-flash open-weight" data-open="1" data-in="0.0399" data-out="0.0784" data-ctx="1048576" data-vram="230.8" data-gpu="3873.6" data-monthly="3.57">
           <td><a href="models/z-ai-glm-5-3-flash.html"><strong>Z.ai: GLM 5.3 Flash</strong></a><br/><small style="color:var(--muted)">z-ai/glm-5.3-flash</small></td>
           <td>Z.AI (GLM)</td>
-          <td>$0.15</td>
-          <td>$0.50</td>
-          <td class="sim-cell"><strong>$16.50/mo</strong></td>
+          <td>$0.0399</td>
+          <td>$0.0784</td>
+          <td class="sim-cell"><strong>$3.57/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/z-ai-glm-5-3-flash-vram-requirements.html"><strong>230.8 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/z-ai-glm-5-3-flash.html">Calculator →</a></td>
@@ -2038,12 +2017,12 @@
           <td><a href="models/google-gemini-3-5-flash-lite.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="deepseek: deepseek v4.1 flash 1017 deepseek deepseek/deepseek-v4.1-flash-1017 proprietary api" data-open="0" data-in="0.035" data-out="0.15" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="4.35">
+        <tr class="model-row" data-name="deepseek: deepseek v4.1 flash 1017 deepseek deepseek/deepseek-v4.1-flash-1017 proprietary api" data-open="0" data-in="0.15" data-out="0.6" data-ctx="1048576" data-vram="9.1" data-gpu="280.8" data-monthly="18.00">
           <td><a href="models/deepseek-deepseek-v4-1-flash-1017.html"><strong>DeepSeek: DeepSeek V4.1 Flash 1017</strong></a><br/><small style="color:var(--muted)">deepseek/deepseek-v4.1-flash-1017</small></td>
           <td>DeepSeek</td>
-          <td>$0.035</td>
           <td>$0.15</td>
-          <td class="sim-cell"><strong>$4.35/mo</strong></td>
+          <td>$0.60</td>
+          <td class="sim-cell"><strong>$18.00/mo</strong></td>
           <td>1,048,576</td>
           <td><a href="vram/deepseek-deepseek-v4-1-flash-1017-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~9.1 GB eq.)</a></td>
           <td><a href="models/deepseek-deepseek-v4-1-flash-1017.html">Calculator →</a></td>
@@ -2401,15 +2380,15 @@
           <td><a href="models/qwen-qwen3-5-397b-a17b.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="mistral: saba mistral ai mistralai/mistral-saba open-weight" data-open="1" data-in="0.2" data-out="0.6" data-ctx="32768" data-vram="7.8" data-gpu="280.8" data-monthly="21.00">
-          <td><a href="models/mistralai-mistral-saba.html"><strong>Mistral: Saba</strong></a><br/><small style="color:var(--muted)">mistralai/mistral-saba</small></td>
+        <tr class="model-row" data-name="mistral: pixtral large 2502 mistral ai mistralai/pixtral-large-2502 open-weight" data-open="1" data-in="2.0" data-out="6.0" data-ctx="128000" data-vram="80.0" data-gpu="3873.6" data-monthly="210.00">
+          <td><a href="models/mistralai-pixtral-large-2502.html"><strong>Mistral: Pixtral Large 2502</strong></a><br/><small style="color:var(--muted)">mistralai/pixtral-large-2502</small></td>
           <td>Mistral AI</td>
-          <td>$0.20</td>
-          <td>$0.60</td>
-          <td class="sim-cell"><strong>$21.00/mo</strong></td>
-          <td>32,768</td>
-          <td><a href="vram/mistralai-mistral-saba-vram-requirements.html"><strong>7.8 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
-          <td><a href="models/mistralai-mistral-saba.html">Calculator →</a></td>
+          <td>$2.00</td>
+          <td>$6.00</td>
+          <td class="sim-cell"><strong>$210.00/mo</strong></td>
+          <td>128,000</td>
+          <td><a href="vram/mistralai-pixtral-large-2502-vram-requirements.html"><strong>80.0 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
+          <td><a href="models/mistralai-pixtral-large-2502.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="ibm: granite 4.2 8b ibm granite ibm-granite/granite-4.2-8b open-weight" data-open="1" data-in="0.06" data-out="0.15" data-ctx="131072" data-vram="5.2" data-gpu="280.8" data-monthly="5.85">
@@ -2456,15 +2435,15 @@
           <td><a href="models/qwen-qwen3-5-plus-02-15.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="mistral: voxtral small 24b 2507 mistral ai mistralai/voxtral-small-24b-2507 open-weight" data-open="1" data-in="0.1" data-out="0.3" data-ctx="32768" data-vram="15.6" data-gpu="280.8" data-monthly="10.50">
-          <td><a href="models/mistralai-voxtral-small-24b-2507.html"><strong>Mistral: Voxtral Small 24B 2507</strong></a><br/><small style="color:var(--muted)">mistralai/voxtral-small-24b-2507</small></td>
+        <tr class="model-row" data-name="mistral: saba mistral ai mistralai/mistral-saba open-weight" data-open="1" data-in="0.2" data-out="0.6" data-ctx="32768" data-vram="7.8" data-gpu="280.8" data-monthly="21.00">
+          <td><a href="models/mistralai-mistral-saba.html"><strong>Mistral: Saba</strong></a><br/><small style="color:var(--muted)">mistralai/mistral-saba</small></td>
           <td>Mistral AI</td>
-          <td>$0.10</td>
-          <td>$0.30</td>
-          <td class="sim-cell"><strong>$10.50/mo</strong></td>
+          <td>$0.20</td>
+          <td>$0.60</td>
+          <td class="sim-cell"><strong>$21.00/mo</strong></td>
           <td>32,768</td>
-          <td><a href="vram/mistralai-voxtral-small-24b-2507-vram-requirements.html"><strong>15.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
-          <td><a href="models/mistralai-voxtral-small-24b-2507.html">Calculator →</a></td>
+          <td><a href="vram/mistralai-mistral-saba-vram-requirements.html"><strong>7.8 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
+          <td><a href="models/mistralai-mistral-saba.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="inference.net: schematron v2 small inference net inference-net/schematron-v2-small proprietary api" data-open="0" data-in="0.05" data-out="0.23" data-ctx="128000" data-vram="5.2" data-gpu="280.8" data-monthly="6.45">
@@ -2509,6 +2488,17 @@
           <td>1,000,000</td>
           <td><a href="vram/qwen-qwen3-5-plus-20260420-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
           <td><a href="models/qwen-qwen3-5-plus-20260420.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="mistral: voxtral small 24b 2507 mistral ai mistralai/voxtral-small-24b-2507 open-weight" data-open="1" data-in="0.1" data-out="0.3" data-ctx="32768" data-vram="15.6" data-gpu="280.8" data-monthly="10.50">
+          <td><a href="models/mistralai-voxtral-small-24b-2507.html"><strong>Mistral: Voxtral Small 24B 2507</strong></a><br/><small style="color:var(--muted)">mistralai/voxtral-small-24b-2507</small></td>
+          <td>Mistral AI</td>
+          <td>$0.10</td>
+          <td>$0.30</td>
+          <td class="sim-cell"><strong>$10.50/mo</strong></td>
+          <td>32,768</td>
+          <td><a href="vram/mistralai-voxtral-small-24b-2507-vram-requirements.html"><strong>15.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
+          <td><a href="models/mistralai-voxtral-small-24b-2507.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="inference.net: schematron v2 turbo inference net inference-net/schematron-v2-turbo proprietary api" data-open="0" data-in="0.03" data-out="0.15" data-ctx="128000" data-vram="20.8" data-gpu="1000.8" data-monthly="4.05">
@@ -2588,12 +2578,12 @@
           <td><a href="models/google-gemini-omni-1-2-flash.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="qwen: qwen3.5-27b qwen qwen/qwen3.5-27b open-weight" data-open="1" data-in="0.195" data-out="1.56" data-ctx="262144" data-vram="17.6" data-gpu="1000.8" data-monthly="35.10">
+        <tr class="model-row" data-name="qwen: qwen3.5-27b qwen qwen/qwen3.5-27b open-weight" data-open="1" data-in="0.26" data-out="2.6" data-ctx="262144" data-vram="17.6" data-gpu="1000.8" data-monthly="54.60">
           <td><a href="models/qwen-qwen3-5-27b.html"><strong>Qwen: Qwen3.5-27B</strong></a><br/><small style="color:var(--muted)">qwen/qwen3.5-27b</small></td>
           <td>Qwen</td>
-          <td>$0.195</td>
-          <td>$1.56</td>
-          <td class="sim-cell"><strong>$35.10/mo</strong></td>
+          <td>$0.26</td>
+          <td>$2.60</td>
+          <td class="sim-cell"><strong>$54.60/mo</strong></td>
           <td>262,144</td>
           <td><a href="vram/qwen-qwen3-5-27b-vram-requirements.html"><strong>17.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/qwen-qwen3-5-27b.html">Calculator →</a></td>
@@ -2665,12 +2655,12 @@
           <td><a href="models/openai-gpt-5-4-nano.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="google: gemma 3 4b google google/gemma-3-4b-it open-weight" data-open="1" data-in="0.05" data-out="0.1" data-ctx="131072" data-vram="2.6" data-gpu="280.8" data-monthly="4.50">
+        <tr class="model-row" data-name="google: gemma 3 4b google google/gemma-3-4b-it open-weight" data-open="1" data-in="0.04" data-out="0.05" data-ctx="131072" data-vram="2.6" data-gpu="280.8" data-monthly="3.15">
           <td><a href="models/google-gemma-3-4b-it.html"><strong>Google: Gemma 3 4B</strong></a><br/><small style="color:var(--muted)">google/gemma-3-4b-it</small></td>
           <td>Google</td>
+          <td>$0.04</td>
           <td>$0.05</td>
-          <td>$0.10</td>
-          <td class="sim-cell"><strong>$4.50/mo</strong></td>
+          <td class="sim-cell"><strong>$3.15/mo</strong></td>
           <td>131,072</td>
           <td><a href="vram/google-gemma-3-4b-it-vram-requirements.html"><strong>2.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/google-gemma-3-4b-it.html">Calculator →</a></td>
@@ -2709,12 +2699,12 @@
           <td><a href="models/openai-gpt-5-4-pro.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="google: gemma 4 26b a4b google google/gemma-4-26b-a4b-it open-weight" data-open="1" data-in="0.09" data-out="0.3" data-ctx="262144" data-vram="16.9" data-gpu="1000.8" data-monthly="9.90">
+        <tr class="model-row" data-name="google: gemma 4 26b a4b google google/gemma-4-26b-a4b-it open-weight" data-open="1" data-in="0.0675" data-out="0.225" data-ctx="262144" data-vram="16.9" data-gpu="1000.8" data-monthly="7.42">
           <td><a href="models/google-gemma-4-26b-a4b-it.html"><strong>Google: Gemma 4 26B A4B</strong></a><br/><small style="color:var(--muted)">google/gemma-4-26b-a4b-it</small></td>
           <td>Google</td>
-          <td>$0.09</td>
-          <td>$0.30</td>
-          <td class="sim-cell"><strong>$9.90/mo</strong></td>
+          <td>$0.0675</td>
+          <td>$0.225</td>
+          <td class="sim-cell"><strong>$7.42/mo</strong></td>
           <td>262,144</td>
           <td><a href="vram/google-gemma-4-26b-a4b-it-vram-requirements.html"><strong>16.9 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/google-gemma-4-26b-a4b-it.html">Calculator →</a></td>
@@ -2775,15 +2765,15 @@
           <td><a href="models/qwen-qwen3-6-27b.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="meituan: longcat 2.0 meituan meituan/longcat-2.0 proprietary api" data-open="0" data-in="0.3" data-out="1.2" data-ctx="1048756" data-vram="20.8" data-gpu="1000.8" data-monthly="36.00">
-          <td><a href="models/meituan-longcat-2-0.html"><strong>Meituan: LongCat 2.0</strong></a><br/><small style="color:var(--muted)">meituan/longcat-2.0</small></td>
-          <td>Meituan</td>
-          <td>$0.30</td>
-          <td>$1.20</td>
-          <td class="sim-cell"><strong>$36.00/mo</strong></td>
-          <td>1,048,756</td>
-          <td><a href="vram/meituan-longcat-2-0-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
-          <td><a href="models/meituan-longcat-2-0.html">Calculator →</a></td>
+        <tr class="model-row" data-name="minimax: minimax m2.5 minimax minimax/minimax-m2.5 proprietary api" data-open="0" data-in="0.27" data-out="0.95" data-ctx="198000" data-vram="20.8" data-gpu="1000.8" data-monthly="30.45">
+          <td><a href="models/minimax-minimax-m2-5.html"><strong>MiniMax: MiniMax M2.5</strong></a><br/><small style="color:var(--muted)">minimax/minimax-m2.5</small></td>
+          <td>MiniMax</td>
+          <td>$0.27</td>
+          <td>$0.95</td>
+          <td class="sim-cell"><strong>$30.45/mo</strong></td>
+          <td>198,000</td>
+          <td><a href="vram/minimax-minimax-m2-5-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
+          <td><a href="models/minimax-minimax-m2-5.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-5.5 pro openai openai/gpt-5.5-pro proprietary api" data-open="0" data-in="30.0" data-out="180.0" data-ctx="1050000" data-vram="45.5" data-gpu="1936.8" data-monthly="4500.00">
@@ -2808,15 +2798,15 @@
           <td><a href="models/qwen-qwen3-6-35b-a3b.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="minimax: minimax m2.5 minimax minimax/minimax-m2.5 proprietary api" data-open="0" data-in="0.295" data-out="1.2" data-ctx="198000" data-vram="20.8" data-gpu="1000.8" data-monthly="35.70">
-          <td><a href="models/minimax-minimax-m2-5.html"><strong>MiniMax: MiniMax M2.5</strong></a><br/><small style="color:var(--muted)">minimax/minimax-m2.5</small></td>
+        <tr class="model-row" data-name="minimax: minimax m2.7 minimax minimax/minimax-m2.7 proprietary api" data-open="0" data-in="0.6" data-out="1.8" data-ctx="196608" data-vram="20.8" data-gpu="1000.8" data-monthly="63.00">
+          <td><a href="models/minimax-minimax-m2-7.html"><strong>MiniMax: MiniMax M2.7</strong></a><br/><small style="color:var(--muted)">minimax/minimax-m2.7</small></td>
           <td>MiniMax</td>
-          <td>$0.295</td>
-          <td>$1.20</td>
-          <td class="sim-cell"><strong>$35.70/mo</strong></td>
-          <td>198,000</td>
-          <td><a href="vram/minimax-minimax-m2-5-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
-          <td><a href="models/minimax-minimax-m2-5.html">Calculator →</a></td>
+          <td>$0.60</td>
+          <td>$1.80</td>
+          <td class="sim-cell"><strong>$63.00/mo</strong></td>
+          <td>196,608</td>
+          <td><a href="vram/minimax-minimax-m2-7-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
+          <td><a href="models/minimax-minimax-m2-7.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-5.6 luna openai openai/gpt-5.6-luna proprietary api" data-open="0" data-in="0.2" data-out="1.2" data-ctx="1050000" data-vram="45.5" data-gpu="1936.8" data-monthly="30.00">
@@ -2841,15 +2831,15 @@
           <td><a href="models/qwen-qwen3-6-flash.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="minimax: minimax m2.7 minimax minimax/minimax-m2.7 proprietary api" data-open="0" data-in="0.21" data-out="0.84" data-ctx="196608" data-vram="20.8" data-gpu="1000.8" data-monthly="25.20">
-          <td><a href="models/minimax-minimax-m2-7.html"><strong>MiniMax: MiniMax M2.7</strong></a><br/><small style="color:var(--muted)">minimax/minimax-m2.7</small></td>
+        <tr class="model-row" data-name="minimax: minimax m3 minimax minimax/minimax-m3 proprietary api" data-open="0" data-in="0.3" data-out="1.2" data-ctx="1048576" data-vram="20.8" data-gpu="1000.8" data-monthly="36.00">
+          <td><a href="models/minimax-minimax-m3.html"><strong>MiniMax: MiniMax M3</strong></a><br/><small style="color:var(--muted)">minimax/minimax-m3</small></td>
           <td>MiniMax</td>
-          <td>$0.21</td>
-          <td>$0.84</td>
-          <td class="sim-cell"><strong>$25.20/mo</strong></td>
-          <td>196,608</td>
-          <td><a href="vram/minimax-minimax-m2-7-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
-          <td><a href="models/minimax-minimax-m2-7.html">Calculator →</a></td>
+          <td>$0.30</td>
+          <td>$1.20</td>
+          <td class="sim-cell"><strong>$36.00/mo</strong></td>
+          <td>1,048,576</td>
+          <td><a href="vram/minimax-minimax-m3-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
+          <td><a href="models/minimax-minimax-m3.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-5.6 luna pro openai openai/gpt-5.6-luna-pro proprietary api" data-open="0" data-in="0.2" data-out="1.2" data-ctx="1050000" data-vram="45.5" data-gpu="1936.8" data-monthly="30.00">
@@ -2874,15 +2864,15 @@
           <td><a href="models/qwen-qwen3-6-plus.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="minimax: minimax m3 minimax minimax/minimax-m3 proprietary api" data-open="0" data-in="0.3" data-out="1.2" data-ctx="1048576" data-vram="20.8" data-gpu="1000.8" data-monthly="36.00">
-          <td><a href="models/minimax-minimax-m3.html"><strong>MiniMax: MiniMax M3</strong></a><br/><small style="color:var(--muted)">minimax/minimax-m3</small></td>
+        <tr class="model-row" data-name="minimax: minimax m3.1 flash minimax minimax/minimax-m3.1-flash proprietary api" data-open="0" data-in="0.075" data-out="0.3" data-ctx="1048576" data-vram="5.2" data-gpu="280.8" data-monthly="9.00">
+          <td><a href="models/minimax-minimax-m3-1-flash.html"><strong>MiniMax: MiniMax M3.1 Flash</strong></a><br/><small style="color:var(--muted)">minimax/minimax-m3.1-flash</small></td>
           <td>MiniMax</td>
+          <td>$0.075</td>
           <td>$0.30</td>
-          <td>$1.20</td>
-          <td class="sim-cell"><strong>$36.00/mo</strong></td>
+          <td class="sim-cell"><strong>$9.00/mo</strong></td>
           <td>1,048,576</td>
-          <td><a href="vram/minimax-minimax-m3-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
-          <td><a href="models/minimax-minimax-m3.html">Calculator →</a></td>
+          <td><a href="vram/minimax-minimax-m3-1-flash-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~5.2 GB eq.)</a></td>
+          <td><a href="models/minimax-minimax-m3-1-flash.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-5.6 sol openai openai/gpt-5.6-sol proprietary api" data-open="0" data-in="4.0" data-out="20.0" data-ctx="1050000" data-vram="45.5" data-gpu="1936.8" data-monthly="540.00">
@@ -2907,15 +2897,15 @@
           <td><a href="models/qwen-qwen3-7-flash.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="minimax: minimax m3.1 flash minimax minimax/minimax-m3.1-flash proprietary api" data-open="0" data-in="0.15" data-out="0.6" data-ctx="1048576" data-vram="5.2" data-gpu="280.8" data-monthly="18.00">
-          <td><a href="models/minimax-minimax-m3-1-flash.html"><strong>MiniMax: MiniMax M3.1 Flash</strong></a><br/><small style="color:var(--muted)">minimax/minimax-m3.1-flash</small></td>
-          <td>MiniMax</td>
-          <td>$0.15</td>
-          <td>$0.60</td>
-          <td class="sim-cell"><strong>$18.00/mo</strong></td>
-          <td>1,048,576</td>
-          <td><a href="vram/minimax-minimax-m3-1-flash-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~5.2 GB eq.)</a></td>
-          <td><a href="models/minimax-minimax-m3-1-flash.html">Calculator →</a></td>
+        <tr class="model-row" data-name="moondream: moondream 3 preview moondream moondream/moondream3-preview proprietary api" data-open="0" data-in="0.3" data-out="2.5" data-ctx="32000" data-vram="20.8" data-gpu="1000.8" data-monthly="55.50">
+          <td><a href="models/moondream-moondream3-preview.html"><strong>Moondream: Moondream 3 Preview</strong></a><br/><small style="color:var(--muted)">moondream/moondream3-preview</small></td>
+          <td>Moondream</td>
+          <td>$0.30</td>
+          <td>$2.50</td>
+          <td class="sim-cell"><strong>$55.50/mo</strong></td>
+          <td>32,000</td>
+          <td><a href="vram/moondream-moondream3-preview-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
+          <td><a href="models/moondream-moondream3-preview.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-5.6 sol pro openai openai/gpt-5.6-sol-pro proprietary api" data-open="0" data-in="4.0" data-out="20.0" data-ctx="1050000" data-vram="45.5" data-gpu="1936.8" data-monthly="540.00">
@@ -2940,15 +2930,15 @@
           <td><a href="models/qwen-qwen3-7-max.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="moondream: moondream 3 preview moondream moondream/moondream3-preview proprietary api" data-open="0" data-in="0.3" data-out="2.5" data-ctx="32000" data-vram="20.8" data-gpu="1000.8" data-monthly="55.50">
-          <td><a href="models/moondream-moondream3-preview.html"><strong>Moondream: Moondream 3 Preview</strong></a><br/><small style="color:var(--muted)">moondream/moondream3-preview</small></td>
+        <tr class="model-row" data-name="moondream: moondream 3.1 moondream moondream/moondream3.1-9b-a2b open-weight" data-open="1" data-in="0.3" data-out="2.5" data-ctx="32000" data-vram="5.9" data-gpu="280.8" data-monthly="55.50">
+          <td><a href="models/moondream-moondream3-1-9b-a2b.html"><strong>Moondream: Moondream 3.1</strong></a><br/><small style="color:var(--muted)">moondream/moondream3.1-9b-a2b</small></td>
           <td>Moondream</td>
           <td>$0.30</td>
           <td>$2.50</td>
           <td class="sim-cell"><strong>$55.50/mo</strong></td>
           <td>32,000</td>
-          <td><a href="vram/moondream-moondream3-preview-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
-          <td><a href="models/moondream-moondream3-preview.html">Calculator →</a></td>
+          <td><a href="vram/moondream-moondream3-1-9b-a2b-vram-requirements.html"><strong>5.9 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
+          <td><a href="models/moondream-moondream3-1-9b-a2b.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-5.6 terra openai openai/gpt-5.6-terra proprietary api" data-open="0" data-in="2.0" data-out="12.0" data-ctx="1050000" data-vram="45.5" data-gpu="1936.8" data-monthly="300.00">
@@ -2973,15 +2963,15 @@
           <td><a href="models/qwen-qwen3-7-plus.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="moondream: moondream 3.1 moondream moondream/moondream3.1-9b-a2b open-weight" data-open="1" data-in="0.3" data-out="2.5" data-ctx="32000" data-vram="5.9" data-gpu="280.8" data-monthly="55.50">
-          <td><a href="models/moondream-moondream3-1-9b-a2b.html"><strong>Moondream: Moondream 3.1</strong></a><br/><small style="color:var(--muted)">moondream/moondream3.1-9b-a2b</small></td>
-          <td>Moondream</td>
-          <td>$0.30</td>
-          <td>$2.50</td>
-          <td class="sim-cell"><strong>$55.50/mo</strong></td>
-          <td>32,000</td>
-          <td><a href="vram/moondream-moondream3-1-9b-a2b-vram-requirements.html"><strong>5.9 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
-          <td><a href="models/moondream-moondream3-1-9b-a2b.html">Calculator →</a></td>
+        <tr class="model-row" data-name="morph: morph v3 fast morph morph/morph-v3-fast proprietary api" data-open="0" data-in="0.8" data-out="1.2" data-ctx="262144" data-vram="20.8" data-gpu="1000.8" data-monthly="66.00">
+          <td><a href="models/morph-morph-v3-fast.html"><strong>Morph: Morph V3 Fast</strong></a><br/><small style="color:var(--muted)">morph/morph-v3-fast</small></td>
+          <td>Morph</td>
+          <td>$0.80</td>
+          <td>$1.20</td>
+          <td class="sim-cell"><strong>$66.00/mo</strong></td>
+          <td>262,144</td>
+          <td><a href="vram/morph-morph-v3-fast-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
+          <td><a href="models/morph-morph-v3-fast.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-5.6 terra pro openai openai/gpt-5.6-terra-pro proprietary api" data-open="0" data-in="2.0" data-out="12.0" data-ctx="1050000" data-vram="45.5" data-gpu="1936.8" data-monthly="300.00">
@@ -3006,15 +2996,15 @@
           <td><a href="models/qwen-qwen3-8-2-4t-a95b.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="morph: morph v3 fast morph morph/morph-v3-fast proprietary api" data-open="0" data-in="0.8" data-out="1.2" data-ctx="262144" data-vram="20.8" data-gpu="1000.8" data-monthly="66.00">
-          <td><a href="models/morph-morph-v3-fast.html"><strong>Morph: Morph V3 Fast</strong></a><br/><small style="color:var(--muted)">morph/morph-v3-fast</small></td>
+        <tr class="model-row" data-name="morph: morph v3 large morph morph/morph-v3-large proprietary api" data-open="0" data-in="0.9" data-out="1.9" data-ctx="262144" data-vram="45.5" data-gpu="1936.8" data-monthly="82.50">
+          <td><a href="models/morph-morph-v3-large.html"><strong>Morph: Morph V3 Large</strong></a><br/><small style="color:var(--muted)">morph/morph-v3-large</small></td>
           <td>Morph</td>
-          <td>$0.80</td>
-          <td>$1.20</td>
-          <td class="sim-cell"><strong>$66.00/mo</strong></td>
+          <td>$0.90</td>
+          <td>$1.90</td>
+          <td class="sim-cell"><strong>$82.50/mo</strong></td>
           <td>262,144</td>
-          <td><a href="vram/morph-morph-v3-fast-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
-          <td><a href="models/morph-morph-v3-fast.html">Calculator →</a></td>
+          <td><a href="vram/morph-morph-v3-large-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~45.5 GB eq.)</a></td>
+          <td><a href="models/morph-morph-v3-large.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-6 astra openai openai/gpt-6-astra proprietary api" data-open="0" data-in="10.0" data-out="50.0" data-ctx="1050000" data-vram="20.8" data-gpu="1000.8" data-monthly="1350.00">
@@ -3028,26 +3018,26 @@
           <td><a href="models/openai-gpt-6-astra.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="qwen: qwen3.8 27b qwen qwen/qwen3.8-27b open-weight" data-open="1" data-in="0.06" data-out="2.2" data-ctx="1024000" data-vram="17.6" data-gpu="1000.8" data-monthly="36.60">
+        <tr class="model-row" data-name="qwen: qwen3.8 27b qwen qwen/qwen3.8-27b open-weight" data-open="1" data-in="0.035" data-out="1.5" data-ctx="1024000" data-vram="17.6" data-gpu="1000.8" data-monthly="24.60">
           <td><a href="models/qwen-qwen3-8-27b.html"><strong>Qwen: Qwen3.8 27B</strong></a><br/><small style="color:var(--muted)">qwen/qwen3.8-27b</small></td>
           <td>Qwen</td>
-          <td>$0.06</td>
-          <td>$2.20</td>
-          <td class="sim-cell"><strong>$36.60/mo</strong></td>
+          <td>$0.035</td>
+          <td>$1.50</td>
+          <td class="sim-cell"><strong>$24.60/mo</strong></td>
           <td>1,024,000</td>
           <td><a href="vram/qwen-qwen3-8-27b-vram-requirements.html"><strong>17.6 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
           <td><a href="models/qwen-qwen3-8-27b.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="morph: morph v3 large morph morph/morph-v3-large proprietary api" data-open="0" data-in="0.9" data-out="1.9" data-ctx="262144" data-vram="45.5" data-gpu="1936.8" data-monthly="82.50">
-          <td><a href="models/morph-morph-v3-large.html"><strong>Morph: Morph V3 Large</strong></a><br/><small style="color:var(--muted)">morph/morph-v3-large</small></td>
-          <td>Morph</td>
-          <td>$0.90</td>
-          <td>$1.90</td>
-          <td class="sim-cell"><strong>$82.50/mo</strong></td>
+        <tr class="model-row" data-name="motif technologies: motif 3 motif technologies motif-technologies/motif-3 proprietary api" data-open="0" data-in="0.3" data-out="1.2" data-ctx="262144" data-vram="20.8" data-gpu="1000.8" data-monthly="36.00">
+          <td><a href="models/motif-technologies-motif-3.html"><strong>Motif Technologies: Motif 3</strong></a><br/><small style="color:var(--muted)">motif-technologies/motif-3</small></td>
+          <td>Motif Technologies</td>
+          <td>$0.30</td>
+          <td>$1.20</td>
+          <td class="sim-cell"><strong>$36.00/mo</strong></td>
           <td>262,144</td>
-          <td><a href="vram/morph-morph-v3-large-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~45.5 GB eq.)</a></td>
-          <td><a href="models/morph-morph-v3-large.html">Calculator →</a></td>
+          <td><a href="vram/motif-technologies-motif-3-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
+          <td><a href="models/motif-technologies-motif-3.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-6 astra pro openai openai/gpt-6-astra-pro proprietary api" data-open="0" data-in="10.0" data-out="50.0" data-ctx="1050000" data-vram="45.5" data-gpu="1936.8" data-monthly="1350.00">
@@ -3072,15 +3062,15 @@
           <td><a href="models/qwen-qwen3-8-flash.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="motif technologies: motif 3 motif technologies motif-technologies/motif-3 proprietary api" data-open="0" data-in="0.3" data-out="1.2" data-ctx="262144" data-vram="20.8" data-gpu="1000.8" data-monthly="36.00">
-          <td><a href="models/motif-technologies-motif-3.html"><strong>Motif Technologies: Motif 3</strong></a><br/><small style="color:var(--muted)">motif-technologies/motif-3</small></td>
-          <td>Motif Technologies</td>
+        <tr class="model-row" data-name="mythomax 13b gryphe gryphe/mythomax-l2-13b open-weight" data-open="1" data-in="0.3" data-out="0.5" data-ctx="8192" data-vram="8.5" data-gpu="280.8" data-monthly="25.50">
+          <td><a href="models/gryphe-mythomax-l2-13b.html"><strong>MythoMax 13B</strong></a><br/><small style="color:var(--muted)">gryphe/mythomax-l2-13b</small></td>
+          <td>Gryphe</td>
           <td>$0.30</td>
-          <td>$1.20</td>
-          <td class="sim-cell"><strong>$36.00/mo</strong></td>
-          <td>262,144</td>
-          <td><a href="vram/motif-technologies-motif-3-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
-          <td><a href="models/motif-technologies-motif-3.html">Calculator →</a></td>
+          <td>$0.50</td>
+          <td class="sim-cell"><strong>$25.50/mo</strong></td>
+          <td>8,192</td>
+          <td><a href="vram/gryphe-mythomax-l2-13b-vram-requirements.html"><strong>8.5 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
+          <td><a href="models/gryphe-mythomax-l2-13b.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-6 luna openai openai/gpt-6-luna proprietary api" data-open="0" data-in="0.1" data-out="0.5" data-ctx="1050000" data-vram="20.8" data-gpu="1000.8" data-monthly="13.50">
@@ -3105,15 +3095,15 @@
           <td><a href="models/qwen-qwen3-8-max-0902.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="mythomax 13b gryphe gryphe/mythomax-l2-13b open-weight" data-open="1" data-in="0.08" data-out="0.11" data-ctx="8192" data-vram="8.5" data-gpu="280.8" data-monthly="6.45">
-          <td><a href="models/gryphe-mythomax-l2-13b.html"><strong>MythoMax 13B</strong></a><br/><small style="color:var(--muted)">gryphe/mythomax-l2-13b</small></td>
-          <td>Gryphe</td>
-          <td>$0.08</td>
-          <td>$0.11</td>
-          <td class="sim-cell"><strong>$6.45/mo</strong></td>
-          <td>8,192</td>
-          <td><a href="vram/gryphe-mythomax-l2-13b-vram-requirements.html"><strong>8.5 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
-          <td><a href="models/gryphe-mythomax-l2-13b.html">Calculator →</a></td>
+        <tr class="model-row" data-name="nex agi: nex-n2.5-mini nex agi nex-agi/nex-n2.5-mini proprietary api" data-open="0" data-in="0.025" data-out="0.1" data-ctx="262144" data-vram="5.2" data-gpu="280.8" data-monthly="3.00">
+          <td><a href="models/nex-agi-nex-n2-5-mini.html"><strong>Nex AGI: Nex-N2.5-Mini</strong></a><br/><small style="color:var(--muted)">nex-agi/nex-n2.5-mini</small></td>
+          <td>Nex Agi</td>
+          <td>$0.025</td>
+          <td>$0.10</td>
+          <td class="sim-cell"><strong>$3.00/mo</strong></td>
+          <td>262,144</td>
+          <td><a href="vram/nex-agi-nex-n2-5-mini-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~5.2 GB eq.)</a></td>
+          <td><a href="models/nex-agi-nex-n2-5-mini.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-6 luna pro openai openai/gpt-6-luna-pro proprietary api" data-open="0" data-in="0.1" data-out="0.5" data-ctx="1050000" data-vram="45.5" data-gpu="1936.8" data-monthly="13.50">
@@ -3138,15 +3128,15 @@
           <td><a href="models/qwen-qwen3-8-max-prime.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="nex agi: nex-n2.5-mini nex agi nex-agi/nex-n2.5-mini proprietary api" data-open="0" data-in="0.025" data-out="0.1" data-ctx="262144" data-vram="5.2" data-gpu="280.8" data-monthly="3.00">
-          <td><a href="models/nex-agi-nex-n2-5-mini.html"><strong>Nex AGI: Nex-N2.5-Mini</strong></a><br/><small style="color:var(--muted)">nex-agi/nex-n2.5-mini</small></td>
+        <tr class="model-row" data-name="nex agi: nex-n2.5-pro nex agi nex-agi/nex-n2.5-pro proprietary api" data-open="0" data-in="0.075" data-out="0.25" data-ctx="262144" data-vram="45.5" data-gpu="1936.8" data-monthly="8.25">
+          <td><a href="models/nex-agi-nex-n2-5-pro.html"><strong>Nex AGI: Nex-N2.5-Pro</strong></a><br/><small style="color:var(--muted)">nex-agi/nex-n2.5-pro</small></td>
           <td>Nex Agi</td>
-          <td>$0.025</td>
-          <td>$0.10</td>
-          <td class="sim-cell"><strong>$3.00/mo</strong></td>
+          <td>$0.075</td>
+          <td>$0.25</td>
+          <td class="sim-cell"><strong>$8.25/mo</strong></td>
           <td>262,144</td>
-          <td><a href="vram/nex-agi-nex-n2-5-mini-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~5.2 GB eq.)</a></td>
-          <td><a href="models/nex-agi-nex-n2-5-mini.html">Calculator →</a></td>
+          <td><a href="vram/nex-agi-nex-n2-5-pro-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~45.5 GB eq.)</a></td>
+          <td><a href="models/nex-agi-nex-n2-5-pro.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-6 sol openai openai/gpt-6-sol proprietary api" data-open="0" data-in="2.0" data-out="10.0" data-ctx="1050000" data-vram="20.8" data-gpu="1000.8" data-monthly="270.00">
@@ -3171,15 +3161,15 @@
           <td><a href="models/qwen-qwen3-8-omni-flash.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="nex agi: nex-n2.5-pro nex agi nex-agi/nex-n2.5-pro proprietary api" data-open="0" data-in="0.075" data-out="0.25" data-ctx="262144" data-vram="45.5" data-gpu="1936.8" data-monthly="8.25">
-          <td><a href="models/nex-agi-nex-n2-5-pro.html"><strong>Nex AGI: Nex-N2.5-Pro</strong></a><br/><small style="color:var(--muted)">nex-agi/nex-n2.5-pro</small></td>
+        <tr class="model-row" data-name="nex agi: nex-n2.6 nex agi nex-agi/nex-n2.6 proprietary api" data-open="0" data-in="0.12" data-out="0.4" data-ctx="262144" data-vram="20.8" data-gpu="1000.8" data-monthly="13.20">
+          <td><a href="models/nex-agi-nex-n2-6.html"><strong>Nex AGI: Nex-N2.6</strong></a><br/><small style="color:var(--muted)">nex-agi/nex-n2.6</small></td>
           <td>Nex Agi</td>
-          <td>$0.075</td>
-          <td>$0.25</td>
-          <td class="sim-cell"><strong>$8.25/mo</strong></td>
+          <td>$0.12</td>
+          <td>$0.40</td>
+          <td class="sim-cell"><strong>$13.20/mo</strong></td>
           <td>262,144</td>
-          <td><a href="vram/nex-agi-nex-n2-5-pro-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~45.5 GB eq.)</a></td>
-          <td><a href="models/nex-agi-nex-n2-5-pro.html">Calculator →</a></td>
+          <td><a href="vram/nex-agi-nex-n2-6-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
+          <td><a href="models/nex-agi-nex-n2-6.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-6 sol pro openai openai/gpt-6-sol-pro proprietary api" data-open="0" data-in="2.0" data-out="10.0" data-ctx="1050000" data-vram="45.5" data-gpu="1936.8" data-monthly="270.00">
@@ -3204,15 +3194,15 @@
           <td><a href="models/qwen-qwen4-max.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="nex agi: nex-n2.6 nex agi nex-agi/nex-n2.6 proprietary api" data-open="0" data-in="0.12" data-out="0.4" data-ctx="262144" data-vram="20.8" data-gpu="1000.8" data-monthly="13.20">
-          <td><a href="models/nex-agi-nex-n2-6.html"><strong>Nex AGI: Nex-N2.6</strong></a><br/><small style="color:var(--muted)">nex-agi/nex-n2.6</small></td>
-          <td>Nex Agi</td>
-          <td>$0.12</td>
-          <td>$0.40</td>
-          <td class="sim-cell"><strong>$13.20/mo</strong></td>
-          <td>262,144</td>
-          <td><a href="vram/nex-agi-nex-n2-6-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
-          <td><a href="models/nex-agi-nex-n2-6.html">Calculator →</a></td>
+        <tr class="model-row" data-name="nous: hermes 4 405b nous research nousresearch/hermes-4-405b open-weight" data-open="1" data-in="1.0" data-out="3.0" data-ctx="131072" data-vram="263.2" data-gpu="3873.6" data-monthly="105.00">
+          <td><a href="models/nousresearch-hermes-4-405b.html"><strong>Nous: Hermes 4 405B</strong></a><br/><small style="color:var(--muted)">nousresearch/hermes-4-405b</small></td>
+          <td>Nous Research</td>
+          <td>$1.00</td>
+          <td>$3.00</td>
+          <td class="sim-cell"><strong>$105.00/mo</strong></td>
+          <td>131,072</td>
+          <td><a href="vram/nousresearch-hermes-4-405b-vram-requirements.html"><strong>263.2 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
+          <td><a href="models/nousresearch-hermes-4-405b.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-6.1 sol openai openai/gpt-6.1-sol proprietary api" data-open="0" data-in="2.0" data-out="10.0" data-ctx="1050000" data-vram="20.8" data-gpu="1000.8" data-monthly="270.00">
@@ -3226,15 +3216,15 @@
           <td><a href="models/openai-gpt-6-1-sol.html">Calculator →</a></td>
         </tr>
         
-        <tr class="model-row" data-name="nous: hermes 4 405b nous research nousresearch/hermes-4-405b open-weight" data-open="1" data-in="1.0" data-out="3.0" data-ctx="131072" data-vram="263.2" data-gpu="3873.6" data-monthly="105.00">
-          <td><a href="models/nousresearch-hermes-4-405b.html"><strong>Nous: Hermes 4 405B</strong></a><br/><small style="color:var(--muted)">nousresearch/hermes-4-405b</small></td>
-          <td>Nous Research</td>
-          <td>$1.00</td>
-          <td>$3.00</td>
-          <td class="sim-cell"><strong>$105.00/mo</strong></td>
-          <td>131,072</td>
-          <td><a href="vram/nousresearch-hermes-4-405b-vram-requirements.html"><strong>263.2 GB</strong></a> <small style="color:var(--accent-green)">(Open)</small></td>
-          <td><a href="models/nousresearch-hermes-4-405b.html">Calculator →</a></td>
+        <tr class="model-row" data-name="pareto 26.10 unbiased unbiased/pareto-26.10 proprietary api" data-open="0" data-in="0.8" data-out="3.2" data-ctx="1048576" data-vram="20.8" data-gpu="1000.8" data-monthly="96.00">
+          <td><a href="models/unbiased-pareto-26-10.html"><strong>Pareto 26.10</strong></a><br/><small style="color:var(--muted)">unbiased/pareto-26.10</small></td>
+          <td>Unbiased</td>
+          <td>$0.80</td>
+          <td>$3.20</td>
+          <td class="sim-cell"><strong>$96.00/mo</strong></td>
+          <td>1,048,576</td>
+          <td><a href="vram/unbiased-pareto-26-10-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
+          <td><a href="models/unbiased-pareto-26-10.html">Calculator →</a></td>
         </tr>
         
         <tr class="model-row" data-name="openai: gpt-6.1 sol pro openai openai/gpt-6.1-sol-pro proprietary api" data-open="0" data-in="2.0" data-out="10.0" data-ctx="1050000" data-vram="45.5" data-gpu="1936.8" data-monthly="270.00">
@@ -3246,6 +3236,17 @@
           <td>1,050,000</td>
           <td><a href="vram/openai-gpt-6-1-sol-pro-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~45.5 GB eq.)</a></td>
           <td><a href="models/openai-gpt-6-1-sol-pro.html">Calculator →</a></td>
+        </tr>
+        
+        <tr class="model-row" data-name="pareto 26.10 preview unbiased unbiased/pareto-26.10-preview proprietary api" data-open="0" data-in="0.8" data-out="3.2" data-ctx="1048576" data-vram="20.8" data-gpu="1000.8" data-monthly="96.00">
+          <td><a href="models/unbiased-pareto-26-10-preview.html"><strong>Pareto 26.10 Preview</strong></a><br/><small style="color:var(--muted)">unbiased/pareto-26.10-preview</small></td>
+          <td>Unbiased</td>
+          <td>$0.80</td>
+          <td>$3.20</td>
+          <td class="sim-cell"><strong>$96.00/mo</strong></td>
+          <td>1,048,576</td>
+          <td><a href="vram/unbiased-pareto-26-10-preview-vram-requirements.html" style="color:var(--muted)" title="Proprietary API — click for open-weight equivalent VRAM">API (~20.8 GB eq.)</a></td>
+          <td><a href="models/unbiased-pareto-26-10-preview.html">Calculator →</a></td>
         </tr>
         
         </tbody>
@@ -3289,7 +3290,7 @@
         </a>
         
         <a href="compare/openai-gpt-5-vs-x-ai-grok-4-20.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
-          <strong style="color:#fff;">OpenAI: GPT-5 vs SpaceXAI: Grok 4.20</strong>
+          <strong style="color:#fff;">OpenAI: GPT-5 vs SpaceXSI: Grok 4.20</strong>
           <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$1.25/1M vs $1.25/1M input tokens →</div>
         </a>
         
@@ -3364,7 +3365,7 @@
         </a>
         
         <a href="compare/openai-gpt-5-vs-x-ai-grok-4-20-multi-agent.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
-          <strong style="color:#fff;">OpenAI: GPT-5 vs SpaceXAI: Grok 4.20 Multi-Agent</strong>
+          <strong style="color:#fff;">OpenAI: GPT-5 vs SpaceXSI: Grok 4.20 Multi-Agent</strong>
           <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$1.25/1M vs $1.25/1M input tokens →</div>
         </a>
         
@@ -3434,7 +3435,7 @@
         </a>
         
         <a href="compare/openai-gpt-5-vs-x-ai-grok-4-3.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
-          <strong style="color:#fff;">OpenAI: GPT-5 vs SpaceXAI: Grok 4.3</strong>
+          <strong style="color:#fff;">OpenAI: GPT-5 vs SpaceXSI: Grok 4.3</strong>
           <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$1.25/1M vs $1.25/1M input tokens →</div>
         </a>
         
@@ -3469,7 +3470,7 @@
         </a>
         
         <a href="compare/anthropic-claude-sonnet-4-5-vs-x-ai-grok-4-20.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
-          <strong style="color:#fff;">Anthropic: Claude Sonnet 4.5 vs SpaceXAI: Grok 4.20</strong>
+          <strong style="color:#fff;">Anthropic: Claude Sonnet 4.5 vs SpaceXSI: Grok 4.20</strong>
           <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$3.00/1M vs $1.25/1M input tokens →</div>
         </a>
         
@@ -3544,7 +3545,7 @@
         </a>
         
         <a href="compare/anthropic-claude-sonnet-4-5-vs-x-ai-grok-4-20-multi-agent.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
-          <strong style="color:#fff;">Anthropic: Claude Sonnet 4.5 vs SpaceXAI: Grok 4.20 Multi-Agent</strong>
+          <strong style="color:#fff;">Anthropic: Claude Sonnet 4.5 vs SpaceXSI: Grok 4.20 Multi-Agent</strong>
           <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$3.00/1M vs $1.25/1M input tokens →</div>
         </a>
         
@@ -3614,7 +3615,7 @@
         </a>
         
         <a href="compare/anthropic-claude-sonnet-4-5-vs-x-ai-grok-4-3.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
-          <strong style="color:#fff;">Anthropic: Claude Sonnet 4.5 vs SpaceXAI: Grok 4.3</strong>
+          <strong style="color:#fff;">Anthropic: Claude Sonnet 4.5 vs SpaceXSI: Grok 4.3</strong>
           <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$3.00/1M vs $1.25/1M input tokens →</div>
         </a>
         
@@ -3644,7 +3645,7 @@
         </a>
         
         <a href="compare/google-gemini-2-5-pro-vs-x-ai-grok-4-20.html" class="card" style="display:block;padding:14px 18px;text-decoration:none;">
-          <strong style="color:#fff;">Google: Gemini 2.5 Pro vs SpaceXAI: Grok 4.20</strong>
+          <strong style="color:#fff;">Google: Gemini 2.5 Pro vs SpaceXSI: Grok 4.20</strong>
           <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">$1.25/1M vs $1.25/1M input tokens →</div>
         </a>
         
@@ -3717,9 +3718,13 @@
   let sortCol = '';
   let sortAsc = true;
 
-  function setWorkloadPreset(inVal, outVal) {
+  function setWorkloadPreset(inVal, outVal, btn) {
     document.getElementById('simInSlider').value = inVal;
     document.getElementById('simOutSlider').value = outVal;
+    if (btn) {
+      document.querySelectorAll('#workloadPresets .filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
     updateWorkloadSim();
   }
 
@@ -3728,6 +3733,11 @@
     const outTok = parseFloat(document.getElementById('simOutSlider').value);
     document.getElementById('simInLabel').textContent = inTok.toLocaleString() + ' / day';
     document.getElementById('simOutLabel').textContent = outTok.toLocaleString() + ' / day';
+    const totalTok = Math.max(1, inTok + outTok);
+    const inPct = Math.round((inTok / totalTok) * 100);
+    const outPct = 100 - inPct;
+    const mixEl = document.getElementById('simMixLabel');
+    if (mixEl) mixEl.textContent = `Current Mix: ${inPct}% input / ${outPct}% output`;
     const rows = document.querySelectorAll('.model-row');
     rows.forEach(r => {
       const inRate = parseFloat(r.getAttribute('data-in') || '0');
@@ -3818,7 +3828,7 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:39 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-22 18:12 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="index.html">All AI Models</a> ·

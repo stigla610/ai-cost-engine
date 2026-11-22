@@ -307,6 +307,18 @@
         <input type="range" id="outSlider" min="50000" max="20000000" step="50000" value="500000" oninput="recalc()" />
       </div>
 
+      <div id="mixInfo" style="color:var(--muted);font-size:0.84rem;margin:-8px 0 14px;">Mix: 80% input / 20% output · Blended API rate: —</div>
+
+      <div class="slider-group">
+        <label><span>GPU Utilization (Active / Peak Headroom)</span> <span id="utilVal">100% (steady 24/7)</span></label>
+        <input type="range" id="utilSlider" min="20" max="100" step="5" value="100" oninput="recalc()" />
+      </div>
+
+      <div class="slider-group">
+        <label><span>Monthly Ops &amp; Infra Overhead</span> <span id="opsVal">$0/mo</span></label>
+        <input type="range" id="opsSlider" min="0" max="1500" step="50" value="0" oninput="recalc()" />
+      </div>
+
       <div class="stat-row">
         <span>Estimated Daily API Cost</span>
         <strong id="dailyCost">$0.00</strong>
@@ -316,8 +328,12 @@
         <strong id="monthlyCost" class="price-big">$0.00</strong>
       </div>
       <div class="stat-row">
-        <span>24/7 NVIDIA H100 SXM (80GB VRAM) (Open-Weight Alternative)</span>
+        <span>24/7 NVIDIA H100 SXM (80GB VRAM) (Open-Weight Alternative)<small id="gpuBreakdown" style="display:block;color:var(--muted);font-size:0.8rem;font-weight:400;"></small></span>
         <strong id="gpuMonthlyCost">$1,936.80/mo</strong>
+      </div>
+      <div class="stat-row">
+        <span>Live Break-Even at Your Mix &amp; Util</span>
+        <strong id="liveBreakeven">—</strong>
       </div>
       <div id="verdictBox" style="margin-top:16px;padding:12px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid var(--accent-green);font-size:0.92rem;"></div>
       <div class="share-row">
@@ -380,7 +396,7 @@
   <div class="card" style="margin-top:24px;">
     <h2>Compare MoonshotAI: Kimi K3.1 Pro (batch) With Other Popular Models</h2>
     <ul style="margin-top:12px;padding-left:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%, 260px),1fr));gap:8px;">
-      <li><a href="openai-gpt-5.html">OpenAI: GPT-5 Cost Calculator ($1.25/1M in)</a></li><li><a href="anthropic-claude-sonnet-4-5.html">Anthropic: Claude Sonnet 4.5 Cost Calculator ($3.00/1M in)</a></li><li><a href="google-gemini-2-5-pro.html">Google: Gemini 2.5 Pro Cost Calculator ($1.25/1M in)</a></li><li><a href="deepseek-deepseek-chat.html">DeepSeek: DeepSeek V3 Cost Calculator ($0.2574/1M in)</a></li><li><a href="meta-llama-llama-4-maverick.html">Meta: Llama 4 Maverick Cost Calculator ($0.35/1M in)</a></li><li><a href="qwen-qwen3-32b.html">Qwen: Qwen3 32B Cost Calculator ($0.08/1M in)</a></li><li><a href="mistralai-mistral-large.html">Mistral Large Cost Calculator ($2.00/1M in)</a></li><li><a href="x-ai-grok-4-20.html">SpaceXAI: Grok 4.20 Cost Calculator ($1.25/1M in)</a></li>
+      <li><a href="openai-gpt-5.html">OpenAI: GPT-5 Cost Calculator ($1.25/1M in)</a></li><li><a href="anthropic-claude-sonnet-4-5.html">Anthropic: Claude Sonnet 4.5 Cost Calculator ($3.00/1M in)</a></li><li><a href="google-gemini-2-5-pro.html">Google: Gemini 2.5 Pro Cost Calculator ($1.25/1M in)</a></li><li><a href="deepseek-deepseek-chat.html">DeepSeek: DeepSeek V3 Cost Calculator ($0.2574/1M in)</a></li><li><a href="meta-llama-llama-4-maverick.html">Meta: Llama 4 Maverick Cost Calculator ($0.35/1M in)</a></li><li><a href="qwen-qwen3-32b.html">Qwen: Qwen3 32B Cost Calculator ($0.08/1M in)</a></li><li><a href="mistralai-mistral-large.html">Mistral Large Cost Calculator ($2.00/1M in)</a></li><li><a href="x-ai-grok-4-20.html">SpaceXSI: Grok 4.20 Cost Calculator ($1.25/1M in)</a></li>
     </ul>
   </div>
 </main>
@@ -389,49 +405,87 @@
   const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/models/moonshotai-kimi-k3-1-pro-batch.html";
   const IN_RATE = 0.372;
   const OUT_RATE = 5.583;
+  const GPU_HOURLY = 2.69;
   const GPU_MONTHLY = 1936.8;
   const IS_OPEN = false;
   function initFromParams() {
     const p = new URLSearchParams(window.location.search);
     if (p.get('in')) document.getElementById('inSlider').value = p.get('in');
     if (p.get('out')) document.getElementById('outSlider').value = p.get('out');
+    if (p.get('util')) document.getElementById('utilSlider').value = p.get('util');
+    if (p.get('ops')) document.getElementById('opsSlider').value = p.get('ops');
     recalc();
   }
   function recalc() {
     const inTok = parseFloat(document.getElementById('inSlider').value);
     const outTok = parseFloat(document.getElementById('outSlider').value);
+    const utilPct = parseFloat(document.getElementById('utilSlider').value);
+    const opsMo = parseFloat(document.getElementById('opsSlider').value);
     document.getElementById('inVal').textContent = inTok.toLocaleString();
     document.getElementById('outVal').textContent = outTok.toLocaleString();
+
+    const totalTok = Math.max(1, inTok + outTok);
+    const inPct = Math.round((inTok / totalTok) * 100);
+    const outPct = 100 - inPct;
+    const blendedRate = ((inTok * IN_RATE) + (outTok * OUT_RATE)) / totalTok;
+    document.getElementById('mixInfo').textContent = `Mix: ${inPct}% input / ${outPct}% output · Blended API rate: $${blendedRate.toFixed(2)}/1M tokens`;
+
+    const effActiveHr = GPU_HOURLY / (utilPct / 100);
+    const adjGpuMonthly = (GPU_MONTHLY / (utilPct / 100)) + opsMo;
+    document.getElementById('utilVal').textContent = utilPct === 100
+      ? `100% (steady 24/7 · $${GPU_HOURLY.toFixed(2)}/hr)`
+      : `${utilPct}% (${(100 / utilPct).toFixed(1)}× peak headroom · $${effActiveHr.toFixed(2)}/active hr)`;
+    document.getElementById('opsVal').textContent = opsMo > 0
+      ? `$${opsMo.toLocaleString()}/mo (drivers, scaling, storage)`
+      : '$0/mo';
+
     const daily = ((inTok / 1e6) * IN_RATE) + ((outTok / 1e6) * OUT_RATE);
     const monthly = daily * 30;
     document.getElementById('dailyCost').textContent = '$' + daily.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
     document.getElementById('monthlyCost').textContent = '$' + monthly.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('gpuMonthlyCost').textContent = '$' + adjGpuMonthly.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + '/mo';
+    document.getElementById('gpuBreakdown').textContent = (utilPct === 100 && opsMo === 0)
+      ? `1× dedicated GPU 24/7 @ $${GPU_HOURLY.toFixed(2)}/hr`
+      : `$${Math.round(GPU_MONTHLY).toLocaleString()} base ÷ ${utilPct}% util + $${opsMo.toLocaleString()} ops`;
+
+    const liveBeM = blendedRate > 0 ? ((adjGpuMonthly / 30) / blendedRate) : 0;
+    document.getElementById('liveBreakeven').textContent = blendedRate > 0
+      ? `~${liveBeM.toFixed(1)}M tokens/day`
+      : 'Free / $0 API';
+
     const verdict = document.getElementById('verdictBox');
-    if (monthly > GPU_MONTHLY) {
-      const save = Math.round(monthly - GPU_MONTHLY).toLocaleString();
+    if (monthly > adjGpuMonthly) {
+      const save = Math.round(monthly - adjGpuMonthly).toLocaleString();
       if (IS_OPEN) {
-        verdict.innerHTML = '💡 <strong>Switching to Open-Weight GPU Wins:</strong> At this volume, renting a dedicated Cloud GPU saves roughly <strong>$' + save + '/month</strong> compared to pay-per-token API billing.';
+        verdict.innerHTML = '💡 <strong>Switching to Open-Weight GPU Wins:</strong> Even after ' + utilPct + '% utilization &amp; $' + opsMo.toLocaleString() + '/mo ops, renting a dedicated Cloud GPU saves roughly <strong>$' + save + '/month</strong> vs. API billing.';
       } else {
-        verdict.innerHTML = '💡 <strong>Switching to Open-Weight GPU Wins:</strong> Since this model is a closed API, migrating high-volume tasks to a self-hosted open-weight equivalent (Llama / Qwen / DeepSeek) on a dedicated GPU can save roughly <strong>$' + save + '/month</strong>.';
+        verdict.innerHTML = '💡 <strong>Switching to Open-Weight GPU Wins:</strong> Even after ' + utilPct + '% utilization &amp; $' + opsMo.toLocaleString() + '/mo ops, migrating high-volume tasks to a self-hosted open-weight equivalent (Llama / Qwen / DeepSeek) can save roughly <strong>$' + save + '/month</strong>.';
       }
     } else {
-      verdict.innerHTML = '✅ <strong>Pay-Per-Token API Wins:</strong> At this volume, staying on the serverless API (or serverless GPU endpoints) is cheaper than renting a 24/7 dedicated GPU instance.';
+      verdict.innerHTML = '✅ <strong>Pay-Per-Token API Wins:</strong> At this volume (' + utilPct + '% GPU utilization, $' + opsMo.toLocaleString() + '/mo ops), pay-per-token API or scale-to-zero Serverless GPUs are cheaper than a dedicated GPU instance.';
     }
   }
   function copyCalcLink(btn) {
     const inTok = document.getElementById('inSlider').value;
     const outTok = document.getElementById('outSlider').value;
-    const url = CANONICAL_URL + '?in=' + inTok + '&out=' + outTok;
+    const util = document.getElementById('utilSlider').value;
+    const ops = document.getElementById('opsSlider').value;
+    const url = CANONICAL_URL + '?in=' + inTok + '&out=' + outTok + '&util=' + util + '&ops=' + ops;
     navigator.clipboard.writeText(url);
     const orig = btn.textContent;
     btn.textContent = '✅ Link Copied!';
     setTimeout(() => btn.textContent = orig, 2000);
   }
   function copyMarkdown(btn) {
-    const inTok = parseFloat(document.getElementById('inSlider').value).toLocaleString();
-    const outTok = parseFloat(document.getElementById('outSlider').value).toLocaleString();
+    const inRaw = document.getElementById('inSlider').value;
+    const outRaw = document.getElementById('outSlider').value;
+    const util = document.getElementById('utilSlider').value;
+    const ops = document.getElementById('opsSlider').value;
+    const inTok = parseFloat(inRaw).toLocaleString();
+    const outTok = parseFloat(outRaw).toLocaleString();
     const monthly = document.getElementById('monthlyCost').textContent;
-    const md = `**${MODEL_NAME} Cost Estimate** (${inTok} in / ${outTok} out per day): **${monthly}/mo** vs **$${GPU_MONTHLY.toFixed(2)}/mo** on Cloud GPU — [Calculate on TokenBench](${CANONICAL_URL}?in=${document.getElementById('inSlider').value}&out=${document.getElementById('outSlider').value})`;
+    const gpuMo = document.getElementById('gpuMonthlyCost').textContent;
+    const md = `**${MODEL_NAME} Cost Estimate** (${inTok} in / ${outTok} out per day @ ${util}% util, $${ops}/mo ops): **${monthly}/mo** API vs **${gpuMo}** on Cloud GPU — [Calculate on TokenBench](${CANONICAL_URL}?in=${inRaw}&out=${outRaw}&util=${util}&ops=${ops})`;
     navigator.clipboard.writeText(md);
     const orig = btn.textContent;
     btn.textContent = '✅ Markdown Copied!';
@@ -441,7 +495,7 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-19 13:39 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-22 18:12 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·

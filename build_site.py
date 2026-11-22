@@ -1097,6 +1097,18 @@ def build_model_page(m, all_models, config, updated_str):
         <input type="range" id="outSlider" min="50000" max="{out_max}" step="50000" value="500000" oninput="recalc()" />
       </div>
 
+      <div id="mixInfo" style="color:var(--muted);font-size:0.84rem;margin:-8px 0 14px;">Mix: 80% input / 20% output · Blended API rate: —</div>
+
+      <div class="slider-group">
+        <label><span>GPU Utilization (Active / Peak Headroom)</span> <span id="utilVal">100% (steady 24/7)</span></label>
+        <input type="range" id="utilSlider" min="20" max="100" step="5" value="100" oninput="recalc()" />
+      </div>
+
+      <div class="slider-group">
+        <label><span>Monthly Ops &amp; Infra Overhead</span> <span id="opsVal">$0/mo</span></label>
+        <input type="range" id="opsSlider" min="0" max="1500" step="50" value="0" oninput="recalc()" />
+      </div>
+
       <div class="stat-row">
         <span>Estimated Daily API Cost</span>
         <strong id="dailyCost">$0.00</strong>
@@ -1106,8 +1118,12 @@ def build_model_page(m, all_models, config, updated_str):
         <strong id="monthlyCost" class="price-big">$0.00</strong>
       </div>
       <div class="stat-row">
-        <span>{gpu_row_label}</span>
+        <span>{gpu_row_label}<small id="gpuBreakdown" style="display:block;color:var(--muted);font-size:0.8rem;font-weight:400;"></small></span>
         <strong id="gpuMonthlyCost">${round(daily_gpu_cost * 30, 2):,.2f}/mo</strong>
+      </div>
+      <div class="stat-row">
+        <span>Live Break-Even at Your Mix &amp; Util</span>
+        <strong id="liveBreakeven">—</strong>
       </div>
       <div id="verdictBox" style="margin-top:16px;padding:12px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid var(--accent-green);font-size:0.92rem;"></div>
       <div class="share-row">
@@ -1179,49 +1195,87 @@ def build_model_page(m, all_models, config, updated_str):
   const CANONICAL_URL = {json.dumps(canonical)};
   const IN_RATE = {m['input_1m']};
   const OUT_RATE = {m['output_1m']};
+  const GPU_HOURLY = {gpu['hourly_usd']};
   const GPU_MONTHLY = {round(daily_gpu_cost * 30, 2)};
   const IS_OPEN = {"true" if m["is_open_weight"] else "false"};
   function initFromParams() {{
     const p = new URLSearchParams(window.location.search);
     if (p.get('in')) document.getElementById('inSlider').value = p.get('in');
     if (p.get('out')) document.getElementById('outSlider').value = p.get('out');
+    if (p.get('util')) document.getElementById('utilSlider').value = p.get('util');
+    if (p.get('ops')) document.getElementById('opsSlider').value = p.get('ops');
     recalc();
   }}
   function recalc() {{
     const inTok = parseFloat(document.getElementById('inSlider').value);
     const outTok = parseFloat(document.getElementById('outSlider').value);
+    const utilPct = parseFloat(document.getElementById('utilSlider').value);
+    const opsMo = parseFloat(document.getElementById('opsSlider').value);
     document.getElementById('inVal').textContent = inTok.toLocaleString();
     document.getElementById('outVal').textContent = outTok.toLocaleString();
+
+    const totalTok = Math.max(1, inTok + outTok);
+    const inPct = Math.round((inTok / totalTok) * 100);
+    const outPct = 100 - inPct;
+    const blendedRate = ((inTok * IN_RATE) + (outTok * OUT_RATE)) / totalTok;
+    document.getElementById('mixInfo').textContent = `Mix: ${{inPct}}% input / ${{outPct}}% output · Blended API rate: $${{blendedRate.toFixed(2)}}/1M tokens`;
+
+    const effActiveHr = GPU_HOURLY / (utilPct / 100);
+    const adjGpuMonthly = (GPU_MONTHLY / (utilPct / 100)) + opsMo;
+    document.getElementById('utilVal').textContent = utilPct === 100
+      ? `100% (steady 24/7 · $${{GPU_HOURLY.toFixed(2)}}/hr)`
+      : `${{utilPct}}% (${{(100 / utilPct).toFixed(1)}}× peak headroom · $${{effActiveHr.toFixed(2)}}/active hr)`;
+    document.getElementById('opsVal').textContent = opsMo > 0
+      ? `$${{opsMo.toLocaleString()}}/mo (drivers, scaling, storage)`
+      : '$0/mo';
+
     const daily = ((inTok / 1e6) * IN_RATE) + ((outTok / 1e6) * OUT_RATE);
     const monthly = daily * 30;
     document.getElementById('dailyCost').textContent = '$' + daily.toLocaleString(undefined, {{minimumFractionDigits: 2, maximumFractionDigits: 2}});
     document.getElementById('monthlyCost').textContent = '$' + monthly.toLocaleString(undefined, {{minimumFractionDigits: 2, maximumFractionDigits: 2}});
+    document.getElementById('gpuMonthlyCost').textContent = '$' + adjGpuMonthly.toLocaleString(undefined, {{minimumFractionDigits: 2, maximumFractionDigits: 2}}) + '/mo';
+    document.getElementById('gpuBreakdown').textContent = (utilPct === 100 && opsMo === 0)
+      ? `1× dedicated GPU 24/7 @ $${{GPU_HOURLY.toFixed(2)}}/hr`
+      : `$${{Math.round(GPU_MONTHLY).toLocaleString()}} base ÷ ${{utilPct}}% util + $${{opsMo.toLocaleString()}} ops`;
+
+    const liveBeM = blendedRate > 0 ? ((adjGpuMonthly / 30) / blendedRate) : 0;
+    document.getElementById('liveBreakeven').textContent = blendedRate > 0
+      ? `~${{liveBeM.toFixed(1)}}M tokens/day`
+      : 'Free / $0 API';
+
     const verdict = document.getElementById('verdictBox');
-    if (monthly > GPU_MONTHLY) {{
-      const save = Math.round(monthly - GPU_MONTHLY).toLocaleString();
+    if (monthly > adjGpuMonthly) {{
+      const save = Math.round(monthly - adjGpuMonthly).toLocaleString();
       if (IS_OPEN) {{
-        verdict.innerHTML = '💡 <strong>{verdict_win_prefix}:</strong> At this volume, renting a dedicated Cloud GPU saves roughly <strong>$' + save + '/month</strong> compared to pay-per-token API billing.';
+        verdict.innerHTML = '💡 <strong>{verdict_win_prefix}:</strong> Even after ' + utilPct + '% utilization &amp; $' + opsMo.toLocaleString() + '/mo ops, renting a dedicated Cloud GPU saves roughly <strong>$' + save + '/month</strong> vs. API billing.';
       }} else {{
-        verdict.innerHTML = '💡 <strong>{verdict_win_prefix}:</strong> Since this model is a closed API, migrating high-volume tasks to a self-hosted open-weight equivalent (Llama / Qwen / DeepSeek) on a dedicated GPU can save roughly <strong>$' + save + '/month</strong>.';
+        verdict.innerHTML = '💡 <strong>{verdict_win_prefix}:</strong> Even after ' + utilPct + '% utilization &amp; $' + opsMo.toLocaleString() + '/mo ops, migrating high-volume tasks to a self-hosted open-weight equivalent (Llama / Qwen / DeepSeek) can save roughly <strong>$' + save + '/month</strong>.';
       }}
     }} else {{
-      verdict.innerHTML = '✅ <strong>Pay-Per-Token API Wins:</strong> At this volume, staying on the serverless API (or serverless GPU endpoints) is cheaper than renting a 24/7 dedicated GPU instance.';
+      verdict.innerHTML = '✅ <strong>Pay-Per-Token API Wins:</strong> At this volume (' + utilPct + '% GPU utilization, $' + opsMo.toLocaleString() + '/mo ops), pay-per-token API or scale-to-zero Serverless GPUs are cheaper than a dedicated GPU instance.';
     }}
   }}
   function copyCalcLink(btn) {{
     const inTok = document.getElementById('inSlider').value;
     const outTok = document.getElementById('outSlider').value;
-    const url = CANONICAL_URL + '?in=' + inTok + '&out=' + outTok;
+    const util = document.getElementById('utilSlider').value;
+    const ops = document.getElementById('opsSlider').value;
+    const url = CANONICAL_URL + '?in=' + inTok + '&out=' + outTok + '&util=' + util + '&ops=' + ops;
     navigator.clipboard.writeText(url);
     const orig = btn.textContent;
     btn.textContent = '✅ Link Copied!';
     setTimeout(() => btn.textContent = orig, 2000);
   }}
   function copyMarkdown(btn) {{
-    const inTok = parseFloat(document.getElementById('inSlider').value).toLocaleString();
-    const outTok = parseFloat(document.getElementById('outSlider').value).toLocaleString();
+    const inRaw = document.getElementById('inSlider').value;
+    const outRaw = document.getElementById('outSlider').value;
+    const util = document.getElementById('utilSlider').value;
+    const ops = document.getElementById('opsSlider').value;
+    const inTok = parseFloat(inRaw).toLocaleString();
+    const outTok = parseFloat(outRaw).toLocaleString();
     const monthly = document.getElementById('monthlyCost').textContent;
-    const md = `**${{MODEL_NAME}} Cost Estimate** (${{inTok}} in / ${{outTok}} out per day): **${{monthly}}/mo** vs **$${{GPU_MONTHLY.toFixed(2)}}/mo** on Cloud GPU — [Calculate on TokenBench](${{CANONICAL_URL}}?in=${{document.getElementById('inSlider').value}}&out=${{document.getElementById('outSlider').value}})`;
+    const gpuMo = document.getElementById('gpuMonthlyCost').textContent;
+    const md = `**${{MODEL_NAME}} Cost Estimate** (${{inTok}} in / ${{outTok}} out per day @ ${{util}}% util, $${{ops}}/mo ops): **${{monthly}}/mo** API vs **${{gpuMo}}** on Cloud GPU — [Calculate on TokenBench](${{CANONICAL_URL}}?in=${{inRaw}}&out=${{outRaw}}&util=${{util}}&ops=${{ops}})`;
     navigator.clipboard.writeText(md);
     const orig = btn.textContent;
     btn.textContent = '✅ Markdown Copied!';
@@ -1909,6 +1963,28 @@ def build_benchmarks_page(models, config, updated_str):
           <td><strong>~{be_tokens}M/day</strong> ({html.escape(gpu['name'].split('(')[0].strip())})</td>
         </tr>"""
 
+    # Sensitivity breakdown using #1 flagship frontier model vs A100 80GB
+    sens_model = next((m for m in primary if m["input_1m"] >= 1.0), primary[0])
+    sens_scenarios = [
+        ("100% Util · $0 Ops · 80/20 In/Out", "Steady 24/7 batch, input-heavy", 1.0, 0.0, 0.80),
+        ("100% Util · $0 Ops · 50/50 In/Out", "Steady 24/7, output-heavy", 1.0, 0.0, 0.50),
+        ("50% Util · $300 Ops · 80/20 In/Out", "Daytime traffic / idle overnight + ops", 0.50, 300.0, 0.80),
+        ("30% Util · $500 Ops · 80/20 In/Out", "Bursty SaaS + scaling/ops overhead", 0.30, 500.0, 0.80),
+    ]
+    sens_rows = ""
+    for sc_label, sc_note, util_frac, ops_mo, in_frac in sens_scenarios:
+        out_frac = 1.0 - in_frac
+        blended = (in_frac * sens_model["input_1m"]) + (out_frac * sens_model["output_1m"])
+        eff_mo = (a100_mo / util_frac) + ops_mo
+        be_m_day = (eff_mo / 30.0) / max(blended, 0.01)
+        sens_rows += f"""
+        <tr>
+          <td><strong>{html.escape(sc_label)}</strong><br/><small style="color:var(--muted)">{html.escape(sc_note)}</small></td>
+          <td>${blended:.2f} / 1M</td>
+          <td>${eff_mo:,.0f}/mo</td>
+          <td><strong style="color:var(--accent-green)">~{be_m_day:.1f}M tokens/day</strong></td>
+        </tr>"""
+
     # Guide 2: KV Cache VRAM scaling for common open-weight sizes
     kv_sizes = [
         ("8B (Llama 3.1 8B / Qwen3 8B)", 8.0),
@@ -1992,6 +2068,27 @@ def build_benchmarks_page(models, config, updated_str):
         <tbody>{breakeven_rows}</tbody>
       </table>
     </div>
+
+    <h3 style="margin-top:24px;margin-bottom:8px;">Utilization, Ops Overhead &amp; Output-Mix Sensitivity</h3>
+    <p style="color:var(--muted);font-size:0.9rem;margin-bottom:10px;">
+      Comparing <strong><a href="models/{sens_model['slug']}.html">{html.escape(sens_model['name'])}</a></strong> ({format_price(sens_model['input_1m'])} in / {format_price(sens_model['output_1m'])} out per 1M) against an <strong>NVIDIA A100 80GB</strong> (${a100_mo:,.0f}/mo base). Lower utilization, driver/scaling ops, or output-heavy mixes shift the break-even significantly:
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Operating Scenario</th>
+            <th>Blended API Rate</th>
+            <th>Effective GPU + Ops Cost</th>
+            <th>Break-Even Volume</th>
+          </tr>
+        </thead>
+        <tbody>{sens_rows}</tbody>
+      </table>
+    </div>
+    <p style="color:var(--muted);font-size:0.86rem;margin-top:10px;">
+      🎛️ <a href="models/{sens_model['slug']}.html">Click any model above to slide Utilization (20%–100%), Ops Overhead, and Input/Output Mix live →</a>
+    </p>
   </div>
 
   <div class="card" id="vram-scaling" style="margin-bottom:24px;">
@@ -2224,11 +2321,12 @@ def build_index_page(models, comparisons, config, updated_str, total_pages):
         <span class="badge badge-green" style="margin-bottom:4px;">Live Batch Workload Simulator</span>
         <h2 style="margin-bottom:2px;">Simulate Your Monthly Bill Across All {len(display_models)} Models</h2>
       </div>
-      <div class="filter-bar" style="margin-bottom:0;">
-        <button type="button" class="filter-pill" onclick="setWorkloadPreset(200000, 50000)">Indie App (250K/day)</button>
-        <button type="button" class="filter-pill active" onclick="setWorkloadPreset(2000000, 500000)">Startup (2.5M/day)</button>
-        <button type="button" class="filter-pill" onclick="setWorkloadPreset(10000000, 2500000)">Scale-Up (12.5M/day)</button>
-        <button type="button" class="filter-pill" onclick="setWorkloadPreset(50000000, 10000000)">Agent Fleet (60M/day)</button>
+      <div class="filter-bar" style="margin-bottom:0;" id="workloadPresets">
+        <button type="button" class="filter-pill" onclick="setWorkloadPreset(200000, 50000, this)">Indie App (250K/day)</button>
+        <button type="button" class="filter-pill active" onclick="setWorkloadPreset(2000000, 500000, this)">Startup (2.5M/day)</button>
+        <button type="button" class="filter-pill" onclick="setWorkloadPreset(10000000, 2500000, this)">Scale-Up (12.5M/day)</button>
+        <button type="button" class="filter-pill" onclick="setWorkloadPreset(50000000, 10000000, this)">Agent Fleet (60M/day)</button>
+        <button type="button" class="filter-pill" onclick="setWorkloadPreset(5000000, 5000000, this)">Output-Heavy 50/50 (10M/day)</button>
       </div>
     </div>
     <div class="grid-2" style="margin:12px 0 6px;">
@@ -2242,7 +2340,7 @@ def build_index_page(models, comparisons, config, updated_str, total_pages):
       </div>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:8px;">
-      <small style="color:var(--muted);">💡 Tip: Click any column header below (e.g. <strong>Est. Monthly</strong> or <strong>Input / 1M</strong>) to sort all models from cheapest to most expensive.</small>
+      <small style="color:var(--muted);">💡 <span id="simMixLabel" style="color:var(--text);font-weight:600;">Current Mix: 80% input / 20% output</span> · Click any column header below (e.g. <strong>Est. Monthly</strong> or <strong>Input / 1M</strong>) to sort all models from cheapest to most expensive.</small>
       <button type="button" class="btn-ghost" onclick="copyIndexLink(this)">🔗 Copy Shareable Benchmark Link</button>
     </div>
   </div>
@@ -2311,9 +2409,13 @@ def build_index_page(models, comparisons, config, updated_str, total_pages):
   let sortCol = '';
   let sortAsc = true;
 
-  function setWorkloadPreset(inVal, outVal) {{
+  function setWorkloadPreset(inVal, outVal, btn) {{
     document.getElementById('simInSlider').value = inVal;
     document.getElementById('simOutSlider').value = outVal;
+    if (btn) {{
+      document.querySelectorAll('#workloadPresets .filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }}
     updateWorkloadSim();
   }}
 
@@ -2322,6 +2424,11 @@ def build_index_page(models, comparisons, config, updated_str, total_pages):
     const outTok = parseFloat(document.getElementById('simOutSlider').value);
     document.getElementById('simInLabel').textContent = inTok.toLocaleString() + ' / day';
     document.getElementById('simOutLabel').textContent = outTok.toLocaleString() + ' / day';
+    const totalTok = Math.max(1, inTok + outTok);
+    const inPct = Math.round((inTok / totalTok) * 100);
+    const outPct = 100 - inPct;
+    const mixEl = document.getElementById('simMixLabel');
+    if (mixEl) mixEl.textContent = `Current Mix: ${{inPct}}% input / ${{outPct}}% output`;
     const rows = document.querySelectorAll('.model-row');
     rows.forEach(r => {{
       const inRate = parseFloat(r.getAttribute('data-in') || '0');

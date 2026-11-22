@@ -18,7 +18,7 @@ Using live pricing pulled across 450 models on [TokenBench](https://stigla610.gi
 | [Meta: Llama 4 Maverick](https://stigla610.github.io/ai-cost-engine/models/meta-llama-llama-4-maverick.html) | $0.35 / $1.00 | $360.00/mo | $825.00/mo | ~236.9M/day |
 | [Qwen: Qwen3 32B](https://stigla610.github.io/ai-cost-engine/models/qwen-qwen3-32b.html) | $0.08 / $0.28 | $90.00/mo | $204.00/mo | ~238.3M/day |
 | [Mistral Large](https://stigla610.github.io/ai-cost-engine/models/mistralai-mistral-large.html) | $2.00 / $6.00 | $2,100.00/mo | $4,800.00/mo | ~40.4M/day |
-| [SpaceXAI: Grok 4.20](https://stigla610.github.io/ai-cost-engine/models/x-ai-grok-4-20.html) | $1.25 / $2.50 | $1,125.00/mo | $2,625.00/mo | ~39.7M/day |
+| [SpaceXSI: Grok 4.20](https://stigla610.github.io/ai-cost-engine/models/x-ai-grok-4-20.html) | $1.25 / $2.50 | $1,125.00/mo | $2,625.00/mo | ~39.7M/day |
 | [NVIDIA: Nemotron 3 Nano 30B A3B](https://stigla610.github.io/ai-cost-engine/models/nvidia-nemotron-3-nano-30b-a3b.html) | $0.06 / $0.24 | $72.00/mo | $162.00/mo | ~292.6M/day |
 | [Cohere: Command A](https://stigla610.github.io/ai-cost-engine/models/cohere-command-a.html) | $2.50 / $10.00 | $3,000.00/mo | $6,750.00/mo | ~27.2M/day |
 | [Z.ai: GLM 4.5](https://stigla610.github.io/ai-cost-engine/models/z-ai-glm-4-5.html) | $0.60 / $2.20 | $690.00/mo | $1,560.00/mo | ~119.6M/day |
