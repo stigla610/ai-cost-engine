@@ -8,6 +8,11 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'TODO.md'
+      - 'README.md'
+      - 'PROMOTION_KIT.md'
+      - 'LICENSE'
 
 permissions:
   contents: read
@@ -19,7 +24,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -30,7 +35,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Fetch live AI model pricing & build 1,200+ programmatic SEO pages
+      - name: Fetch live AI model pricing & build 1,500+ programmatic SEO pages
         run: python build_site.py
 
       - name: Setup GitHub Pages
@@ -41,9 +46,24 @@ jobs:
         with:
           path: './dist'
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Checkout repository for IndexNow ping
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
       - name: Ping IndexNow (Bing, DuckDuckGo, Yandex, Naver) with all live URLs
         run: python build_site.py --ping-indexnow
