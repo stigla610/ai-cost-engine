@@ -18,5 +18,5 @@
 - [ ] Publish **Article 2** ([`articles/02-local-llm-vram-kv-cache-guide-2026.md`](./articles/02-local-llm-vram-kv-cache-guide-2026.md)) on Dev.to & Hashnode *(space 1–2 days after Article 1)*
 - [ ] Publish **Article 3** ([`articles/03-cheapest-llm-apis-ranked-by-workload-2026.md`](./articles/03-cheapest-llm-apis-ranked-by-workload-2026.md)) on Dev.to & Hashnode *(space 1–2 days after Article 2)*
 - [ ] Optional: Add `amazon_associate_tag` to [`config.json`](./config.json) for local GPU hardware commissions
-- [ ] Optional: Submit TokenBench to AlternativeTo / SaaSHub / Futurepedia directories
+- [x] Directory submissions: **SaaSHub** submitted ($0 free tier, pending review); **AlternativeTo** & **OpenAlternative** require sign-in; **FutureTools.io** needs CAPTCHA completion; **Futurepedia** & **AIxploria** closed free listings
 - [ ] Check status of open Awesome-list PRs (`rafska/awesome-local-llm#391` and `EndoTheDev/Awesome-Ollama#171`)
