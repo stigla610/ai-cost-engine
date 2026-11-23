@@ -4,21 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Z.ai: GLM Flash Latest API Cost Calculator &amp; Self-Host GPU Break-Even (2026)</title>
-  <meta name="description" content="Calculate exact Z.ai: GLM Flash Latest token costs ($0.0399/1M input, $0.0784/1M output), local VRAM requirements (5.2GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta name="description" content="Calculate exact Z.ai: GLM Flash Latest token costs ($0.0475/1M input, $0.0729/1M output), local VRAM requirements (5.2GB Q4), and Cloud GPU self-hosting break-even." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/models/z-ai-glm-flash-latest.html" />
   <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
   <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="Z.ai: GLM Flash Latest API Cost Calculator &amp; Self-Host GPU Break-Even (2026)" />
-  <meta property="og:description" content="Calculate exact Z.ai: GLM Flash Latest token costs ($0.0399/1M input, $0.0784/1M output), local VRAM requirements (5.2GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta property="og:description" content="Calculate exact Z.ai: GLM Flash Latest token costs ($0.0475/1M input, $0.0729/1M output), local VRAM requirements (5.2GB Q4), and Cloud GPU self-hosting break-even." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/models/z-ai-glm-flash-latest.html" />
   <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Z.ai: GLM Flash Latest API Cost Calculator &amp; Self-Host GPU Break-Even (2026)" />
-  <meta name="twitter:description" content="Calculate exact Z.ai: GLM Flash Latest token costs ($0.0399/1M input, $0.0784/1M output), local VRAM requirements (5.2GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta name="twitter:description" content="Calculate exact Z.ai: GLM Flash Latest token costs ($0.0475/1M input, $0.0729/1M output), local VRAM requirements (5.2GB Q4), and Cloud GPU self-hosting break-even." />
   <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Z.ai: GLM Flash Latest API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Z.ai: GLM Flash Latest costs $0.0399 per 1M input tokens and $0.0784 per 1M output tokens, with a context window of 1,048,576 tokens."}}, {"@type": "Question", "name": "When is it cheaper to self-host Z.ai: GLM Flash Latest on a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Renting a dedicated NVIDIA RTX 4090 (24GB VRAM) costs roughly $0.39/hour ($9.36/day). If your workload exceeds 182.1M blended tokens per day, self-hosting Z.ai: GLM Flash Latest on Vast.ai GPU Marketplace can significantly reduce your monthly inference bill."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Z.ai: GLM Flash Latest API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Z.ai: GLM Flash Latest costs $0.0475 per 1M input tokens and $0.0729 per 1M output tokens, with a context window of 1,048,576 tokens."}}, {"@type": "Question", "name": "When is it cheaper to self-host Z.ai: GLM Flash Latest on a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Renting a dedicated NVIDIA RTX 4090 (24GB VRAM) costs roughly $0.39/hour ($9.36/day). If your workload exceeds 169.9M blended tokens per day, self-hosting Z.ai: GLM Flash Latest on Vast.ai GPU Marketplace can significantly reduce your monthly inference bill."}}]}</script>
   <script data-goatcounter="https://stigla.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   <style>
     :root {
@@ -299,12 +299,12 @@
 
       <div class="slider-group">
         <label><span>Input Tokens per Day</span> <span id="inVal">2,000,000</span></label>
-        <input type="range" id="inSlider" min="100000" max="260000000" step="100000" value="2000000" oninput="recalc()" />
+        <input type="range" id="inSlider" min="100000" max="240000000" step="100000" value="2000000" oninput="recalc()" />
       </div>
 
       <div class="slider-group">
         <label><span>Output Tokens per Day</span> <span id="outVal">500,000</span></label>
-        <input type="range" id="outSlider" min="50000" max="104000000" step="50000" value="500000" oninput="recalc()" />
+        <input type="range" id="outSlider" min="50000" max="96000000" step="50000" value="500000" oninput="recalc()" />
       </div>
 
       <div id="mixInfo" style="color:var(--muted);font-size:0.84rem;margin:-8px 0 14px;">Mix: 80% input / 20% output · Blended API rate: —</div>
@@ -358,11 +358,11 @@
       </div>
       <div class="stat-row">
         <span>Input Price (per 1M tokens)</span>
-        <strong>$0.0399</strong>
+        <strong>$0.0475</strong>
       </div>
       <div class="stat-row">
         <span>Output Price (per 1M tokens)</span>
-        <strong>$0.0784</strong>
+        <strong>$0.0729</strong>
       </div>
       <div class="stat-row">
         <span>Max Context Window</span>
@@ -374,7 +374,7 @@
       </div>
       <div class="stat-row">
         <span>API vs. GPU Daily Break-Even</span>
-        <strong>~182.1M tokens/day</strong>
+        <strong>~169.9M tokens/day</strong>
       </div>
 
       <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
@@ -446,8 +446,8 @@
 <script>
   const MODEL_NAME = "Z.ai: GLM Flash Latest";
   const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/models/z-ai-glm-flash-latest.html";
-  const IN_RATE = 0.0399;
-  const OUT_RATE = 0.0784;
+  const IN_RATE = 0.0475;
+  const OUT_RATE = 0.0729;
   const GPU_HOURLY = 0.39;
   const GPU_MONTHLY = 280.8;
   const IS_OPEN = true;
@@ -538,7 +538,7 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-22 18:12 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-23 19:58 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·

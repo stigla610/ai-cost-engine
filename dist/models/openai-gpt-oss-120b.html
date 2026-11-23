@@ -4,21 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OpenAI: gpt-oss-120b API Cost Calculator &amp; Self-Host GPU Break-Even (2026)</title>
-  <meta name="description" content="Calculate exact OpenAI: gpt-oss-120b token costs ($0.09/1M input, $0.36/1M output), local VRAM requirements (78.0GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta name="description" content="Calculate exact OpenAI: gpt-oss-120b token costs ($0.05/1M input, $0.25/1M output), local VRAM requirements (78.0GB Q4), and Cloud GPU self-hosting break-even." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/models/openai-gpt-oss-120b.html" />
   <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
   <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="OpenAI: gpt-oss-120b API Cost Calculator &amp; Self-Host GPU Break-Even (2026)" />
-  <meta property="og:description" content="Calculate exact OpenAI: gpt-oss-120b token costs ($0.09/1M input, $0.36/1M output), local VRAM requirements (78.0GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta property="og:description" content="Calculate exact OpenAI: gpt-oss-120b token costs ($0.05/1M input, $0.25/1M output), local VRAM requirements (78.0GB Q4), and Cloud GPU self-hosting break-even." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/models/openai-gpt-oss-120b.html" />
   <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="OpenAI: gpt-oss-120b API Cost Calculator &amp; Self-Host GPU Break-Even (2026)" />
-  <meta name="twitter:description" content="Calculate exact OpenAI: gpt-oss-120b token costs ($0.09/1M input, $0.36/1M output), local VRAM requirements (78.0GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta name="twitter:description" content="Calculate exact OpenAI: gpt-oss-120b token costs ($0.05/1M input, $0.25/1M output), local VRAM requirements (78.0GB Q4), and Cloud GPU self-hosting break-even." />
   <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the OpenAI: gpt-oss-120b API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "OpenAI: gpt-oss-120b costs $0.09 per 1M input tokens and $0.36 per 1M output tokens, with a context window of 131,072 tokens."}}, {"@type": "Question", "name": "When is it cheaper to self-host OpenAI: gpt-oss-120b on a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Renting a dedicated 2x NVIDIA H100 (160GB VRAM) costs roughly $5.38/hour ($129.12/day). If your workload exceeds 755.1M blended tokens per day, self-hosting OpenAI: gpt-oss-120b on RunPod Cloud GPUs can significantly reduce your monthly inference bill."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the OpenAI: gpt-oss-120b API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "OpenAI: gpt-oss-120b costs $0.05 per 1M input tokens and $0.25 per 1M output tokens, with a context window of 131,072 tokens."}}, {"@type": "Question", "name": "When is it cheaper to self-host OpenAI: gpt-oss-120b on a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Renting a dedicated 2x NVIDIA H100 (160GB VRAM) costs roughly $5.38/hour ($129.12/day). If your workload exceeds 1173.8M blended tokens per day, self-hosting OpenAI: gpt-oss-120b on RunPod Cloud GPUs can significantly reduce your monthly inference bill."}}]}</script>
   <script data-goatcounter="https://stigla.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   <style>
     :root {
@@ -358,11 +358,11 @@
       </div>
       <div class="stat-row">
         <span>Input Price (per 1M tokens)</span>
-        <strong>$0.09</strong>
+        <strong>$0.05</strong>
       </div>
       <div class="stat-row">
         <span>Output Price (per 1M tokens)</span>
-        <strong>$0.36</strong>
+        <strong>$0.25</strong>
       </div>
       <div class="stat-row">
         <span>Max Context Window</span>
@@ -374,7 +374,7 @@
       </div>
       <div class="stat-row">
         <span>API vs. GPU Daily Break-Even</span>
-        <strong>~755.1M tokens/day</strong>
+        <strong>~1173.8M tokens/day</strong>
       </div>
 
       <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
@@ -446,8 +446,8 @@
 <script>
   const MODEL_NAME = "OpenAI: gpt-oss-120b";
   const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/models/openai-gpt-oss-120b.html";
-  const IN_RATE = 0.09;
-  const OUT_RATE = 0.36;
+  const IN_RATE = 0.05;
+  const OUT_RATE = 0.25;
   const GPU_HOURLY = 5.38;
   const GPU_MONTHLY = 3873.6;
   const IS_OPEN = true;
@@ -538,7 +538,7 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-22 18:12 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-23 19:58 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·

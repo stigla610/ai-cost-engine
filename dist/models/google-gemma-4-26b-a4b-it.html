@@ -4,21 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Google: Gemma 4 26B A4B API Cost Calculator &amp; Self-Host GPU Break-Even (2026)</title>
-  <meta name="description" content="Calculate exact Google: Gemma 4 26B A4B token costs ($0.0675/1M input, $0.225/1M output), local VRAM requirements (16.9GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta name="description" content="Calculate exact Google: Gemma 4 26B A4B token costs ($0.0765/1M input, $0.255/1M output), local VRAM requirements (16.9GB Q4), and Cloud GPU self-hosting break-even." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/models/google-gemma-4-26b-a4b-it.html" />
   <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
   <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="Google: Gemma 4 26B A4B API Cost Calculator &amp; Self-Host GPU Break-Even (2026)" />
-  <meta property="og:description" content="Calculate exact Google: Gemma 4 26B A4B token costs ($0.0675/1M input, $0.225/1M output), local VRAM requirements (16.9GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta property="og:description" content="Calculate exact Google: Gemma 4 26B A4B token costs ($0.0765/1M input, $0.255/1M output), local VRAM requirements (16.9GB Q4), and Cloud GPU self-hosting break-even." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/models/google-gemma-4-26b-a4b-it.html" />
   <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Google: Gemma 4 26B A4B API Cost Calculator &amp; Self-Host GPU Break-Even (2026)" />
-  <meta name="twitter:description" content="Calculate exact Google: Gemma 4 26B A4B token costs ($0.0675/1M input, $0.225/1M output), local VRAM requirements (16.9GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta name="twitter:description" content="Calculate exact Google: Gemma 4 26B A4B token costs ($0.0765/1M input, $0.255/1M output), local VRAM requirements (16.9GB Q4), and Cloud GPU self-hosting break-even." />
   <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Google: Gemma 4 26B A4B API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Google: Gemma 4 26B A4B costs $0.0675 per 1M input tokens and $0.225 per 1M output tokens, with a context window of 262,144 tokens."}}, {"@type": "Question", "name": "When is it cheaper to self-host Google: Gemma 4 26B A4B on a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Renting a dedicated NVIDIA A100 (80GB VRAM) costs roughly $1.39/hour ($33.36/day). If your workload exceeds 290.6M blended tokens per day, self-hosting Google: Gemma 4 26B A4B on RunPod Cloud GPUs can significantly reduce your monthly inference bill."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Google: Gemma 4 26B A4B API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Google: Gemma 4 26B A4B costs $0.0765 per 1M input tokens and $0.255 per 1M output tokens, with a context window of 262,144 tokens."}}, {"@type": "Question", "name": "When is it cheaper to self-host Google: Gemma 4 26B A4B on a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Renting a dedicated NVIDIA A100 (80GB VRAM) costs roughly $1.39/hour ($33.36/day). If your workload exceeds 256.6M blended tokens per day, self-hosting Google: Gemma 4 26B A4B on RunPod Cloud GPUs can significantly reduce your monthly inference bill."}}]}</script>
   <script data-goatcounter="https://stigla.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   <style>
     :root {
@@ -299,12 +299,12 @@
 
       <div class="slider-group">
         <label><span>Input Tokens per Day</span> <span id="inVal">2,000,000</span></label>
-        <input type="range" id="inSlider" min="100000" max="410000000" step="100000" value="2000000" oninput="recalc()" />
+        <input type="range" id="inSlider" min="100000" max="360000000" step="100000" value="2000000" oninput="recalc()" />
       </div>
 
       <div class="slider-group">
         <label><span>Output Tokens per Day</span> <span id="outVal">500,000</span></label>
-        <input type="range" id="outSlider" min="50000" max="164000000" step="50000" value="500000" oninput="recalc()" />
+        <input type="range" id="outSlider" min="50000" max="144000000" step="50000" value="500000" oninput="recalc()" />
       </div>
 
       <div id="mixInfo" style="color:var(--muted);font-size:0.84rem;margin:-8px 0 14px;">Mix: 80% input / 20% output · Blended API rate: —</div>
@@ -358,11 +358,11 @@
       </div>
       <div class="stat-row">
         <span>Input Price (per 1M tokens)</span>
-        <strong>$0.0675</strong>
+        <strong>$0.0765</strong>
       </div>
       <div class="stat-row">
         <span>Output Price (per 1M tokens)</span>
-        <strong>$0.225</strong>
+        <strong>$0.255</strong>
       </div>
       <div class="stat-row">
         <span>Max Context Window</span>
@@ -374,7 +374,7 @@
       </div>
       <div class="stat-row">
         <span>API vs. GPU Daily Break-Even</span>
-        <strong>~290.6M tokens/day</strong>
+        <strong>~256.6M tokens/day</strong>
       </div>
 
       <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
@@ -446,8 +446,8 @@
 <script>
   const MODEL_NAME = "Google: Gemma 4 26B A4B";
   const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/models/google-gemma-4-26b-a4b-it.html";
-  const IN_RATE = 0.0675;
-  const OUT_RATE = 0.225;
+  const IN_RATE = 0.0765;
+  const OUT_RATE = 0.255;
   const GPU_HOURLY = 1.39;
   const GPU_MONTHLY = 1000.8;
   const IS_OPEN = true;
@@ -538,7 +538,7 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-22 18:12 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-23 19:58 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·

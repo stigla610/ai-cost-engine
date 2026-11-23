@@ -4,21 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DeepSeek: DeepSeek Pro Latest API Cost Calculator &amp; Open-Weight GPU Break-Even (2026)</title>
-  <meta name="description" content="Calculate exact DeepSeek: DeepSeek Pro Latest API token costs ($0.1188/1M input, $8.00/1M output) and compare against self-hosting an open-weight GPU alternative." />
+  <meta name="description" content="Calculate exact DeepSeek: DeepSeek Pro Latest API token costs ($0.0999/1M input, $5.00/1M output) and compare against self-hosting an open-weight GPU alternative." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/models/deepseek-deepseek-pro-latest.html" />
   <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
   <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="DeepSeek: DeepSeek Pro Latest API Cost Calculator &amp; Open-Weight GPU Break-Even (2026)" />
-  <meta property="og:description" content="Calculate exact DeepSeek: DeepSeek Pro Latest API token costs ($0.1188/1M input, $8.00/1M output) and compare against self-hosting an open-weight GPU alternative." />
+  <meta property="og:description" content="Calculate exact DeepSeek: DeepSeek Pro Latest API token costs ($0.0999/1M input, $5.00/1M output) and compare against self-hosting an open-weight GPU alternative." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/models/deepseek-deepseek-pro-latest.html" />
   <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="DeepSeek: DeepSeek Pro Latest API Cost Calculator &amp; Open-Weight GPU Break-Even (2026)" />
-  <meta name="twitter:description" content="Calculate exact DeepSeek: DeepSeek Pro Latest API token costs ($0.1188/1M input, $8.00/1M output) and compare against self-hosting an open-weight GPU alternative." />
+  <meta name="twitter:description" content="Calculate exact DeepSeek: DeepSeek Pro Latest API token costs ($0.0999/1M input, $5.00/1M output) and compare against self-hosting an open-weight GPU alternative." />
   <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the DeepSeek: DeepSeek Pro Latest API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "DeepSeek: DeepSeek Pro Latest costs $0.1188 per 1M input tokens and $8.00 per 1M output tokens, with a context window of 1,048,576 tokens."}}, {"@type": "Question", "name": "Can you self-host DeepSeek: DeepSeek Pro Latest or switch to a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "DeepSeek: DeepSeek Pro Latest is a proprietary API model, so its weights are not downloadable. However, if your API spend exceeds $1,937/month (~26.0M tokens/day), running an equivalent open-weight model (Llama, Qwen, or DeepSeek) on a dedicated NVIDIA H100 SXM (80GB VRAM) ($2.69/hr) on RunPod Cloud GPUs can cut costs substantially."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the DeepSeek: DeepSeek Pro Latest API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "DeepSeek: DeepSeek Pro Latest costs $0.0999 per 1M input tokens and $5.00 per 1M output tokens, with a context window of 1,048,576 tokens."}}, {"@type": "Question", "name": "Can you self-host DeepSeek: DeepSeek Pro Latest or switch to a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "DeepSeek: DeepSeek Pro Latest is a proprietary API model, so its weights are not downloadable. However, if your API spend exceeds $1,937/month (~41.1M tokens/day), running an equivalent open-weight model (Llama, Qwen, or DeepSeek) on a dedicated NVIDIA H100 SXM (80GB VRAM) ($2.69/hr) on RunPod Cloud GPUs can cut costs substantially."}}]}</script>
   <script data-goatcounter="https://stigla.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   <style>
     :root {
@@ -299,12 +299,12 @@
 
       <div class="slider-group">
         <label><span>Input Tokens per Day</span> <span id="inVal">2,000,000</span></label>
-        <input type="range" id="inSlider" min="100000" max="50000000" step="100000" value="2000000" oninput="recalc()" />
+        <input type="range" id="inSlider" min="100000" max="60000000" step="100000" value="2000000" oninput="recalc()" />
       </div>
 
       <div class="slider-group">
         <label><span>Output Tokens per Day</span> <span id="outVal">500,000</span></label>
-        <input type="range" id="outSlider" min="50000" max="20000000" step="50000" value="500000" oninput="recalc()" />
+        <input type="range" id="outSlider" min="50000" max="24000000" step="50000" value="500000" oninput="recalc()" />
       </div>
 
       <div id="mixInfo" style="color:var(--muted);font-size:0.84rem;margin:-8px 0 14px;">Mix: 80% input / 20% output · Blended API rate: —</div>
@@ -358,11 +358,11 @@
       </div>
       <div class="stat-row">
         <span>Input Price (per 1M tokens)</span>
-        <strong>$0.1188</strong>
+        <strong>$0.0999</strong>
       </div>
       <div class="stat-row">
         <span>Output Price (per 1M tokens)</span>
-        <strong>$8.00</strong>
+        <strong>$5.00</strong>
       </div>
       <div class="stat-row">
         <span>Max Context Window</span>
@@ -374,7 +374,7 @@
       </div>
       <div class="stat-row">
         <span>API vs. GPU Daily Break-Even</span>
-        <strong>~26.0M tokens/day</strong>
+        <strong>~41.1M tokens/day</strong>
       </div>
 
       <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
@@ -403,8 +403,8 @@
 <script>
   const MODEL_NAME = "DeepSeek: DeepSeek Pro Latest";
   const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/models/deepseek-deepseek-pro-latest.html";
-  const IN_RATE = 0.1188;
-  const OUT_RATE = 8.0;
+  const IN_RATE = 0.0999;
+  const OUT_RATE = 5.0;
   const GPU_HOURLY = 2.69;
   const GPU_MONTHLY = 1936.8;
   const IS_OPEN = false;
@@ -495,7 +495,7 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-22 18:12 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-23 19:58 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·

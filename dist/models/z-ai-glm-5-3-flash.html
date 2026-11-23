@@ -4,21 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Z.ai: GLM 5.3 Flash API Cost Calculator &amp; Self-Host GPU Break-Even (2026)</title>
-  <meta name="description" content="Calculate exact Z.ai: GLM 5.3 Flash token costs ($0.0399/1M input, $0.0784/1M output), local VRAM requirements (230.8GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta name="description" content="Calculate exact Z.ai: GLM 5.3 Flash token costs ($0.15/1M input, $0.50/1M output), local VRAM requirements (230.8GB Q4), and Cloud GPU self-hosting break-even." />
   <link rel="canonical" href="https://stigla610.github.io/ai-cost-engine/models/z-ai-glm-5-3-flash.html" />
   <link rel="icon" type="image/svg+xml" href="https://stigla610.github.io/ai-cost-engine/favicon.svg" />
   <meta property="og:site_name" content="TokenBench &amp; GPU Cost Engine" />
   <meta property="og:title" content="Z.ai: GLM 5.3 Flash API Cost Calculator &amp; Self-Host GPU Break-Even (2026)" />
-  <meta property="og:description" content="Calculate exact Z.ai: GLM 5.3 Flash token costs ($0.0399/1M input, $0.0784/1M output), local VRAM requirements (230.8GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta property="og:description" content="Calculate exact Z.ai: GLM 5.3 Flash token costs ($0.15/1M input, $0.50/1M output), local VRAM requirements (230.8GB Q4), and Cloud GPU self-hosting break-even." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://stigla610.github.io/ai-cost-engine/models/z-ai-glm-5-3-flash.html" />
   <meta property="og:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Z.ai: GLM 5.3 Flash API Cost Calculator &amp; Self-Host GPU Break-Even (2026)" />
-  <meta name="twitter:description" content="Calculate exact Z.ai: GLM 5.3 Flash token costs ($0.0399/1M input, $0.0784/1M output), local VRAM requirements (230.8GB Q4), and Cloud GPU self-hosting break-even." />
+  <meta name="twitter:description" content="Calculate exact Z.ai: GLM 5.3 Flash token costs ($0.15/1M input, $0.50/1M output), local VRAM requirements (230.8GB Q4), and Cloud GPU self-hosting break-even." />
   <meta name="twitter:image" content="https://stigla610.github.io/ai-cost-engine/og-card.svg" />
   <meta name="google-site-verification" content="lh2pyuMw9HSkVamWj8bTOtEsXchlKvBMT0zwAkzfR2c" />
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Z.ai: GLM 5.3 Flash API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Z.ai: GLM 5.3 Flash costs $0.0399 per 1M input tokens and $0.0784 per 1M output tokens, with a context window of 1,048,576 tokens."}}, {"@type": "Question", "name": "When is it cheaper to self-host Z.ai: GLM 5.3 Flash on a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Renting a dedicated 2x NVIDIA H100 (160GB VRAM) costs roughly $5.38/hour ($129.12/day). If your workload exceeds 2512.1M blended tokens per day, self-hosting Z.ai: GLM 5.3 Flash on RunPod Cloud GPUs can significantly reduce your monthly inference bill."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does the Z.ai: GLM 5.3 Flash API cost per 1M tokens?", "acceptedAnswer": {"@type": "Answer", "text": "Z.ai: GLM 5.3 Flash costs $0.15 per 1M input tokens and $0.50 per 1M output tokens, with a context window of 1,048,576 tokens."}}, {"@type": "Question", "name": "When is it cheaper to self-host Z.ai: GLM 5.3 Flash on a Cloud GPU?", "acceptedAnswer": {"@type": "Answer", "text": "Renting a dedicated 2x NVIDIA H100 (160GB VRAM) costs roughly $5.38/hour ($129.12/day). If your workload exceeds 506.4M blended tokens per day, self-hosting Z.ai: GLM 5.3 Flash on RunPod Cloud GPUs can significantly reduce your monthly inference bill."}}]}</script>
   <script data-goatcounter="https://stigla.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   <style>
     :root {
@@ -358,11 +358,11 @@
       </div>
       <div class="stat-row">
         <span>Input Price (per 1M tokens)</span>
-        <strong>$0.0399</strong>
+        <strong>$0.15</strong>
       </div>
       <div class="stat-row">
         <span>Output Price (per 1M tokens)</span>
-        <strong>$0.0784</strong>
+        <strong>$0.50</strong>
       </div>
       <div class="stat-row">
         <span>Max Context Window</span>
@@ -374,7 +374,7 @@
       </div>
       <div class="stat-row">
         <span>API vs. GPU Daily Break-Even</span>
-        <strong>~2512.1M tokens/day</strong>
+        <strong>~506.4M tokens/day</strong>
       </div>
 
       <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
@@ -446,8 +446,8 @@
 <script>
   const MODEL_NAME = "Z.ai: GLM 5.3 Flash";
   const CANONICAL_URL = "https://stigla610.github.io/ai-cost-engine/models/z-ai-glm-5-3-flash.html";
-  const IN_RATE = 0.0399;
-  const OUT_RATE = 0.0784;
+  const IN_RATE = 0.15;
+  const OUT_RATE = 0.5;
   const GPU_HOURLY = 5.38;
   const GPU_MONTHLY = 3873.6;
   const IS_OPEN = true;
@@ -538,7 +538,7 @@
 </script>
 <footer>
   <div class="container">
-    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-22 18:12 UTC.</p>
+    <p><strong>TokenBench &amp; GPU Cost Engine</strong> — Automatically updated daily with live API pricing, VRAM calculators &amp; cloud GPU benchmarks. Last auto-sync: 2026-11-23 19:58 UTC.</p>
     <p style="margin-top:8px;">Links to cloud GPU &amp; hardware providers include partner referral links at zero extra cost to you, keeping our calculators 100% free.</p>
     <p style="margin-top:8px;">
       <a href="../index.html">All AI Models</a> ·

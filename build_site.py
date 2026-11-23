@@ -2253,7 +2253,7 @@ Compare side-by-side costs or simulate custom token ratios on the live dashboard
 
 def build_index_page(models, comparisons, config, updated_str, total_pages):
     base_url = config["base_url"].rstrip("/")
-    canonical = f"{base_url}/index.html"
+    canonical = f"{base_url}/"
     title = f"{config['site_name']} — {config['site_tagline']}"
     desc = "Compare live API token pricing across 300+ AI models (OpenAI, Anthropic, DeepSeek, Meta Llama, Qwen, Mistral, Google Gemini), simulate monthly workload bills, calculate LLM VRAM requirements, and compare Cloud GPU rental rates."
 
@@ -2658,7 +2658,7 @@ def main():
     index_html = build_index_page(models, comparisons, config, updated_str, len(urls) + 1)
     with open(os.path.join(DIST_DIR, "index.html"), "w", encoding="utf-8") as f:
         f.write(index_html)
-    urls.insert(0, f"{base_url}/index.html")
+    urls.insert(0, f"{base_url}/")
 
     # 7. Build sitemap.xml & robots.txt & .nojekyll & IndexNow key file
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")

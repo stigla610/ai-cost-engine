@@ -1,56 +1,57 @@
 # 🚀 Zero-Budget Traffic & Backlink Seeding Kit
 
-Use these ready-to-copy templates to seed initial developer traffic and high-authority backlinks so Google and Bing index all 1,540+ pages.
+Use these ready-to-copy templates to seed initial developer traffic and high-authority backlinks so Google and Bing index all 1,554+ pages.
 
 ---
 
-## 1. Reddit Post — `r/LocalLLaMA` / `r/ollama` / `r/selfhosted`
+## 1. Reddit Post — `r/LocalLLaMA`
 
 **Title:**
-`I built an open, zero-bloat calculator for LLM VRAM (FP16/Q8/Q4 + KV cache), Home GPU Electricity ($/kWh), and API vs Self-Hosting break-even across 440+ models`
+`I built a free, zero-bloat calculator + CLI for LLM VRAM (FP16/Q8/Q4 + KV cache), GPU Utilization/Ops Break-Even & Electricity ($/kWh) across 450+ models`
 
 **Body:**
 ```markdown
 Hey r/LocalLLaMA,
 
 Whenever a new model drops, I always end up doing napkin math to figure out:
-1. Whether it'll fit on my local VRAM in Q4_K_M or Q8_0 once I crank the context window up to 32k–64k
-2. What my home rig's 24/7 power draw is actually costing me per month vs. serverless API tokens or renting an on-demand GPU pod
+1. Whether it'll fit on my local VRAM in Q4_K_M or Q8_0 once I crank the context window up to 32k–128k
+2. What my home rig's power draw is actually costing me per month vs. serverless API tokens or renting an on-demand GPU pod
+3. Where the real break-even point is once you factor in GPU utilization (20%–100% idle/burst headroom), monthly ops overhead, and input vs. output token mix
 
-So I built a fast, static calculator directory that auto-syncs daily with OpenRouter's model list (440+ models, separating open-weight models from closed APIs):
+So I built **TokenBench**, a fast static calculator suite + zero-dependency Python CLI that auto-syncs daily across 450+ models (separating 130+ open-weight models from closed APIs):
 
+- **Batch Workload Simulator (ranks 260+ models by monthly cost for your exact daily input/output mix):** https://stigla610.github.io/ai-cost-engine/
 - **VRAM + KV Cache & Home Electricity Calculator:** https://stigla610.github.io/ai-cost-engine/vram-electricity-calculator.html
-- **Batch Workload Simulator (ranks 260+ models by monthly cost for your exact daily token volume):** https://stigla610.github.io/ai-cost-engine/
-- **GitHub Repo:** https://github.com/stigla610/ai-cost-engine
+- **Utilization, Ops Overhead & Output-Mix Sensitivity Benchmarks:** https://stigla610.github.io/ai-cost-engine/benchmarks.html#breakeven
+- **GitHub Repo (MIT):** https://github.com/stigla610/ai-cost-engine
 
-Features added based on community feedback:
-- Hardware quick-presets (RTX 4060 Ti 16GB, 3090/4090 24GB, 5090 32GB, Dual 3090 48GB, Mac Studio 64GB/192GB, A100/H100 80GB)
-- Proper MoE total-parameter VRAM sizing (DeepSeek V3/R1 671B, Qwen3 235B-A22B, Llama 4 Maverick/Scout, Mixtral 8x22B)
-- One-click shareable deep links (`?p=70&ctx=32768&w=550&kwh=0.18`) and Markdown table export for pasting into issues/comments
+You can also auto-check your local GPU VRAM (`nvidia-smi` / Apple Silicon Unified Memory) in 1 second with copy-paste `ollama run` and `vllm serve` commands:
 
-Let me know if any model parameter counts or KV-cache multipliers look off and I'll patch the generator script!
+```bash
+curl -sL https://stigla610.github.io/ai-cost-engine/tokenbench.py | python3 -
+```
+
+Includes hardware quick-presets (RTX 4060 Ti 16GB, 3090/4090 24GB, 5090 32GB, Dual 3090 48GB, Mac Studio 64GB/192GB, A100/H100 80GB), MoE total-parameter sizing, and shareable deep links + Markdown export. Let me know if any model parameter counts or KV-cache multipliers look off!
 ```
 
 ---
 
 ## 2. Hacker News — `Show HN` Submission
 
-* **Title:** `Show HN: TokenBench – Open LLM API Cost, VRAM, and GPU Break-Even Calculator`
+* **Title:** `Show HN: TokenBench – Open LLM API Cost, VRAM & GPU Break-Even Calculator`
 * **URL:** `https://stigla610.github.io/ai-cost-engine/`
 * **First Comment:**
 ```text
-Hi HN, I built TokenBench to answer a question that kept coming up in production AI projects: "At what daily token volume does it actually make sense to stop paying per-token API rates and run vLLM/Ollama on a dedicated GPU?"
+Hi HN, I built TokenBench to answer a question that kept coming up in production AI projects: "At what daily token volume and GPU utilization does it actually make sense to stop paying per-token API rates and run vLLM/Ollama on a dedicated GPU?"
 
-The site pulls live pricing and context windows daily for 440+ models across OpenAI, Anthropic, Google, DeepSeek, Meta Llama, Qwen, and Mistral. You can drag the daily input/output token sliders on the main page to sort all models by your projected monthly bill, or use the VRAM & electricity calculator to estimate FP16/Q8/Q4 memory + KV cache overhead and local $/kWh power costs.
+The site pulls live pricing and context windows daily for 450+ models across OpenAI, Anthropic, Google, DeepSeek, Meta Llama, Qwen, and Mistral. On the main page you can drag daily input/output token sliders to rank 260+ models by projected monthly spend, and on each model calculator you can adjust GPU utilization (20%–100%), monthly ops overhead, and input/output mix to see the live break-even threshold. There is also a VRAM + KV-cache & electricity ($/kWh) calculator and a zero-dependency local GPU checker CLI (`curl -sL https://stigla610.github.io/ai-cost-engine/tokenbench.py | python3 -`).
 
-Source code (single zero-dependency Python static generator running on GitHub Actions): https://github.com/stigla610/ai-cost-engine
+Source code (single zero-dependency Python static generator running on GitHub Actions, MIT): https://github.com/stigla610/ai-cost-engine
 ```
 
 ---
 
-## 3. Hugging Face Space (Takes 60 Seconds — High-Authority Backlink)
+## 3. Hugging Face Space (High-Authority Backlink)
 
-1. Go to [huggingface.co/new-space](https://huggingface.co/new-space)
-2. Name it `llm-vram-cost-calculator`, select **Static** as the Space SDK, and make it **Public**.
-3. Upload the two files inside the [`./huggingface-space/`](./huggingface-space/) folder (`README.md` and `index.html`).
-4. Hugging Face Spaces get indexed rapidly by Google and pass strong domain authority to `https://stigla610.github.io/ai-cost-engine/`.
+1. Live Space: `https://huggingface.co/spaces/stigla610/llm-vram-cost-calculator`
+2. Static HTML widget files live in `./huggingface-space/` (`README.md` and `index.html`).
