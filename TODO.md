@@ -11,11 +11,12 @@
 - [x] **Hashnode** publication created (`https://tokenbench-ai.hashnode.dev`) & Article 1 cross-posted (`https://tokenbench-ai.hashnode.dev/llm-api-vs-dedicated-cloud-gpu-break-even-math-in-2026-live-data`)
 - [x] Added GPU utilization (20%–100%), monthly ops overhead ($0–$1,500/mo), and live input/output mix sensitivity to model calculators, index simulator, and benchmarks hub
 - [x] Replied to reader feedback (@onelifevibe) on Hashnode Article 1
+- [x] Article 2 published on Dev.to (`https://dev.to/stigla610/how-much-vram-do-open-weight-llms-actually-need-at-8k-vs-32k-context-241k`) & Hashnode (`https://tokenbench-ai.hashnode.dev/how-much-vram-do-open-weight-llms-actually-need-at-8k-vs-32k-context`)
 
 ---
 
 ## 📅 Scheduled / Upcoming Content & Growth
-- [ ] Publish **Article 2** ([`articles/02-local-llm-vram-kv-cache-guide-2026.md`](./articles/02-local-llm-vram-kv-cache-guide-2026.md)) on Dev.to & Hashnode *(space 1–2 days after Article 1)*
+- [x] Publish **Article 2** ([`articles/02-local-llm-vram-kv-cache-guide-2026.md`](./articles/02-local-llm-vram-kv-cache-guide-2026.md)) on Dev.to & Hashnode
 - [ ] Publish **Article 3** ([`articles/03-cheapest-llm-apis-ranked-by-workload-2026.md`](./articles/03-cheapest-llm-apis-ranked-by-workload-2026.md)) on Dev.to & Hashnode *(space 1–2 days after Article 2)*
 - [ ] Optional: Add `amazon_associate_tag` to [`config.json`](./config.json) for local GPU hardware commissions
 - [x] Directory submissions: **SaaSHub** submitted ($0 free tier, pending review); **AlternativeTo** & **OpenAlternative** require sign-in; **FutureTools.io** needs CAPTCHA completion; **Futurepedia** & **AIxploria** closed free listings
