@@ -19,10 +19,11 @@
 
 ## 📅 Scheduled / Upcoming Content & Growth
 - [x] Publish **Article 2** ([`articles/02-local-llm-vram-kv-cache-guide-2026.md`](./articles/02-local-llm-vram-kv-cache-guide-2026.md)) on Dev.to & Hashnode
-- [ ] Create & push `stigla610.github.io` root `robots.txt` repo *(prepared locally, waiting on GitHub browser sign-in)*
-- [ ] Sign in to **Bing Webmaster Tools** (`https://www.bing.com/webmasters`) to import site & submit `sitemap.xml`
+- [x] Create & push `stigla610.github.io` root `robots.txt` repo *(live at `https://stigla610.github.io/robots.txt` & redirect index, HTTP 200 verified 2026-11-26)*
+- [x] Sign in to **Bing Webmaster Tools** (`https://www.bing.com/webmasters`) to import site & submit `sitemap.xml` *(verified via GSC import 2026-11-26; `sitemap.xml` crawled `Success`, `1.6K` URLs discovered, `0` errors)*
+- [ ] Publish `tokenbench` CLI to PyPI (`pip install tokenbench` — package name confirmed available on PyPI as of 2026-11-26)
 - [ ] Community launch follow-up: `Show HN` temporarily restricted (`/showlim` on HN); `r/LocalLLaMA` (`u/GrahZaDorucak`) auto-removed post until account reaches 5 subreddit karma
 - [ ] Publish **Article 3** ([`articles/03-cheapest-llm-apis-ranked-by-workload-2026.md`](./articles/03-cheapest-llm-apis-ranked-by-workload-2026.md)) on Dev.to & Hashnode *(space 1–2 days after Article 2)*
 - [ ] Optional: Add `amazon_associate_tag` to [`config.json`](./config.json) for local GPU hardware commissions
 - [x] Directory submissions: **SaaSHub** submitted ($0 free tier, pending review); **AlternativeTo** & **OpenAlternative** require sign-in; **FutureTools.io** needs CAPTCHA completion; **Futurepedia** & **AIxploria** closed free listings
-- [ ] Check status of open Awesome-list PRs (`rafska/awesome-local-llm#391` and `EndoTheDev/Awesome-Ollama#171`)
+- [ ] Check status of open Awesome-list PRs (`rafska/awesome-local-llm#391` and `EndoTheDev/Awesome-Ollama#171` — checked 2026-11-26: both open, mergeable, `0` comments/reviews)
