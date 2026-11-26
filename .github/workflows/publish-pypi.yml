@@ -1,0 +1,79 @@
+name: Publish tokenbench CLI to PyPI
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build & verify sdist and wheel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install build and twine
+        run: python -m pip install --upgrade pip build twine
+
+      - name: Build sdist and wheel into dist_pypi
+        run: python -m build --outdir dist_pypi
+
+      - name: Check package metadata with twine
+        run: twine check --strict dist_pypi/*
+
+      - name: Verify archive contents exclude static site files
+        run: |
+          python - <<'PY'
+          import glob, tarfile, zipfile
+          sdist = glob.glob("dist_pypi/*.tar.gz")[0]
+          wheel = glob.glob("dist_pypi/*.whl")[0]
+          with tarfile.open(sdist, "r:gz") as tf:
+              names = tf.getnames()
+          assert any(n.endswith("/tokenbench.py") for n in names), names
+          assert not any("/dist/" in n or n.endswith(".html") for n in names), f"Unexpected site files in sdist: {names}"
+          with zipfile.ZipFile(wheel) as zf:
+              wnames = zf.namelist()
+          assert "tokenbench.py" in wnames, wnames
+          assert not any(n.endswith(".html") for n in wnames), f"Unexpected HTML files in wheel: {wnames}"
+          print(f"Verified sdist ({len(names)} entries) and wheel ({len(wnames)} entries) cleanly.")
+          PY
+
+      - name: Smoke-test installed wheel CLI
+        run: |
+          python -m venv /tmp/tb-test
+          /tmp/tb-test/bin/pip install dist_pypi/*.whl
+          /tmp/tb-test/bin/tokenbench --version
+          /tmp/tb-test/bin/tokenbench --vram 24 --ctx 32768 --search qwen --json > /dev/null
+
+      - name: Upload PyPI distribution artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pypi-dist
+          path: dist_pypi/
+
+  publish:
+    name: Publish to PyPI via Trusted Publishing
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/tokenbench
+    permissions:
+      id-token: write
+    steps:
+      - name: Download PyPI distribution artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pypi-dist
+          path: dist_pypi/
+
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist_pypi/

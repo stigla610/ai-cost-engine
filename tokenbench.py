@@ -22,6 +22,7 @@ import subprocess
 import sys
 import urllib.request
 
+__version__ = "2.1.0"
 SITE_BASE_URL = "https://stigla610.github.io/ai-cost-engine"
 
 CURATED_OPEN_MODELS = [
@@ -290,7 +291,7 @@ def _infer_commands(model_id, name, params_b):
 
 def fetch_live_open_models():
     url = "https://openrouter.ai/api/v1/models"
-    req = urllib.request.Request(url, headers={"User-Agent": "TokenBench-CLI/2.1"})
+    req = urllib.request.Request(url, headers={"User-Agent": f"TokenBench-CLI/{__version__}"})
     with urllib.request.urlopen(req, timeout=15) as resp:
         raw = json.loads(resp.read().decode("utf-8"))
     results = []
@@ -374,6 +375,7 @@ def main():
     parser.add_argument("--search", type=str, default="", help="Filter models by name/family (e.g. qwen, llama, deepseek)")
     parser.add_argument("--live", action="store_true", help="Fetch live 130+ open-weight models from OpenRouter API")
     parser.add_argument("--json", action="store_true", help="Output JSON instead of formatted table")
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     args = parser.parse_args()
 
     detected_vram, hw_desc, source = detect_hardware()

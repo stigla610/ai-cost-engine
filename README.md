@@ -1,8 +1,9 @@
 # ⚡ TokenBench — AI API Pricing, LLM VRAM & Cloud GPU Break-Even Engine
 
 [![Live Demo](https://img.shields.io/badge/Live_Calculators-TokenBench-38bdf8?style=for-the-badge)](https://stigla610.github.io/ai-cost-engine/)
+[![PyPI](https://img.shields.io/pypi/v/tokenbench?style=for-the-badge&color=0ea5e9)](https://pypi.org/project/tokenbench/)
 [![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Space-f59e0b?style=for-the-badge)](https://huggingface.co/spaces/stigla610/llm-vram-cost-calculator)
-[![Models Tracked](https://img.shields.io/badge/Models_Tracked-440%2B-10b981?style=for-the-badge)](https://stigla610.github.io/ai-cost-engine/index.html)
+[![Models Tracked](https://img.shields.io/badge/Models_Tracked-450%2B-10b981?style=for-the-badge)](https://stigla610.github.io/ai-cost-engine/)
 [![Auto-Sync](https://img.shields.io/badge/Updated-Daily_via_GitHub_Actions-818cf8?style=for-the-badge)](https://stigla610.github.io/ai-cost-engine/gpu-cloud-pricing.html)
 
 **TokenBench** is an open, daily-updated benchmark and calculator suite for comparing **LLM API token pricing**, estimating **local GPU VRAM requirements** (FP16, Q8_0, and 4-bit GGUF/AWQ/EXL2 quantization + KV cache overhead), and finding the exact **daily token break-even point** between serverless APIs and dedicated Cloud GPUs.
@@ -15,7 +16,14 @@
 
 Zero-dependency Python 3 CLI that auto-detects your local GPU VRAM (`nvidia-smi`, Apple Silicon Unified Memory, or Windows GPU) and tells you which open-weight models fit in FP16, `Q8_0`, or `Q4_K_M`—complete with copy-paste **`ollama run`** and **`vllm serve`** commands.
 
-### Run Instantly (No Install)
+### Install via `pip`
+```bash
+pip install tokenbench
+tokenbench
+tokenbench --vram 24 --ctx 32768 --search qwen
+```
+
+### Or Run Instantly (No Install)
 
 **Linux / macOS:**
 ```bash
@@ -27,13 +35,7 @@ curl -sL https://stigla610.github.io/ai-cost-engine/tokenbench.py | python3 -
 irm https://stigla610.github.io/ai-cost-engine/tokenbench.py | python -
 ```
 
-### Or Install Locally via `pip`
-```bash
-git clone https://github.com/stigla610/ai-cost-engine.git
-cd ai-cost-engine
-pip install .
-tokenbench --vram 24 --ctx 32768 --search qwen
-```
+*(Or clone and run `pip install .` from source.)*
 
 **Supported CLI Flags:**
 * `--vram 24` — Override detected VRAM in GB
@@ -62,7 +64,8 @@ Qwen2.5 Coder 32B                 32B   23.2G   39.7G   75.2G  ⚡ Q4_K_M     ol
 
 ## 🛠️ Interactive Calculators & Directories
 
-* **[Batch Workload API Cost Simulator](https://stigla610.github.io/ai-cost-engine/index.html)** — Slide your daily input/output token volume to rank 260+ models (OpenAI, Anthropic, Google Gemini, DeepSeek, Meta Llama, Qwen, Mistral, xAI Grok) from cheapest to most expensive per month.
+* **[Batch Workload API Cost Simulator](https://stigla610.github.io/ai-cost-engine/)** — Slide your daily input/output token volume to rank 450+ models (OpenAI, Anthropic, Google Gemini, DeepSeek, Meta Llama, Qwen, Mistral, xAI Grok) from cheapest to most expensive per month.
+* **[LLM Cost & Break-Even Benchmarks Hub](https://stigla610.github.io/ai-cost-engine/benchmarks.html)** — Live break-even tables and workload presets across frontier proprietary and open-weight models.
 * **[LLM VRAM & Home GPU Electricity Calculator](https://stigla610.github.io/ai-cost-engine/vram-electricity-calculator.html)** — Calculate exact GPU memory needed for 1B–405B+ models across context lengths (`2K` to `128K` tokens) and compare your local PC's `$/kWh` power bill against cloud GPU instances.
 * **[Cloud GPU Hourly Price Matrix](https://stigla610.github.io/ai-cost-engine/gpu-cloud-pricing.html)** — Compare on-demand RTX 4090, NVIDIA A100 (80GB), and NVIDIA H100 (80GB) hourly and monthly rates.
 
