@@ -25,5 +25,5 @@
 - [ ] Community launch follow-up: `Show HN` temporarily restricted (`/showlim` on HN); `r/LocalLLaMA` (`u/GrahZaDorucak`) auto-removed post until account reaches 5 subreddit karma
 - [ ] Publish **Article 3** ([`articles/03-cheapest-llm-apis-ranked-by-workload-2026.md`](./articles/03-cheapest-llm-apis-ranked-by-workload-2026.md)) on Dev.to & Hashnode *(space 1–2 days after Article 2)*
 - [ ] Optional: Add `amazon_associate_tag` to [`config.json`](./config.json) for local GPU hardware commissions
-- [x] Directory submissions: **SaaSHub** submitted ($0 free tier, pending review); **AlternativeTo** & **OpenAlternative** require sign-in; **FutureTools.io** needs CAPTCHA completion; **Futurepedia** & **AIxploria** closed free listings
+- [x] Directory submissions: **SaaSHub** approved & verified (`https://www.saashub.com/tokenbench`, verified 2026-11-26; free/open-source listing + GitHub & PyPI links); **AlternativeTo** & **OpenAlternative** require sign-in; **FutureTools.io** needs CAPTCHA completion; **Futurepedia** & **AIxploria** closed free listings
 - [ ] Check status of open Awesome-list PRs (`rafska/awesome-local-llm#391` and `EndoTheDev/Awesome-Ollama#171` — checked 2026-11-26: both open, mergeable, `0` comments/reviews)
